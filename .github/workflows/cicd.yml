@@ -1,0 +1,54 @@
+name: CICD
+
+# triggers
+on:
+  push:
+    branches: ['*']
+  release:
+    types: [ created ]
+  pull_request:
+    branches:
+      - main
+
+# env variables
+env:
+  CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
+# jobs
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        # supported scala versions
+        scala:
+          - 2.13.6
+
+    steps:
+      - uses: actions/checkout@v2
+
+      #----------- JDK -----------
+      - name: Set up JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+
+      #----------- CACHE -----------
+      - name: Cache SBT
+        uses: actions/cache@v2.1.4
+        with:
+          # A list of files, directories, and wildcard patterns to cache and restore
+          path: |
+            ~/.ivy2/cache
+            ~/.sbt
+          # An explicit key for restoring and saving the cache
+          key: ${{ runner.os }}-sbt-${{ matrix.scala }}-${{ hashFiles('**/build.sb') }}
+
+      #----------- COMPILE -----------
+      - name: Compile, Format, Test and Coverage for ${{ matrix.scala }}
+        run: sbt ++${{ matrix.scala }} clean scalafmtCheck coverage test coverageReport
+
+      #----------- COVERAGE -----------
+      - name: Codecov
+        run: bash <(curl -s https://codecov.io/bash)
