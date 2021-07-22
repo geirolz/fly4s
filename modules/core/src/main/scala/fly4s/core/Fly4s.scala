@@ -3,13 +3,15 @@ package fly4s.core
 import cats.data.{NonEmptyList, ValidatedNel}
 import cats.data.Validated.{Invalid, Valid}
 import cats.effect.Async
+import fly4s.core.data.{FlywayConfiguration, ValidateOutput, ValidatedMigrateResult}
+import fly4s.core.syntax.AllSyntax
 import org.flywaydb.core.Flyway
 import org.flywaydb.core.api.Location
 
 import scala.jdk.CollectionConverters.CollectionHasAsScala
 
 //noinspection SimplifyBooleanMatch
-object Fly4s {
+object Fly4s extends AllBasicInstances with AllSyntax {
 
   import cats.implicits._
 
@@ -23,7 +25,7 @@ object Fly4s {
     outOfOrder: Boolean = false,
     baselineOnMigrate: Boolean = false,
     ignorePendingMigrations: Boolean = false
-  )(implicit F: Async[F]): F[MigrationResult] =
+  )(implicit F: Async[F]): F[ValidatedMigrateResult] =
     F.delay {
       Flyway.configure
         .dataSource(
@@ -43,7 +45,7 @@ object Fly4s {
 
   def migrate[F[_]](
     config: FlywayConfiguration
-  )(implicit F: Async[F]): F[MigrationResult] = {
+  )(implicit F: Async[F]): F[ValidatedMigrateResult] = {
 
     def initFlyway(flywayConfig: FlywayConfiguration): F[ValidatedNel[ValidateOutput, Flyway]] =
       for {
@@ -66,29 +68,5 @@ object Fly4s {
         case invalid @ Invalid(_) => F.pure(invalid)
       }
     } yield result
-  }
-
-  def evalMigrationResult[F[_]](
-    result: MigrationResult
-  )(implicit F: Async[F]): F[MigrateResult] = {
-    result match {
-      case Valid(result) => F.pure(result)
-      case Invalid(errors) =>
-        F.raiseError(
-          new RuntimeException(
-            errors
-              .map(error => s"""
-                               |Failed validation:
-                               |  - version: ${error.version}
-                               |  - path: ${error.filepath}
-                               |  - description: ${error.description}
-                               |  - errorCode: ${error.errorDetails.errorCode}
-                               |  - errorMessage: ${error.errorDetails.errorMessage}
-                """.stripMargin)
-              .toList
-              .mkString("\n\n")
-          )
-        )
-    }
   }
 }

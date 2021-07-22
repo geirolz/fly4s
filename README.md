@@ -42,6 +42,8 @@ case class DbConfig(
   migrationsLocations: List[String]
 )
 
+import Fly4s._
+
 def initDatabase(dbConfig: DbConfig): IO[Unit] = 
     for {
       _               <- logger.debug(s"Initializing ${dbConfig.name} database")
@@ -52,7 +54,7 @@ def initDatabase(dbConfig: DbConfig): IO[Unit] =
         pass                = dbConfig.pass,
         migrationsTable     = dbConfig.migrationsTable,
         migrationsLocations = dbConfig.migrationsLocations
-      ).flatMap(Database.evalMigrationResult)
+      ).value
       _               <- logger.info(s" Applied ${migrationResult.migrationsExecuted} migrations to ${dbConfig.name} database")
     } yield ()
 ```
