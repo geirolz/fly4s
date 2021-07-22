@@ -26,6 +26,6 @@ private.sbt
 
 # MODULES TARGETS
 target/
-modules/core/target/
-modules/generic/target/
+modules/core/target
+modules/generic/targetk
 /.bsp/sbt.json

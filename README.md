@@ -27,3 +27,32 @@ Supports 2.13 (and soon Scala 3)
 ```
   libraryDependencies += "com.github.geirolz" %% "fly4s-core" % <version>
 ```
+
+
+## Usage
+```scala
+//not required but useful if you handle config with case class
+case class DbConfig(
+  name: String,
+  driver: String,
+  url: String,
+  user: Option[String],
+  pass: Option[Array[Char]],
+  migrationsTable: String,
+  migrationsLocations: List[String]
+)
+
+def initDatabase(dbConfig: DbConfig): IO[Unit] = 
+    for {
+      _               <- logger.debug(s"Initializing ${dbConfig.name} database")
+      _               <- logger.debug(s"Applying migration for ${dbConfig.name}")
+      migrationResult <- Fly4s.migrate[IO](
+        url                 = dbConfig.url,
+        user                = dbConfig.user,
+        pass                = dbConfig.pass,
+        migrationsTable     = dbConfig.migrationsTable,
+        migrationsLocations = dbConfig.migrationsLocations
+      ).flatMap(Database.evalMigrationResult)
+      _               <- logger.info(s" Applied ${migrationResult.migrationsExecuted} migrations to ${dbConfig.name} database")
+    } yield ()
+```
