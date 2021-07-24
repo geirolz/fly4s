@@ -37,7 +37,7 @@ case class DbConfig(
   driver: String,
   url: String,
   user: Option[String],
-  pass: Option[Array[Char]],
+  password: Option[Array[Char]],
   migrationsTable: String,
   migrationsLocations: List[String]
 )
@@ -49,7 +49,7 @@ def initDatabase(dbConfig: DbConfig): IO[Unit] =
       fly4s           = Fly4s(Fly4sConfig(
         url                 = dbConfig.url,
         user                = dbConfig.user,
-        pass                = dbConfig.pass,
+        password            = dbConfig.password,
         migrationsTable     = dbConfig.migrationsTable,
         migrationsLocations = Location.of(dbConfig.migrationsLocations)
       ))
