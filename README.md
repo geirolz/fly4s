@@ -48,13 +48,14 @@ def initDatabase(dbConfig: DbConfig): IO[Unit] =
     for {
       _               <- logger.debug(s"Initializing ${dbConfig.name} database")
       _               <- logger.debug(s"Applying migration for ${dbConfig.name}")
-      migrationResult <- Fly4s.migrate[IO](
+      fly4s           = Fly4s(Fly4sConfig(
         url                 = dbConfig.url,
         user                = dbConfig.user,
         pass                = dbConfig.pass,
         migrationsTable     = dbConfig.migrationsTable,
         migrationsLocations = dbConfig.migrationsLocations
-      ).value
+      ))
+      migrationResult <- fly4s.migrate[IO]
       _               <- logger.info(s" Applied ${migrationResult.migrationsExecuted} migrations to ${dbConfig.name} database")
     } yield ()
 ```

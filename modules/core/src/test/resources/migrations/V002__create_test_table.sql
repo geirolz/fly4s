@@ -1,1 +1,0 @@
-create table test.test_table;

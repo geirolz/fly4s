@@ -1,12 +1,33 @@
 package fly4s.core
 
-import cats.data.ValidatedNel
-import org.flywaydb.core.api.configuration.FluentConfiguration
-import org.flywaydb.core.api.output.{MigrateResult => JMigrateResult, ValidateOutput => JValidateOutput}
+import org.flywaydb.core.api.{
+  Location => JLocation,
+  MigrationVersion => JMigrationVersion,
+  MigrationInfoService => JMigrationInfoService
+}
+import org.flywaydb.core.api.output.{
+  BaselineResult => JBaselineResult,
+  CleanResult => JCleanResult,
+  MigrateResult => JMigrateResult,
+  RepairResult => JRepairResult,
+  UndoResult => JUndoResult,
+  ValidateOutput => JValidateOutput,
+  ValidateResult => JValidateResult
+}
 
 package object data {
-  type FlywayConfiguration = FluentConfiguration
+
+  //results
+  type MigrationInfoService = JMigrationInfoService
   type MigrateResult = JMigrateResult
   type ValidateOutput = JValidateOutput
-  type ValidatedMigrateResult = ValidatedNel[ValidateOutput, MigrateResult]
+  type ValidateResult = JValidateResult
+  type CleanResult = JCleanResult
+  type UndoResult = JUndoResult
+  type BaselineResult = JBaselineResult
+  type RepairResult = JRepairResult
+
+  //conf
+  type Location = JLocation
+  type MigrationVersion = JMigrationVersion
 }

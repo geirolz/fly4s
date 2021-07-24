@@ -1,12 +1,14 @@
 package fly4s.core
 
 import cats.effect.IO
+import fly4s.core.data.{Fly4sConfig, Location}
 import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.matchers.should.Matchers
 import utils.{H2Settings, H2TestSupport}
 
-class Fly4sTest extends AnyFunSuite with H2TestSupport {
+class Fly4sTest extends AnyFunSuite with H2TestSupport with Matchers {
 
-  val h2Settings: H2Settings = H2Settings.inFile(
+  val h2Settings: H2Settings = H2Settings.inMemory(
     name = "h2-test",
     options = Map(
       "MODE"           -> "MYSQL",
@@ -14,19 +16,16 @@ class Fly4sTest extends AnyFunSuite with H2TestSupport {
     )
   )
 
-  import Fly4s._
-
   test("Test migration") {
 
-    val result = Fly4s
-      .migrate[IO](
-        url = h2Settings.getUrl(),
-        migrationsLocations = List("/migrations")
-      )
-      .value
+    val result =
+      Fly4s(
+        Fly4sConfig(
+          url = h2Settings.getUrl(),
+          locations = Location.of("/migrations")
+        )
+      ).migrate[IO].unsafeRunSync()
 
-    Console.println(result.unsafeRunSync())
-
-    Thread.sleep(100000)
+    result.migrationsExecuted shouldBe 2
   }
 }

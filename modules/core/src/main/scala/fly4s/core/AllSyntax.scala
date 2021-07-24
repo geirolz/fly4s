@@ -1,4 +1,4 @@
-package fly4s.core.syntax
+package fly4s.core
 
 import fly4s.core.syntax.data.AllDataSyntax
 
