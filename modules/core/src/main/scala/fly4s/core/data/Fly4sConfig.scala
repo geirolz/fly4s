@@ -47,7 +47,7 @@ case class Fly4sConfig(
 
   def toJava: Configuration = {
 
-    def applyGenericConfig: Endo[FluentConfiguration] =
+    def applyConnectionConfig: Endo[FluentConfiguration] =
       _.dataSource(url, user.orNull, password.map(_.mkString).orNull)
         .connectRetries(connectRetries)
         .initSql(initSql.orNull)
@@ -86,7 +86,7 @@ case class Fly4sConfig(
       .algebra[FluentConfiguration]
       .combineAll(
         List(
-          applyGenericConfig,
+          applyConnectionConfig,
           applyMigrationsConf,
           applyFlagsConf
         )

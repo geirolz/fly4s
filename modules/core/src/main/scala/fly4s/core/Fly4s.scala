@@ -4,11 +4,34 @@ import cats.effect.Async
 import fly4s.core.data._
 import org.flywaydb.core.Flyway
 
-class Fly4s(flyway: Flyway) {
+final class Fly4s(flyway: Flyway) {
 
   /** Return the Java `Flyway` instance
     */
   val toJava: Flyway = flyway
+
+//  /** !!!NOTE!!!
+//    *  <b>BY DEFAULT FLYWAY PERFORMS VALIDATION SO PLEASE SET `validateOnMigrate` FLAG TO `FALSE` TO USE THIS METHOD</b>
+//    * !!!NOTE!!!
+//    *
+//    * <b><i>1. Validation</i></b>
+//    * Check [[Fly4s.validate]] for further details
+//    *
+//    * <b><i>2. Migration</i></b>
+//    * If validation steps fails migration wont be applied.
+//    * Check [[Fly4s.migrate]] for further details
+//    *
+//    * @return An `ValidatedNel` summarising the operation results.
+//    */
+//  def validateAndMigrate[F[_]: Async]: F[ValidatedMigrationResult] = {
+//    for {
+//      validationRes <- validate[F].flatMap(ValidateResult.toValidatedNel[F])
+//      migrationRes <- validationRes match {
+//        case Valid(_)                 => migrate[F].map(_.valid)
+//        case i @ Validated.Invalid(_) => Async[F].pure(i)
+//      }
+//    } yield migrationRes
+//  }
 
   /** <p>Starts the database migration. All pending migrations will be applied in order.
     * Calling migrate on an up-to-date database has no effect.</p>

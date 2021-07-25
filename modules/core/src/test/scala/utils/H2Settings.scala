@@ -14,7 +14,7 @@ sealed trait H2Settings {
 
   def addOption(o: (String, String)): H2Settings
 
-  def getUrl(): String = {
+  def getUrl: String = {
 
     val baseUrl = this match {
       case _: H2InMemorySettings => s"jdbc:h2:mem:$name"
