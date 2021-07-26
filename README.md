@@ -12,7 +12,7 @@ A lightweight, simple and functional wrapper for Flyway using cats effect.
 
 ## How to import
 
-Supports 2.13 (and soon Scala 3)
+Fly4s supports Scala 2.13 and 3
 
 **Maven** for 2.13
 ```xml
