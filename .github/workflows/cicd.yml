@@ -22,13 +22,16 @@ env:
 # jobs
 jobs:
   build:
-
+    name: build (${{ matrix.scala }})
     runs-on: ubuntu-latest
     strategy:
       matrix:
         # supported scala versions
-        scala:
-          - 2.13.6
+        include:
+          - scala: 2.13.6
+            test-tasks: coverage test coverageReport
+          - scala: 3.0.1
+            test-tasks: test # scoverage doesn’t support Scala 3
 
     steps:
       - uses: actions/checkout@v2
@@ -52,11 +55,12 @@ jobs:
 
       #----------- COMPILE -----------
       - name: Compile, Format, Test and Coverage for ${{ matrix.scala }}
-        run: sbt ++${{ matrix.scala }} clean scalafmtCheck coverage test coverageReport
+        run: sbt ++${{ matrix.scala }} clean scalafmtCheck ${{ matrix.test-tasks }}
 
       #----------- COVERAGE -----------
       - name: Codecov
         run: bash <(curl -s https://codecov.io/bash)
+
   deploy:
     runs-on: ubuntu-latest
     if: github.event_name != 'pull_request'

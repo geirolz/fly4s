@@ -62,15 +62,16 @@ lazy val noPublishSettings = Seq(
 
 lazy val baseSettings = Seq(
   //scala
-  scalaVersion := "2.13.6",
+  crossScalaVersions := List("2.13.6", "3.0.1"),
+  scalaVersion := crossScalaVersions.value.head,
   scalacOptions ++= scalacSettings(scalaVersion.value),
   //dependencies
   resolvers ++= ProjectResolvers.all,
   libraryDependencies ++= ProjectDependencies.common ++ {
     CrossVersion.partialVersion(scalaVersion.value) match {
-      case Some((2, _)) => ProjectDependencies.Plugins.compilerPluginsFor2_13
-      case Some((3, _)) => ProjectDependencies.Plugins.compilerPluginsFor3
-      case _            => Nil
+      case Some((2, 13)) => ProjectDependencies.Plugins.compilerPluginsFor2_13
+      case Some((3, _))  => ProjectDependencies.Plugins.compilerPluginsFor3
+      case _             => Nil
     }
   },
   //fmt

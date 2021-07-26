@@ -1,4 +1,4 @@
-package utils
+package fly4s.utils
 
 sealed trait H2Settings {
 

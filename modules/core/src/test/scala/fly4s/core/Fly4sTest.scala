@@ -4,9 +4,11 @@ import cats.effect.IO
 import fly4s.core.data._
 import org.scalatest.funsuite.AnyFunSuite
 import org.scalatest.matchers.should.Matchers
-import utils.{H2Settings, H2TestSupport}
+import fly4s.utils.{H2Settings, H2TestSupport}
 
 class Fly4sTest extends AnyFunSuite with H2TestSupport with Matchers {
+
+  import cats.effect.unsafe.implicits.global
 
   val h2Settings: H2Settings = H2Settings.inMemory(
     name = "h2-test",
