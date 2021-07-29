@@ -6,7 +6,8 @@ import org.flywaydb.core.api.{
   MigrationInfoService => JMigrationInfoService,
   MigrationVersion => JMigrationVersion,
   ErrorDetails => JErrorDetails,
-  ErrorCode => JErrorCode
+  ErrorCode => JErrorCode,
+  ResourceProvider => JResourceProvider
 }
 import org.flywaydb.core.api.output.{
   BaselineResult => JBaselineResult,
@@ -17,6 +18,10 @@ import org.flywaydb.core.api.output.{
   ValidateOutput => JValidateOutput,
   ValidateResult => JValidateResult
 }
+
+import org.flywaydb.core.api.resolver.{MigrationResolver => JMigrationResolver}
+
+import org.flywaydb.core.api.callback.{Callback => JCallback}
 
 package object data {
 
@@ -35,4 +40,7 @@ package object data {
   //conf
   type Location = JLocation
   type MigrationVersion = JMigrationVersion
+  type Callback = JCallback
+  type MigrationResolver = JMigrationResolver
+  type ResourceProvider = JResourceProvider
 }

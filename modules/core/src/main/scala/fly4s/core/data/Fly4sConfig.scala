@@ -2,12 +2,11 @@ package fly4s.core.data
 
 import cats.data.NonEmptyList
 import org.flywaydb.core.api.configuration.{Configuration, FluentConfiguration}
-
 import java.nio.charset.{Charset, StandardCharsets}
 import scala.jdk.CollectionConverters.{MapHasAsJava, MapHasAsScala}
 
 case class Fly4sConfig(
-  url: String = "",
+  url: String,
   user: Option[String] = None,
   password: Option[Array[Char]] = None,
   connectRetries: Int = 0,
@@ -33,6 +32,10 @@ case class Fly4sConfig(
   sqlMigrationSuffixes: Seq[String] = Seq(".sql"),
   repeatableSqlMigrationPrefix: String = "R",
   sqlMigrationSeparator: String = "__",
+  //--- migrations functions ---
+  callbacks: List[Callback] = Nil,
+  resolvers: List[MigrationResolver] = Nil,
+  resourceProvider: Option[ResourceProvider] = None,
   //--- flags ---
   group: Boolean = false,
   mixed: Boolean = false,
@@ -84,6 +87,10 @@ object Fly4sConfig {
       sqlMigrationSuffixes = c.getSqlMigrationSuffixes.toList,
       repeatableSqlMigrationPrefix = c.getRepeatableSqlMigrationPrefix,
       sqlMigrationSeparator = c.getSqlMigrationSeparator,
+      //migrations - functions
+      callbacks = c.getCallbacks.toList,
+      resolvers = c.getResolvers.toList,
+      resourceProvider = Option(c.getResourceProvider),
       //---------- flags ----------
       group = c.isGroup,
       mixed = c.isMixed,
@@ -132,7 +139,10 @@ object Fly4sConfig {
       .sqlMigrationSuffixes(c.sqlMigrationSuffixes *)
       .repeatableSqlMigrationPrefix(c.repeatableSqlMigrationPrefix)
       .sqlMigrationSeparator(c.sqlMigrationSeparator)
-
+      //migrations - functions
+      .callbacks(c.callbacks *)
+      .resolvers(c.resolvers *)
+      .resourceProvider(c.resourceProvider.orNull)
       //---------- flags ----------
       .group(c.group)
       .mixed(c.mixed)
@@ -153,105 +163,12 @@ object Fly4sConfig {
       .skipDefaultResolvers(c.skipDefaultResolvers)
 }
 
-//sealed trait Fly4sFluentConfig extends Fly4sFluentMigrationConfig with Fly4sFluentFlagConfig { this: Fly4sConfig =>
-//
-//  /** Sets the datasource to use. Must have the necessary privileges to execute DDL.
-//    *
-//    * @param url      The JDBC URL of the database.
-//    * @param user     The user of the database.
-//    * @param password The password of the database.
-//    */
-//  def dataSource(url: String, user: Option[String] = None, password: Option[Array[Char]] = None): Fly4sConfig =
-//    copy(url = url, user = user, password = password)
-//
-//  /** The maximum number of retries when attempting to connect to the database. After each failed attempt, Flyway will
-//    * wait 1 second before attempting to connect again, up to the maximum number of times specified by connectRetries.
-//    *
-//    * @param connectRetries The maximum number of retries (default: `0`).
-//    */
-//  def connectRetries(connectRetries: Int): Fly4sConfig =
-//    copy(connectRetries = connectRetries)
-//
-//  /** The SQL statements to run to initialize a new database connection immediately after opening it.
-//    *
-//    * @param initSql The SQL statements. (default: `None`)
-//    */
-//  def initSql(initSql: Option[String]): Fly4sConfig =
-//    copy(initSql = initSql)
-//
-//  /** Sets the default schema managed by Flyway. This schema name is case-sensitive. If not specified, but
-//    * <i>schemas</i> is, Flyway uses the first schema in that list. If that is also not specified, Flyway uses the default
-//    * schema for the database connection.
-//    * <p>Consequences:</p>
-//    * <ul>
-//    * <li>This schema will be the one containing the schema history table.</li>
-//    * <li>This schema will be the default for the database connection (provided the database supports this concept).</li>
-//    * </ul>
-//    *
-//    * @param defaultSchemaName The default schema managed by Flyway.
-//    */
-//  def defaultSchema(defaultSchemaName: Option[String]): Fly4sConfig =
-//    copy(defaultSchemaName = defaultSchemaName)
-//
-//  /** Sets the schemas managed by Flyway. These schema names are case-sensitive. If not specified, Flyway uses
-//    * the default schema for the database connection. If <i>defaultSchemaName</i> is not specified, then the first of
-//    * this list also acts as default schema.
-//    * <p>Consequences:</p>
-//    * <ul>
-//    * <li>Flyway will automatically attempt to create all these schemas, unless they already exist.</li>
-//    * <li>The schemas will be cleaned in the order of this list.</li>
-//    * <li>If Flyway created them, the schemas themselves will be dropped when cleaning.</li>
-//    * </ul>
-//    *
-//    * @param schemaNames The schemas managed by Flyway. May not be `null`. Must contain at least one element.
-//    */
-//  def schemas(schemaNames: NonEmptyList[String]): Fly4sConfig =
-//    copy(schemaNames = Option(schemaNames))
-//
-//  /** @param lockRetryCount lock retry count. (default: `50`)
-//    */
-//  def lockRetryCount(lockRetryCount: Int): Fly4sConfig =
-//    copy(lockRetryCount = lockRetryCount)
-//
-//  //
-//  //  /** Set the callbacks for lifecycle notifications.
-//  //    *
-//  //    * @param callbacks The callbacks for lifecycle notifications. (default: none)
-//  //    */
-//  //  def callbacks(callbacks: Callback*): Fly4sConfig = {
-//  //    config.setCallbacks(callbacks)
-//  //    this
-//  //  }
-//  //
-//  //
-//  //  /** Sets custom MigrationResolvers to be used in addition to the built-in ones for resolving Migrations to apply.
-//  //    *
-//  //    * @param resolvers The custom MigrationResolvers to be used in addition to the built-in ones for resolving Migrations to apply. (default: empty list)
-//  //    */
-//  //  def resolvers(resolvers: MigrationResolver*): Fly4sConfig = {
-//  //    config.setResolvers(resolvers)
-//  //    this
-//  //  }
-//  //
-//  //  /** Sets custom MigrationResolvers to be used in addition to the built-in ones for resolving Migrations to apply.
-//  //    *
-//  //    * @param resolvers The fully qualified class names of the custom MigrationResolvers to be used in addition to the built-in ones for resolving Migrations to apply. (default: empty list)
-//  //    */
-//  //  def resolvers(resolvers: String*): Fly4sConfig = {
-//  //    config.setResolversAsClassNames(resolvers)
-//  //    this
-//  //  }
-//  //
-//  //
-//  //
-//  //  /** Custom ResourceProvider to be used to look up resources. If not set, the default strategy will be used.
-//  //    *
-//  //    * @param resourceProvider Custom ResourceProvider to be used to look up resources
-//  //    */
-//  //  def resourceProvider(resourceProvider: ResourceProvider): Fly4sConfig = {
-//  //    config.setResourceProvider(resourceProvider)
-//  //    this
-//  //  }
+/*
+
+
+
+ */
+
 //  //
 //  //  /** Custom ClassProvider to be used to look up {@link JavaMigration} classes. If not set, the default strategy will be used.
 //  //    *
@@ -321,6 +238,67 @@ object Fly4sConfig {
 //  //    this
 //  //  }
 //  //
+
+//sealed trait Fly4sFluentConfig extends Fly4sFluentMigrationConfig with Fly4sFluentFlagConfig { this: Fly4sConfig =>
+//
+//  /** Sets the datasource to use. Must have the necessary privileges to execute DDL.
+//    *
+//    * @param url      The JDBC URL of the database.
+//    * @param user     The user of the database.
+//    * @param password The password of the database.
+//    */
+//  def dataSource(url: String, user: Option[String] = None, password: Option[Array[Char]] = None): Fly4sConfig =
+//    copy(url = url, user = user, password = password)
+//
+//  /** The maximum number of retries when attempting to connect to the database. After each failed attempt, Flyway will
+//    * wait 1 second before attempting to connect again, up to the maximum number of times specified by connectRetries.
+//    *
+//    * @param connectRetries The maximum number of retries (default: `0`).
+//    */
+//  def connectRetries(connectRetries: Int): Fly4sConfig =
+//    copy(connectRetries = connectRetries)
+//
+//  /** The SQL statements to run to initialize a new database connection immediately after opening it.
+//    *
+//    * @param initSql The SQL statements. (default: `None`)
+//    */
+//  def initSql(initSql: Option[String]): Fly4sConfig =
+//    copy(initSql = initSql)
+//
+//  /** Sets the default schema managed by Flyway. This schema name is case-sensitive. If not specified, but
+//    * <i>schemas</i> is, Flyway uses the first schema in that list. If that is also not specified, Flyway uses the default
+//    * schema for the database connection.
+//    * <p>Consequences:</p>
+//    * <ul>
+//    * <li>This schema will be the one containing the schema history table.</li>
+//    * <li>This schema will be the default for the database connection (provided the database supports this concept).</li>
+//    * </ul>
+//    *
+//    * @param defaultSchemaName The default schema managed by Flyway.
+//    */
+//  def defaultSchema(defaultSchemaName: Option[String]): Fly4sConfig =
+//    copy(defaultSchemaName = defaultSchemaName)
+//
+//  /** Sets the schemas managed by Flyway. These schema names are case-sensitive. If not specified, Flyway uses
+//    * the default schema for the database connection. If <i>defaultSchemaName</i> is not specified, then the first of
+//    * this list also acts as default schema.
+//    * <p>Consequences:</p>
+//    * <ul>
+//    * <li>Flyway will automatically attempt to create all these schemas, unless they already exist.</li>
+//    * <li>The schemas will be cleaned in the order of this list.</li>
+//    * <li>If Flyway created them, the schemas themselves will be dropped when cleaning.</li>
+//    * </ul>
+//    *
+//    * @param schemaNames The schemas managed by Flyway. May not be `null`. Must contain at least one element.
+//    */
+//  def schemas(schemaNames: NonEmptyList[String]): Fly4sConfig =
+//    copy(schemaNames = Option(schemaNames))
+//
+//  /** @param lockRetryCount lock retry count. (default: `50`)
+//    */
+//  def lockRetryCount(lockRetryCount: Int): Fly4sConfig =
+//    copy(lockRetryCount = lockRetryCount)
+//
 //}
 //
 //sealed trait Fly4sFluentMigrationConfig { this: Fly4sConfig =>

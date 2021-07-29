@@ -114,9 +114,6 @@ final class Fly4s private (private val flyway: Flyway, val config: Fly4sConfig) 
 
 object Fly4s extends AllInstances with AllSyntax {
 
-  def apply(): Fly4s =
-    Fly4s(Fly4sConfig())
-
   /** Create a new [[Fly4s]] instance with the specified configuration
     * @param config Configuration for [[Fly4s]]
     * @return [[Fly4s]] instance with the specified configuration
