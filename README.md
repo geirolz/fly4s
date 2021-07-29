@@ -37,36 +37,20 @@ case class DbConfig(
 
 #### validation and migration
 ```scala
-def initDatabase(dbConfig: DbConfig): IO[Unit] = 
-    for {
-      _               <- logger.debug(s"Initializing ${dbConfig.name} database")
-      _               <- logger.debug(s"Applying migration for ${dbConfig.name}")
-      fly4s           = Fly4s(Fly4sConfig(
-        url                 = dbConfig.url,
-        user                = dbConfig.user,
-        password            = dbConfig.password,
-        migrationsTable     = dbConfig.migrationsTable,
-        migrationsLocations = Location.ofAll(dbConfig.migrationsLocations)
-      ))
-      migrationResult <- fly4s.validateAndMigrate[IO]
-      _               <- logger.info(s" Applied ${migrationResult.migrationsExecuted} migrations to ${dbConfig.name} database")
-    } yield ()
-```
 
-#### Standard migration
-```scala
+import fly4s.implicits.*
+
 def initDatabase(dbConfig: DbConfig): IO[Unit] = 
     for {
       _               <- logger.debug(s"Initializing ${dbConfig.name} database")
       _               <- logger.debug(s"Applying migration for ${dbConfig.name}")
-      fly4s           = Fly4s(Fly4sConfig(
+      migrationResult <- Fly4s(Fly4sConfig(
         url                 = dbConfig.url,
         user                = dbConfig.user,
         password            = dbConfig.password,
         migrationsTable     = dbConfig.migrationsTable,
         migrationsLocations = Location.ofAll(dbConfig.migrationsLocations)
-      ))
-      migrationResult <- fly4s.migrate[IO]
+      )).validateAndMigrate[IO].result
       _               <- logger.info(s" Applied ${migrationResult.migrationsExecuted} migrations to ${dbConfig.name} database")
     } yield ()
 ```

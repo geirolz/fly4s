@@ -9,6 +9,7 @@ import fly4s.utils.{H2Settings, H2TestSupport}
 class Fly4sTest extends AnyFunSuite with Matchers with H2TestSupport {
 
   import cats.effect.unsafe.implicits.global
+  import fly4s.implicits.*
 
   val h2Settings: H2Settings = H2Settings.inMemory(
     name = "h2-test",
@@ -19,15 +20,18 @@ class Fly4sTest extends AnyFunSuite with Matchers with H2TestSupport {
   )
 
   test("Test validate and migrate") {
-    val result: ValidatedMigrateResult =
+    val result: MigrateResult =
       Fly4s(
         Fly4sConfig(
           url = h2Settings.getUrl,
           locations = List(Location("/migrations"))
         )
-      ).validateAndMigrate[IO].unsafeRunSync()
+      )
+        .validateAndMigrate[IO]
+        .result
+        .unsafeRunSync()
 
-    result.toOption.get.migrationsExecuted shouldBe 2
+    result.migrationsExecuted shouldBe 2
   }
 
   test("Test migrate") {

@@ -112,7 +112,7 @@ final class Fly4s private (private val flyway: Flyway, val config: Fly4sConfig) 
   def repair[F[_]: Async]: F[RepairResult] = Async[F].delay { flyway.repair() }
 }
 
-object Fly4s extends AllInstances with AllSyntax {
+object Fly4s extends AllCoreInstances {
 
   /** Create a new [[Fly4s]] instance with the specified configuration
     * @param config Configuration for [[Fly4s]]
