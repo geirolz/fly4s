@@ -2,36 +2,46 @@ package fly4s.core
 
 import cats.effect.Async
 import cats.Endo
+import cats.data.Validated
+import cats.data.Validated.Valid
 import fly4s.core.data.*
 import org.flywaydb.core.Flyway
 
 final class Fly4s private (private val flyway: Flyway, val config: Fly4sConfig) {
 
+  import cats.implicits.*
+
   /** Re-instantiate a [[Fly4s]] instance with the updated configuration
     * @param updateConfig Function to update configuration
     * @return [[Fly4s]] instance with the updated configuration
     */
-  def reconfigure(updateConfig: Endo[Fly4sConfig]): Fly4s =
+  def configure(updateConfig: Endo[Fly4sConfig]): Fly4s =
     Fly4s(updateConfig(config))
 
-//  /** <b><i>1. Validation</i></b>
-//    * Check [[Fly4s.validate]] for further details
-//    *
-//    * <b><i>2. Migration</i></b>
-//    * If validation steps fails migration wont be applied.
-//    * Check [[Fly4s.migrate]] for further details
-//    *
-//    * @return An `ValidatedNel` summarising the operation results.
-//    */
-//  def validateAndMigrate[F[_]: Async]: F[ValidatedMigrationResult] = {
-//    for {
-//      validationRes <- validate[F].flatMap(ValidateResult.toValidatedNel[F])
-//      migrationRes <- validationRes match {
-//        case Valid(_)                 => migrate[F].map(_.valid)
-//        case i @ Validated.Invalid(_) => Async[F].pure(i)
-//      }
-//    } yield migrationRes
-//  }
+  /** Validate and then runs migrations.
+    *
+    * <b><i>1. Validation</i></b>
+    *  To apply the validation we reconfigure the [[Fly4s]] with `ignorePendingMigrations` set as `true`
+    * Check [[Fly4s.validate]] for further details
+    *
+    * <b><i>2. Migration</i></b>
+    * If validation steps fails migration wont be applied.
+    * Check [[Fly4s.migrate]] for further details
+    *
+    * @return An `ValidatedNel` summarising the operation results.
+    */
+  def validateAndMigrate[F[_]: Async]: F[ValidatedMigrateResult] = {
+    for {
+      validationRes <-
+        configure(_.copy(ignorePendingMigrations = true))
+          .validate[F]
+          .flatMap(ValidateResult.toValidatedNel[F])
+      migrationRes <- validationRes match {
+        case Valid(_)                 => migrate[F].map(_.valid)
+        case i @ Validated.Invalid(_) => Async[F].pure(i)
+      }
+    } yield migrationRes
+  }
 
   /** <p>Starts the database migration. All pending migrations will be applied in order.
     * Calling migrate on an up-to-date database has no effect.</p>
@@ -103,6 +113,9 @@ final class Fly4s private (private val flyway: Flyway, val config: Fly4sConfig) 
 }
 
 object Fly4s extends AllInstances with AllSyntax {
+
+  def apply(): Fly4s =
+    Fly4s(Fly4sConfig())
 
   /** Create a new [[Fly4s]] instance with the specified configuration
     * @param config Configuration for [[Fly4s]]

@@ -7,7 +7,7 @@ import java.nio.charset.{Charset, StandardCharsets}
 import scala.jdk.CollectionConverters.{MapHasAsJava, MapHasAsScala}
 
 case class Fly4sConfig(
-  url: String,
+  url: String = "",
   user: Option[String] = None,
   password: Option[Array[Char]] = None,
   connectRetries: Int = 0,

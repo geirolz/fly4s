@@ -1,17 +1,17 @@
 package fly4s.core.data
 
 import cats.data.{NonEmptyList, ValidatedNel}
-import cats.ApplicativeError
+import cats.ApplicativeThrow
 
 object ValidateResult {
 
-  import cats.implicits._
+  import cats.implicits.*
 
   import scala.jdk.CollectionConverters.CollectionHasAsScala
 
   def toValidatedNel[F[_]](
     v: ValidateResult
-  )(implicit F: ApplicativeError[F, Throwable]): F[ValidatedNel[ValidateOutput, Unit]] = {
+  )(implicit F: ApplicativeThrow[F]): F[ValidatedNel[ValidateOutput, Unit]] = {
     v.validationSuccessful match {
       case true => F.pure(().valid)
       case false =>

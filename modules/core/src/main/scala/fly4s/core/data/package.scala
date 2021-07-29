@@ -4,7 +4,9 @@ import cats.data.ValidatedNel
 import org.flywaydb.core.api.{
   Location => JLocation,
   MigrationInfoService => JMigrationInfoService,
-  MigrationVersion => JMigrationVersion
+  MigrationVersion => JMigrationVersion,
+  ErrorDetails => JErrorDetails,
+  ErrorCode => JErrorCode
 }
 import org.flywaydb.core.api.output.{
   BaselineResult => JBaselineResult,
@@ -19,7 +21,7 @@ import org.flywaydb.core.api.output.{
 package object data {
 
   //results
-  type ValidatedMigrationResult = ValidatedNel[ValidateOutput, MigrateResult]
+  type ValidatedMigrateResult = ValidatedNel[ValidateOutput, MigrateResult]
   type MigrationInfoService = JMigrationInfoService
   type MigrateResult = JMigrateResult
   type ValidateOutput = JValidateOutput
@@ -28,7 +30,8 @@ package object data {
   type UndoResult = JUndoResult
   type BaselineResult = JBaselineResult
   type RepairResult = JRepairResult
-
+  type ErrorDetails = JErrorDetails
+  type ErrorCode = JErrorCode
   //conf
   type Location = JLocation
   type MigrationVersion = JMigrationVersion

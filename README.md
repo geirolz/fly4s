@@ -14,15 +14,6 @@ A lightweight, simple and functional wrapper for Flyway using cats effect.
 
 Fly4s supports Scala 2.13 and 3
 
-**Maven** for 2.13
-```xml
-<dependency>
-    <groupId>com.github.geirolz</groupId>
-    <artifactId>fly4s-core_2.13</artifactId>
-    <version>version</version>
-</dependency>
-```
-
 **Sbt**
 ```
   libraryDependencies += "com.github.geirolz" %% "fly4s-core" % <version>
@@ -30,8 +21,9 @@ Fly4s supports Scala 2.13 and 3
 
 
 ## Usage
+
+Given the following ADT config 
 ```scala
-//not required but useful if you handle config with case class
 case class DbConfig(
   name: String,
   driver: String,
@@ -41,7 +33,10 @@ case class DbConfig(
   migrationsTable: String,
   migrationsLocations: List[String]
 )
+```
 
+#### validation and migration
+```scala
 def initDatabase(dbConfig: DbConfig): IO[Unit] = 
     for {
       _               <- logger.debug(s"Initializing ${dbConfig.name} database")
@@ -51,7 +46,25 @@ def initDatabase(dbConfig: DbConfig): IO[Unit] =
         user                = dbConfig.user,
         password            = dbConfig.password,
         migrationsTable     = dbConfig.migrationsTable,
-        migrationsLocations = Location.of(dbConfig.migrationsLocations)
+        migrationsLocations = Location.ofAll(dbConfig.migrationsLocations)
+      ))
+      migrationResult <- fly4s.validateAndMigrate[IO]
+      _               <- logger.info(s" Applied ${migrationResult.migrationsExecuted} migrations to ${dbConfig.name} database")
+    } yield ()
+```
+
+#### Standard migration
+```scala
+def initDatabase(dbConfig: DbConfig): IO[Unit] = 
+    for {
+      _               <- logger.debug(s"Initializing ${dbConfig.name} database")
+      _               <- logger.debug(s"Applying migration for ${dbConfig.name}")
+      fly4s           = Fly4s(Fly4sConfig(
+        url                 = dbConfig.url,
+        user                = dbConfig.user,
+        password            = dbConfig.password,
+        migrationsTable     = dbConfig.migrationsTable,
+        migrationsLocations = Location.ofAll(dbConfig.migrationsLocations)
       ))
       migrationResult <- fly4s.migrate[IO]
       _               <- logger.info(s" Applied ${migrationResult.migrationsExecuted} migrations to ${dbConfig.name} database")

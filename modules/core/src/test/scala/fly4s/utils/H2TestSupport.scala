@@ -15,7 +15,7 @@ trait H2TestSupport extends BeforeAndAfterAll { this: AnyFunSuite =>
 
         new JFile(settings.parentDir)
           .listFiles()
-          .filter(file => file.getAbsolutePath.contains(settings.name) && file.getAbsolutePath.endsWith("db"))
+//          .filter(file => file.getAbsolutePath.contains(settings.name) && file.getAbsolutePath.endsWith("db"))
           .foreach(file => {
             Console.out.println(s"Deleting ${file.getAbsolutePath}")
             file.delete()
