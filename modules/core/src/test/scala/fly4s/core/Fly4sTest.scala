@@ -10,7 +10,7 @@ class Fly4sTest extends AnyFunSuite with H2TestSupport with Matchers {
 
   import cats.effect.unsafe.implicits.global
 
-  val h2Settings: H2Settings = H2Settings.inMemory(
+  val h2Settings: H2Settings = H2Settings.inFile(
     name = "h2-test",
     options = Map(
       "MODE" -> "MYSQL"
@@ -32,13 +32,13 @@ class Fly4sTest extends AnyFunSuite with H2TestSupport with Matchers {
 //  }
 
   test("Test migrate") {
-    val result: MigrateResult =
-      Fly4s(
-        Fly4sConfig(
-          url = h2Settings.getUrl,
-          locations = Location.of("/migrations")
-        )
-      ).migrate[IO].unsafeRunSync()
+
+    val result: MigrateResult = Fly4s(
+      Fly4sConfig(
+        url = h2Settings.getUrl,
+        locations = Location.ofAll("/migrations")
+      )
+    ).migrate[IO].unsafeRunSync()
 
     result.migrationsExecuted shouldBe 2
   }
@@ -47,7 +47,7 @@ class Fly4sTest extends AnyFunSuite with H2TestSupport with Matchers {
     Fly4s(
       Fly4sConfig(
         url = h2Settings.getUrl,
-        locations = Location.of("/migrations")
+        locations = Location.ofAll("/migrations")
       )
     ).validate[IO].unsafeRunSync()
   }
@@ -56,7 +56,7 @@ class Fly4sTest extends AnyFunSuite with H2TestSupport with Matchers {
     Fly4s(
       Fly4sConfig(
         url = h2Settings.getUrl,
-        locations = Location.of("/migrations")
+        locations = Location.ofAll("/migrations")
       )
     ).clean[IO].unsafeRunSync()
   }
@@ -66,7 +66,7 @@ class Fly4sTest extends AnyFunSuite with H2TestSupport with Matchers {
       Fly4s(
         Fly4sConfig(
           url = h2Settings.getUrl,
-          locations = Location.of("/migrations")
+          locations = Location.ofAll("/migrations")
         )
       ).baseline[IO].unsafeRunSync()
 
@@ -78,7 +78,7 @@ class Fly4sTest extends AnyFunSuite with H2TestSupport with Matchers {
       Fly4s(
         Fly4sConfig(
           url = h2Settings.getUrl,
-          locations = Location.of("/migrations")
+          locations = Location.ofAll("/migrations")
         )
       ).repair[IO].unsafeRunSync()
 
@@ -89,7 +89,7 @@ class Fly4sTest extends AnyFunSuite with H2TestSupport with Matchers {
     Fly4s(
       Fly4sConfig(
         url = h2Settings.getUrl,
-        locations = Location.of("/migrations")
+        locations = Location.ofAll("/migrations")
       )
     ).info[IO].unsafeRunSync()
   }

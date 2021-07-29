@@ -1,20 +1,20 @@
 package fly4s.core
 
 import cats.effect.Async
-import fly4s.core.data._
+import cats.Endo
+import fly4s.core.data.*
 import org.flywaydb.core.Flyway
 
-final class Fly4s(flyway: Flyway) {
+final class Fly4s private (private val flyway: Flyway, val config: Fly4sConfig) {
 
-  /** Return the Java `Flyway` instance
+  /** Re-instantiate a [[Fly4s]] instance with the updated configuration
+    * @param updateConfig Function to update configuration
+    * @return [[Fly4s]] instance with the updated configuration
     */
-  val toJava: Flyway = flyway
+  def reconfigure(updateConfig: Endo[Fly4sConfig]): Fly4s =
+    Fly4s(updateConfig(config))
 
-//  /** !!!NOTE!!!
-//    *  <b>BY DEFAULT FLYWAY PERFORMS VALIDATION SO PLEASE SET `validateOnMigrate` FLAG TO `FALSE` TO USE THIS METHOD</b>
-//    * !!!NOTE!!!
-//    *
-//    * <b><i>1. Validation</i></b>
+//  /** <b><i>1. Validation</i></b>
 //    * Check [[Fly4s.validate]] for further details
 //    *
 //    * <b><i>2. Migration</i></b>
@@ -105,8 +105,10 @@ final class Fly4s(flyway: Flyway) {
 object Fly4s extends AllInstances with AllSyntax {
 
   def apply(config: Fly4sConfig): Fly4s =
-    Fly4s.fromJava(new Flyway(config.toJava))
+    new Fly4s(new Flyway(Fly4sConfig.toJava(config)), config)
 
   def fromJava(flyway: Flyway): Fly4s =
-    new Fly4s(flyway)
+    new Fly4s(flyway, Fly4sConfig.fromJava(flyway.getConfiguration))
+
+  def toJava(fly4s: Fly4s): Flyway = fly4s.flyway
 }
