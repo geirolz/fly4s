@@ -104,11 +104,23 @@ final class Fly4s private (private val flyway: Flyway, val config: Fly4sConfig) 
 
 object Fly4s extends AllInstances with AllSyntax {
 
+  /** Create a new [[Fly4s]] instance with the specified configuration
+    * @param config Configuration for [[Fly4s]]
+    * @return [[Fly4s]] instance with the specified configuration
+    */
   def apply(config: Fly4sConfig): Fly4s =
     new Fly4s(new Flyway(Fly4sConfig.toJava(config)), config)
 
+  /** Convert a standard `Flyway` instance to a [[Fly4s]] instance.
+    * @param flyway `Flyway` instance to convert
+    * @return [[Fly4s]] instance with the `Flyway` instance configuration
+    */
   def fromJava(flyway: Flyway): Fly4s =
     new Fly4s(flyway, Fly4sConfig.fromJava(flyway.getConfiguration))
 
+  /** Convert a [[Fly4s]] instance into standard `Flyway` instance
+    * @param fly4s [[Fly4s]] instance to convert
+    * @return standard `Flyway` instance
+    */
   def toJava(fly4s: Fly4s): Flyway = fly4s.flyway
 }
