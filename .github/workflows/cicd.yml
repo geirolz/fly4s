@@ -30,7 +30,7 @@ jobs:
         include:
           - scala: 2.13.6
             test-tasks: coverage test coverageReport
-          - scala: 3.0.1
+          - scala: 3.0.2
             test-tasks: test # scoverage doesn’t support Scala 3
 
     steps:
