@@ -7,6 +7,9 @@ object Location {
   def apply(value: String): Location =
     new Location(value)
 
+  def one(values: String): List[Location] =
+    ofAll(values)
+
   def ofAll(values: String*): List[Location] =
     ofFunctor(values.toList)
 

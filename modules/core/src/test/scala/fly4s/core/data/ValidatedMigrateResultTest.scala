@@ -13,14 +13,14 @@ class ValidatedMigrateResultTest extends AnyFunSuite with Matchers with TryValue
 
   test("ValidatedMigrateResult.valid.liftTo[Try] should be Success") {
     val migrateResult = new MigrateResult("FLYWAY_VERSION", "DATABASE", "SCHEMA_NAME")
-    val result = ValidatedMigrateResult.liftTo[Try](ValidatedMigrateResult.valid(migrateResult))
+    val result        = ValidatedMigrateResult.liftTo[Try](ValidatedMigrateResult.valid(migrateResult))
 
     result shouldBe Success(migrateResult)
   }
 
   test("ValidatedMigrateResult.invalid.liftTo[Try] should be Failure") {
     val validateOutputs = NonEmptyList.of(Samples.aValidateOutput)
-    val result = ValidatedMigrateResult.liftTo[Try](ValidatedMigrateResult.invalid(validateOutputs))
+    val result          = ValidatedMigrateResult.liftTo[Try](ValidatedMigrateResult.invalid(validateOutputs))
 
     result.isFailure shouldBe true
   }

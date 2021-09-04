@@ -1,14 +1,14 @@
 package fly4s.core
 
 import cats.effect.IO
+import cats.effect.testing.scalatest.AsyncIOSpec
 import fly4s.core.data.*
-import org.scalatest.funsuite.AnyFunSuite
+import fly4s.utils.{H2Settings, H2Support}
+import org.scalatest.funsuite.AsyncFunSuite
 import org.scalatest.matchers.should.Matchers
-import fly4s.utils.{H2Settings, H2TestSupport}
 
-class Fly4sTest extends AnyFunSuite with Matchers with H2TestSupport {
+class Fly4sTest extends AsyncFunSuite with AsyncIOSpec with Matchers with H2Support {
 
-  import cats.effect.unsafe.implicits.global
   import fly4s.implicits.*
 
   val h2Settings: H2Settings = H2Settings.inMemory(
@@ -20,80 +20,88 @@ class Fly4sTest extends AnyFunSuite with Matchers with H2TestSupport {
   )
 
   test("Test validate and migrate") {
-    val result: MigrateResult =
-      Fly4s(
-        Fly4sConfig(
-          url = h2Settings.getUrl,
-          locations = List(Location("/migrations"))
+    Fly4s
+      .make[IO](
+        url = h2Settings.getUrl,
+        config = Fly4sConfig(
+          locations               = Location.ofAll("/migrations"),
+          ignorePendingMigrations = true
         )
       )
-        .validateAndMigrate[IO]
-        .result
-        .unsafeRunSync()
-
-    result.migrationsExecuted shouldBe 2
+      .use(_.validateAndMigrate[IO])
+      .result
+      .asserting(_.migrationsExecuted shouldBe 2)
   }
 
   test("Test migrate") {
-
-    val result: MigrateResult = Fly4s(
-      Fly4sConfig(
+    Fly4s
+      .make[IO](
         url = h2Settings.getUrl,
-        locations = List(Location("/migrations"))
+        config = Fly4sConfig(
+          locations = Location.ofAll("/migrations")
+        )
       )
-    ).migrate[IO].unsafeRunSync()
-
-    result.migrationsExecuted shouldBe 2
+      .use(_.migrate[IO])
+      .asserting(_.migrationsExecuted shouldBe 2)
   }
 
   test("Test validate") {
-    Fly4s(
-      Fly4sConfig(
+    Fly4s
+      .make[IO](
         url = h2Settings.getUrl,
-        locations = Location.ofAll("/migrations")
+        config = Fly4sConfig(
+          locations = Location.ofAll("/migrations")
+        )
       )
-    ).validate[IO].unsafeRunSync()
+      .use(_.validate[IO])
+      .assertNoException
   }
 
   test("Test clean") {
-    Fly4s(
-      Fly4sConfig(
+    Fly4s
+      .make[IO](
         url = h2Settings.getUrl,
-        locations = Location.ofAll("/migrations")
+        config = Fly4sConfig(
+          locations = Location.ofAll("/migrations")
+        )
       )
-    ).clean[IO].unsafeRunSync()
+      .use(_.clean[IO])
+      .assertNoException
   }
 
   test("Test baseline") {
-    val result: BaselineResult =
-      Fly4s(
-        Fly4sConfig(
-          url = h2Settings.getUrl,
+    Fly4s
+      .make[IO](
+        url = h2Settings.getUrl,
+        config = Fly4sConfig(
           locations = Location.ofAll("/migrations")
         )
-      ).baseline[IO].unsafeRunSync()
-
-    result.successfullyBaselined shouldBe true
+      )
+      .use(_.baseline[IO])
+      .asserting(_.successfullyBaselined shouldBe true)
   }
 
   test("Test repair") {
-    val result: RepairResult =
-      Fly4s(
-        Fly4sConfig(
-          url = h2Settings.getUrl,
+    Fly4s
+      .make[IO](
+        url = h2Settings.getUrl,
+        config = Fly4sConfig(
           locations = Location.ofAll("/migrations")
         )
-      ).repair[IO].unsafeRunSync()
-
-    result.repairActions shouldBe empty
+      )
+      .use(_.repair[IO])
+      .asserting(_.repairActions shouldBe empty)
   }
 
   test("Test info") {
-    Fly4s(
-      Fly4sConfig(
+    Fly4s
+      .make[IO](
         url = h2Settings.getUrl,
-        locations = Location.ofAll("/migrations")
+        config = Fly4sConfig(
+          locations = Location.ofAll("/migrations")
+        )
       )
-    ).info[IO].unsafeRunSync()
+      .use(_.info[IO])
+      .assertNoException
   }
 }

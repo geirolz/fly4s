@@ -44,13 +44,15 @@ def initDatabase(dbConfig: DbConfig): IO[Unit] =
     for {
       _               <- logger.debug(s"Initializing ${dbConfig.name} database")
       _               <- logger.debug(s"Applying migration for ${dbConfig.name}")
-      migrationResult <- Fly4s(Fly4sConfig(
-        url                 = dbConfig.url,
-        user                = dbConfig.user,
-        password            = dbConfig.password,
-        migrationsTable     = dbConfig.migrationsTable,
-        migrationsLocations = Location.ofAll(dbConfig.migrationsLocations)
-      )).validateAndMigrate[IO].result
+      migrationResult <- Fly4s.make[IO](
+                             url                 = dbConfig.url,
+                             user                = dbConfig.user,
+                             password            = dbConfig.password,
+                             config = Fly4sConfig(
+                               table     = dbConfig.migrationsTable,
+                               locations = Location.ofFunctor(dbConfig.migrationsLocations)
+                             )
+                         ).use(_.validateAndMigrate[IO].result)
       _               <- logger.info(s" Applied ${migrationResult.migrationsExecuted} migrations to ${dbConfig.name} database")
     } yield ()
 ```

@@ -52,7 +52,7 @@ object H2Settings {
 
   def inFile(
     name: String,
-    parentDir: String = "./target/test-data/db",
+    parentDir: String            = "./target/test-data/db",
     options: Map[String, String] = Map.empty
   ): H2Settings =
     H2InFileSettings(name, parentDir, options)

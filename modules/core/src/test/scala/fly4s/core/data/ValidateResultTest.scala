@@ -13,7 +13,7 @@ class ValidateResultTest extends AnyFunSuite with Matchers {
 
     val validateResult = Samples.anValidateResult(
       validationSuccessful = true,
-      invalidMigrations = Nil
+      invalidMigrations    = Nil
     )
     val result: Try[ValidatedNel[ValidateOutput, Unit]] = ValidateResult.toValidatedNel[Try](validateResult)
 
@@ -25,7 +25,7 @@ class ValidateResultTest extends AnyFunSuite with Matchers {
     val invalidMigrations = NonEmptyList.one(Samples.aValidateOutput)
     val validateResult = Samples.anValidateResult(
       validationSuccessful = false,
-      invalidMigrations = invalidMigrations.toList
+      invalidMigrations    = invalidMigrations.toList
     )
 
     val result = ValidateResult.toValidatedNel[Try](validateResult)
@@ -37,7 +37,7 @@ class ValidateResultTest extends AnyFunSuite with Matchers {
 
     val validateResult = Samples.anValidateResult(
       validationSuccessful = false,
-      invalidMigrations = Nil
+      invalidMigrations    = Nil
     )
 
     val result = ValidateResult.toValidatedNel[Try](validateResult)
