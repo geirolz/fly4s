@@ -182,7 +182,7 @@ object Fly4s extends AllCoreInstances {
         )
       })
 
-  object Unsafe {
+  private[core] object Unsafe {
 
     def makeFromRawConfigForDataSource[F[_]](
       mapFlywayConfig: Endo[FluentConfiguration],
