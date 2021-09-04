@@ -1,6 +1,6 @@
 import cats.effect.IO
 import fly4s.core.Fly4s
-import fly4s.core.data.{Fly4sConfig, Location}
+import fly4s.core.data.{Fly4sConfig, Location, ValidatedMigrateResult}
 import org.flywaydb.core.internal.logging.slf4j.Slf4jLog
 
 case class DbConfig(
@@ -15,7 +15,9 @@ case class DbConfig(
 
 val dbConfig : DbConfig = ???
 
-Fly4s.make[IO](
+import fly4s.implicits.*
+
+val res: IO[ValidatedMigrateResult] = Fly4s.make[IO](
   url                 = dbConfig.url,
   user                = dbConfig.user,
   password            = dbConfig.password,
