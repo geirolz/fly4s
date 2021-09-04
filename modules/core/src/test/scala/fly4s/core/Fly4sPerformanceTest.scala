@@ -23,7 +23,7 @@ class Fly4sPerformanceTest extends AsyncFunSuite with AsyncIOSpec with Matchers 
     val flywayDb = H2Settings.inMemory(s"flyway$op").mysqlMode
 
     checkPerformance(op)(
-      tolerance = 500.milliseconds,
+      tolerance = 1000.milliseconds,
       fly4sOp = Fly4s
         .make[IO](
           url = fly4sDb.getUrl,
