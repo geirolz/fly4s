@@ -1,6 +1,6 @@
 import sbt.project
 val prjname = "fly4s"
-val org = "com.github.geirolz"
+val org     = "com.github.geirolz"
 inThisBuild(
   List(
     organization := org,

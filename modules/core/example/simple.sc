@@ -13,14 +13,16 @@ case class DbConfig(
   migrationsLocations: List[String]
 )
 
-val dbConfig : DbConfig = ???
+val dbConfig: DbConfig = ???
 
-Fly4s.make[IO](
-  url                 = dbConfig.url,
-  user                = dbConfig.user,
-  password            = dbConfig.password,
-  config = Fly4sConfig(
-    table     = dbConfig.migrationsTable,
-    locations = Location.ofFunctor(dbConfig.migrationsLocations)
+Fly4s
+  .make[IO](
+    url      = dbConfig.url,
+    user     = dbConfig.user,
+    password = dbConfig.password,
+    config = Fly4sConfig(
+      table     = dbConfig.migrationsTable,
+      locations = Location.ofFunctor(dbConfig.migrationsLocations)
+    )
   )
-).use(_.validateAndMigrate[IO])
+  .use(_.validateAndMigrate[IO])
