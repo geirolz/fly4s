@@ -9,6 +9,7 @@ import org.scalatest.matchers.should.Matchers
 
 class Fly4sTest extends AsyncFunSuite with AsyncIOSpec with Matchers with H2Support {
 
+  import cats.implicits.*
   import fly4s.implicits.*
 
   val h2Settings: H2Settings = H2Settings.inMemory(
@@ -103,5 +104,59 @@ class Fly4sTest extends AsyncFunSuite with AsyncIOSpec with Matchers with H2Supp
       )
       .use(_.info[IO])
       .assertNoException
+  }
+
+  test("Reconfigure with a completely new config") {
+
+    val res = Fly4s
+      .make[IO](
+        url      = h2Settings.getUrl,
+        user     = "USER".some,
+        password = "PWD".toCharArray.some,
+        config = Fly4sConfig(
+          locations = Location.ofAll("/migrations")
+        )
+      )
+      .use(
+        _.reconfigure[IO](
+          Fly4sConfig(
+            locations = Location.ofAll("/new_migrations")
+          )
+        )
+      )
+
+    for {
+      _ <- res.asserting(_.config.locations shouldBe List(Location("/new_migrations")))
+      _ <- res.asserting(_.sourceConfig.url shouldBe Some(h2Settings.getUrl))
+      _ <- res.asserting(_.sourceConfig.user shouldBe Some("USER"))
+      _ <- res.asserting(_.sourceConfig.password.map(_.mkString) shouldBe Some("PWD"))
+    } yield ()
+  }
+
+  test("Reconfigure mapping current config") {
+
+    val res = Fly4s
+      .make[IO](
+        url      = h2Settings.getUrl,
+        user     = "USER".some,
+        password = "PWD".toCharArray.some,
+        config = Fly4sConfig(
+          locations = Location.ofAll("/migrations")
+        )
+      )
+      .use(
+        _.reconfigure[IO]((current: Fly4sConfig) =>
+          current.copy(
+            locations = Location.ofAll("/new_migrations")
+          )
+        )
+      )
+
+    for {
+      _ <- res.asserting(_.config.locations shouldBe List(Location("/new_migrations")))
+      _ <- res.asserting(_.sourceConfig.url shouldBe Some(h2Settings.getUrl))
+      _ <- res.asserting(_.sourceConfig.user shouldBe Some("USER"))
+      _ <- res.asserting(_.sourceConfig.password.map(_.mkString) shouldBe Some("PWD"))
+    } yield ()
   }
 }

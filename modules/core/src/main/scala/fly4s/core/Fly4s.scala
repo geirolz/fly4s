@@ -14,6 +14,24 @@ final class Fly4s private (private val flyway: Flyway, val config: Fly4sConfig) 
 
   import cats.implicits.*
 
+  //------------------------------------- CONFIG -------------------------------------
+
+  /** Retrieves the url, user and password used to construct the dataSource. May be `None` if the dataSource was passed
+    * in directly.
+    *
+    * @return
+    *   The url, user and password used to construct the dataSource. May be `None` if the dataSource was passed in
+    *   directly.
+    */
+  def sourceConfig: SourceConfig = {
+    val jconf = flyway.getConfiguration
+    SourceConfig.fromNullable(
+      url      = jconf.getUrl,
+      user     = jconf.getUser,
+      password = jconf.getPassword
+    )
+  }
+
   /** Re-instantiate a [[Fly4s]] instance with the new configuration
     * @param newConfig
     *   New configuration instance
@@ -32,6 +50,7 @@ final class Fly4s private (private val flyway: Flyway, val config: Fly4sConfig) 
   def reconfigure[F[_]: Async](updateConfig: Endo[Fly4sConfig]): F[Fly4s] =
     Fly4s.Unsafe.reconfigure[F](this, updateConfig(config))
 
+  //------------------------------------- OPS -------------------------------------
   /** Validate and then runs migrations.
     *
     * <b><i>1. Validation</i></b> To apply the validation we reconfigure the [[Fly4s]] with `ignorePendingMigrations`
@@ -43,13 +62,13 @@ final class Fly4s private (private val flyway: Flyway, val config: Fly4sConfig) 
     * @return
     *   An `ValidatedNel` summarising the operation results.
     */
-  def validateAndMigrate[F[_]: Async]: F[ValidatedMigrateResult] = {
+  def validateAndMigrate[F[_]](implicit F: Async[F]): F[ValidatedMigrateResult] = {
     for {
       validateResult   <- validate[F]
       validationResNel <- ValidateResult.toValidatedNel[F](validateResult)
       migrationRes <- validationResNel match {
         case Valid(_)                 => migrate[F].map(_.valid)
-        case i @ Validated.Invalid(_) => Async[F].pure(i)
+        case i @ Validated.Invalid(_) => F.pure(i)
       }
     } yield migrationRes
   }
