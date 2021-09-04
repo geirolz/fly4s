@@ -4,7 +4,7 @@ object ProjectDependencies {
 
   object Plugins {
     val compilerPluginsFor2_13: Seq[ModuleID] = Seq(
-      compilerPlugin("org.typelevel" %% "kind-projector" % "0.13.1" cross CrossVersion.full),
+      compilerPlugin("org.typelevel" %% "kind-projector" % "0.13.2" cross CrossVersion.full),
       compilerPlugin("com.olegpy" %% "better-monadic-for" % "0.3.1")
     )
 
@@ -20,14 +20,15 @@ object ProjectDependencies {
   private val effects: Seq[ModuleID] = {
     Seq(
       "org.typelevel" %% "cats-core" % "2.6.1",
-      "org.typelevel" %% "cats-effect" % "3.2.5"
+      "org.typelevel" %% "cats-effect" % "3.2.7"
     )
   }
 
   private val tests: Seq[ModuleID] = Seq(
     "org.scalactic" %% "scalactic" % "3.2.9",
     "org.scalatest" %% "scalatest" % "3.2.9" % Test,
-    "com.h2database" % "h2" % "1.4.200" % Test
+    "com.h2database" % "h2" % "1.4.200" % Test,
+    "org.typelevel" %% "cats-effect-testing-scalatest" % "1.3.0" % Test
   )
 
   private val db: Seq[ModuleID] = {
