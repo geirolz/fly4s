@@ -18,7 +18,9 @@ object ValidateResult {
         NonEmptyList
           .fromList(v.invalidMigrations.asScala.toList)
           .map(_.invalid[Unit])
-          .liftTo[F](new RuntimeException("InvalidMigrations list are empty but must be NON-empty!"))
+          .liftTo[F](
+            new RuntimeException("InvalidMigrations list are empty but must be NON-empty!")
+          )
     }
   }
 }

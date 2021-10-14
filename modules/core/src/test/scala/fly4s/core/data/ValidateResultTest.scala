@@ -15,7 +15,8 @@ class ValidateResultTest extends AnyFunSuite with Matchers {
       validationSuccessful = true,
       invalidMigrations    = Nil
     )
-    val result: Try[ValidatedNel[ValidateOutput, Unit]] = ValidateResult.toValidatedNel[Try](validateResult)
+    val result: Try[ValidatedNel[ValidateOutput, Unit]] =
+      ValidateResult.toValidatedNel[Try](validateResult)
 
     result shouldBe Success(Valid(()))
   }

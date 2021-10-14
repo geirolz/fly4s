@@ -16,12 +16,12 @@ final class Fly4s private (private val flyway: Flyway, val config: Fly4sConfig) 
 
   //------------------------------------- CONFIG -------------------------------------
 
-  /** Retrieves the url, user and password used to construct the dataSource. May be `None` if the dataSource was passed
-    * in directly.
+  /** Retrieves the url, user and password used to construct the dataSource. May be `None` if the
+    * dataSource was passed in directly.
     *
     * @return
-    *   The url, user and password used to construct the dataSource. May be `None` if the dataSource was passed in
-    *   directly.
+    *   The url, user and password used to construct the dataSource. May be `None` if the dataSource
+    *   was passed in directly.
     */
   def sourceConfig: SourceConfig = {
     val jconf = flyway.getConfiguration
@@ -53,11 +53,11 @@ final class Fly4s private (private val flyway: Flyway, val config: Fly4sConfig) 
   //------------------------------------- OPS -------------------------------------
   /** Validate and then runs migrations.
     *
-    * <b><i>1. Validation</i></b> To apply the validation we reconfigure the [[Fly4s]] with `ignorePendingMigrations`
-    * set as `true` Check [[Fly4s.validate]] for further details
+    * <b><i>1. Validation</i></b> To apply the validation we reconfigure the [[Fly4s]] with
+    * `ignorePendingMigrations` set as `true` Check [[Fly4s.validate]] for further details
     *
-    * <b><i>2. Migration</i></b> If validation steps fails migration wont be applied. Check [[Fly4s.migrate]] for
-    * further details
+    * <b><i>2. Migration</i></b> If validation steps fails migration wont be applied. Check
+    * [[Fly4s.migrate]] for further details
     *
     * @return
     *   An `ValidatedNel` summarising the operation results.
@@ -73,18 +73,19 @@ final class Fly4s private (private val flyway: Flyway, val config: Fly4sConfig) 
     } yield migrationRes
   }
 
-  /** <p>Starts the database migration. All pending migrations will be applied in order. Calling migrate on an
-    * up-to-date database has no effect.</p> <img src="https://flywaydb.org/assets/balsamiq/command-migrate.png"
-    * alt="migrate">
+  /** <p>Starts the database migration. All pending migrations will be applied in order. Calling
+    * migrate on an up-to-date database has no effect.</p> <img
+    * src="https://flywaydb.org/assets/balsamiq/command-migrate.png" alt="migrate">
     *
     * @return
     *   An object summarising the successfully applied migrations.
     */
   def migrate[F[_]](implicit F: Async[F]): F[MigrateResult] = F.blocking { flyway.migrate() }
 
-  /** <p>Undoes the most recently applied versioned migration. If target is specified, Flyway will attempt to undo
-    * versioned migrations in the order they were applied until it hits one with a version below the target. If there is
-    * no versioned migration to undo, calling undo has no effect.</p> <p><i>Flyway Teams only</i></p> <img
+  /** <p>Undoes the most recently applied versioned migration. If target is specified, Flyway will
+    * attempt to undo versioned migrations in the order they were applied until it hits one with a
+    * version below the target. If there is no versioned migration to undo, calling undo has no
+    * effect.</p> <p><i>Flyway Teams only</i></p> <img
     * src="https://flywaydb.org/assets/balsamiq/command-undo.png" alt="undo">
     *
     * @return
@@ -92,20 +93,23 @@ final class Fly4s private (private val flyway: Flyway, val config: Fly4sConfig) 
     */
   def undo[F[_]](implicit F: Async[F]): F[UndoResult] = F.blocking { flyway.undo() }
 
-  /** <p>Validate applied migrations against resolved ones (on the filesystem or classpath) to detect accidental changes
-    * that may prevent the schema(s) from being recreated exactly.</p> <p>Validation fails if</p> <ul> <li>differences
-    * in migration names, types or checksums are found</li> <li>versions have been applied that aren't resolved locally
-    * anymore</li> <li>versions have been resolved that haven't been applied yet</li> </ul>
+  /** <p>Validate applied migrations against resolved ones (on the filesystem or classpath) to
+    * detect accidental changes that may prevent the schema(s) from being recreated exactly.</p>
+    * <p>Validation fails if</p> <ul> <li>differences in migration names, types or checksums are
+    * found</li> <li>versions have been applied that aren't resolved locally anymore</li>
+    * <li>versions have been resolved that haven't been applied yet</li> </ul>
     *
     * <img src="https://flywaydb.org/assets/balsamiq/command-validate.png" alt="validate">
     *
     * @return
     *   An object summarising the validation results
     */
-  def validate[F[_]](implicit F: Async[F]): F[ValidateResult] = F.blocking { flyway.validateWithResult() }
+  def validate[F[_]](implicit F: Async[F]): F[ValidateResult] = F.blocking {
+    flyway.validateWithResult()
+  }
 
-  /** <p>Drops all objects (tables, views, procedures, triggers, ...) in the configured schemas. The schemas are cleaned
-    * in the order specified by the `schemas` property.</p> <img
+  /** <p>Drops all objects (tables, views, procedures, triggers, ...) in the configured schemas. The
+    * schemas are cleaned in the order specified by the `schemas` property.</p> <img
     * src="https://flywaydb.org/assets/balsamiq/command-clean.png" alt="clean">
     *
     * @return
@@ -113,15 +117,17 @@ final class Fly4s private (private val flyway: Flyway, val config: Fly4sConfig) 
     */
   def clean[F[_]](implicit F: Async[F]): F[CleanResult] = F.blocking { flyway.clean() }
 
-  /** <p>Retrieves the complete information about all the migrations including applied, pending and current migrations
-    * with details and status.</p> <img src="https://flywaydb.org/assets/balsamiq/command-info.png" alt="info">
+  /** <p>Retrieves the complete information about all the migrations including applied, pending and
+    * current migrations with details and status.</p> <img
+    * src="https://flywaydb.org/assets/balsamiq/command-info.png" alt="info">
     *
     * @return
     *   All migrations sorted by version, oldest first.
     */
   def info[F[_]](implicit F: Async[F]): F[MigrationInfoService] = F.blocking { flyway.info() }
 
-  /** <p>Baselines an existing database, excluding all migrations up to and including baselineVersion.</p>
+  /** <p>Baselines an existing database, excluding all migrations up to and including
+    * baselineVersion.</p>
     *
     * <img src="https://flywaydb.org/assets/balsamiq/command-baseline.png" alt="baseline">
     *
@@ -130,10 +136,11 @@ final class Fly4s private (private val flyway: Flyway, val config: Fly4sConfig) 
     */
   def baseline[F[_]](implicit F: Async[F]): F[BaselineResult] = F.blocking { flyway.baseline() }
 
-  /** Repairs the Flyway schema history table. This will perform the following actions: <ul> <li>Remove any failed
-    * migrations on databases without DDL transactions (User objects left behind must still be cleaned up manually)</li>
-    * <li>Realign the checksums, descriptions and types of the applied migrations with the ones of the available
-    * migrations</li> </ul> <img src="https://flywaydb.org/assets/balsamiq/command-repair.png" alt="repair">
+  /** Repairs the Flyway schema history table. This will perform the following actions: <ul>
+    * <li>Remove any failed migrations on databases without DDL transactions (User objects left
+    * behind must still be cleaned up manually)</li> <li>Realign the checksums, descriptions and
+    * types of the applied migrations with the ones of the available migrations</li> </ul> <img
+    * src="https://flywaydb.org/assets/balsamiq/command-repair.png" alt="repair">
     *
     * @return
     *   An object summarising the actions taken
@@ -146,8 +153,8 @@ object Fly4s extends AllCoreInstances {
   import cats.effect.*
   import cats.implicits.*
 
-  /** Creates a `Resource` to properly handle the connection with the datasource Create a new `javax.sql` using fly4s
-    * `DriverDataSource` with the specified parameters.
+  /** Creates a `Resource` to properly handle the connection with the datasource Create a new
+    * `javax.sql` using fly4s `DriverDataSource` with the specified parameters.
     *
     * @param url
     *   The JDBC URL of the database.
@@ -176,8 +183,8 @@ object Fly4s extends AllCoreInstances {
       classLoader     = classLoader
     )
 
-  /** Creates a new [[Fly4s]] `Resource` to properly handle the connection with the datasource. Sets the datasource to
-    * use. Must have the necessary privileges to execute DDL.
+  /** Creates a new [[Fly4s]] `Resource` to properly handle the connection with the datasource. Sets
+    * the datasource to use. Must have the necessary privileges to execute DDL.
     *
     * @param acquireDataSource
     *   The datasource to use. Must have the necessary privileges to execute DDL.

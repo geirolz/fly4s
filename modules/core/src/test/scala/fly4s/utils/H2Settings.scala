@@ -38,7 +38,8 @@ case class H2InMemorySettings(name: String, options: Map[String, String]) extend
   override def addOption(o: (String, String)): H2InMemorySettings = copy(options = options + o)
 }
 
-case class H2InFileSettings(name: String, parentDir: String, options: Map[String, String]) extends H2Settings {
+case class H2InFileSettings(name: String, parentDir: String, options: Map[String, String])
+    extends H2Settings {
 
   val dir: String = s"$parentDir/$name"
 

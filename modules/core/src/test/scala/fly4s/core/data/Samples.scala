@@ -9,7 +9,10 @@ import scala.jdk.CollectionConverters.IterableHasAsJava
 
 object Samples {
 
-  def anValidateResult(validationSuccessful: Boolean, invalidMigrations: List[ValidateOutput]): ValidateResult =
+  def anValidateResult(
+    validationSuccessful: Boolean,
+    invalidMigrations: List[ValidateOutput]
+  ): ValidateResult =
     new ValidateResult(
       /*flywayVersion         = */ "FLYWAY_VERSION",
       /*database              = */ "DATABASE",

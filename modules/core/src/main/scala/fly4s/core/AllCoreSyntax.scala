@@ -10,11 +10,16 @@ trait AllCoreSyntax {
   import cats.implicits.*
 
   implicit class ValidatedMigrateResultOps(result: ValidatedMigrateResult) {
-    def liftTo[F[_]: MonadThrow](implicit @unused S: Show[Iterable[ValidateOutput]]): F[MigrateResult] =
+    def liftTo[F[_]: MonadThrow](implicit
+      @unused S: Show[Iterable[ValidateOutput]]
+    ): F[MigrateResult] =
       ValidatedMigrateResult.liftTo[F](result)
   }
 
-  implicit class ValidatedMigrateResultMonadThrowOps[F[_]: MonadThrow](r: F[ValidatedMigrateResult]) {
-    def result(implicit @unused S: Show[Iterable[ValidateOutput]]): F[MigrateResult] = r.flatMap(_.liftTo[F])
+  implicit class ValidatedMigrateResultMonadThrowOps[F[_]: MonadThrow](
+    r: F[ValidatedMigrateResult]
+  ) {
+    def result(implicit @unused S: Show[Iterable[ValidateOutput]]): F[MigrateResult] =
+      r.flatMap(_.liftTo[F])
   }
 }

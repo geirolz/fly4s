@@ -20,7 +20,9 @@ trait ValidateOutputInstances {
   implicit val showInstanceForValidateOutput: Show[ValidateOutput] = (v: ValidateOutput) =>
     ValidateOutput.asPrettyString(v)
 
-  implicit def showInstanceForValidateOutputList(implicit S: Show[ValidateOutput]): Show[Iterable[ValidateOutput]] =
+  implicit def showInstanceForValidateOutputList(implicit
+    S: Show[ValidateOutput]
+  ): Show[Iterable[ValidateOutput]] =
     (vs: Iterable[ValidateOutput]) =>
       vs
         .map(S.show)
