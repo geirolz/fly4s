@@ -21,7 +21,7 @@ val res: IO[ValidatedMigrateResult] = Fly4s
     password = dbConfig.password,
     config = Fly4sConfig(
       table     = dbConfig.migrationsTable,
-      locations = Location.ofFunctor(dbConfig.migrationsLocations)
+      locations = Location.of(dbConfig.migrationsLocations)
     )
   )
   .use(_.validateAndMigrate[IO])

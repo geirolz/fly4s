@@ -11,8 +11,8 @@ object Location {
     ofAll(values)
 
   def ofAll(values: String*): List[Location] =
-    ofFunctor(values.toList)
+    of(values.toList)
 
-  def ofFunctor[F[_]: Functor](values: F[String]): F[Location] =
+  def of[F[_]: Functor](values: F[String]): F[Location] =
     Functor[F].map(values)(Location(_))
 }
