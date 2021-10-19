@@ -2,26 +2,25 @@ package fly4s.core
 
 import cats.data.ValidatedNel
 import org.flywaydb.core.api.{
-  ErrorCode => JErrorCode,
-  ErrorDetails => JErrorDetails,
-  Location => JLocation,
-  MigrationInfoService => JMigrationInfoService,
-  MigrationVersion => JMigrationVersion,
-  ResourceProvider => JResourceProvider
+  ErrorCode as JErrorCode,
+  ErrorDetails as JErrorDetails,
+  Location as JLocation,
+  MigrationInfoService as JMigrationInfoService,
+  MigrationVersion as JMigrationVersion,
+  ResourceProvider as JResourceProvider
 }
+import org.flywaydb.core.api.callback.Callback as JCallback
 import org.flywaydb.core.api.output.{
-  BaselineResult => JBaselineResult,
-  CleanResult => JCleanResult,
-  MigrateResult => JMigrateResult,
-  RepairResult => JRepairResult,
-  UndoResult => JUndoResult,
-  ValidateOutput => JValidateOutput,
-  ValidateResult => JValidateResult
+  BaselineResult as JBaselineResult,
+  CleanResult as JCleanResult,
+  MigrateResult as JMigrateResult,
+  RepairResult as JRepairResult,
+  UndoResult as JUndoResult,
+  ValidateOutput as JValidateOutput,
+  ValidateResult as JValidateResult
 }
-
-import org.flywaydb.core.api.resolver.{MigrationResolver => JMigrationResolver}
-
-import org.flywaydb.core.api.callback.{Callback => JCallback}
+import org.flywaydb.core.api.pattern.ValidatePattern as JValidatePattern
+import org.flywaydb.core.api.resolver.MigrationResolver as JMigrationResolver
 
 package object data {
 
@@ -43,4 +42,5 @@ package object data {
   type Callback          = JCallback
   type MigrationResolver = JMigrationResolver
   type ResourceProvider  = JResourceProvider
+  type ValidatePattern   = JValidatePattern
 }

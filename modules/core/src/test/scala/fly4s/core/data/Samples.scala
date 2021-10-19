@@ -20,8 +20,7 @@ object Samples {
       /*validationSuccessful  = */ validationSuccessful,
       /*validateCount         = */ 0,
       /*invalidMigrations     = */ new util.ArrayList(invalidMigrations.asJavaCollection),
-      /*warnings              = */ Collections.emptyList(),
-      /*validationError       = */ "VALIDATION_ERROR"
+      /*warnings              = */ Collections.emptyList()
     )
 
   def anErrorDetails: ErrorDetails =

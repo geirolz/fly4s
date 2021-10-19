@@ -8,9 +8,9 @@ object Location {
     new Location(value)
 
   def one(values: String): List[Location] =
-    ofAll(values)
+    of(values)
 
-  def ofAll(values: String*): List[Location] =
+  def of(values: String*): List[Location] =
     of(values.toList)
 
   def of[F[_]: Functor](values: F[String]): F[Location] =

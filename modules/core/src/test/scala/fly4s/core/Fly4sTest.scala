@@ -25,8 +25,10 @@ class Fly4sTest extends AsyncFunSuite with AsyncIOSpec with Matchers with H2Supp
       .make[IO](
         url = h2Settings.getUrl,
         config = Fly4sConfig(
-          locations               = Location.ofAll("/migrations"),
-          ignorePendingMigrations = true
+          locations = Location.of("/migrations"),
+          ignoreMigrationPatterns = List(
+            ValidatePattern.ignorePendingMigrations
+          )
         )
       )
       .use(_.validateAndMigrate[IO])
@@ -39,7 +41,7 @@ class Fly4sTest extends AsyncFunSuite with AsyncIOSpec with Matchers with H2Supp
       .make[IO](
         url = h2Settings.getUrl,
         config = Fly4sConfig(
-          locations = Location.ofAll("/migrations")
+          locations = Location.of("/migrations")
         )
       )
       .use(_.migrate[IO])
@@ -51,7 +53,7 @@ class Fly4sTest extends AsyncFunSuite with AsyncIOSpec with Matchers with H2Supp
       .make[IO](
         url = h2Settings.getUrl,
         config = Fly4sConfig(
-          locations = Location.ofAll("/migrations")
+          locations = Location.of("/migrations")
         )
       )
       .use(_.validate[IO])
@@ -63,7 +65,7 @@ class Fly4sTest extends AsyncFunSuite with AsyncIOSpec with Matchers with H2Supp
       .make[IO](
         url = h2Settings.getUrl,
         config = Fly4sConfig(
-          locations = Location.ofAll("/migrations")
+          locations = Location.of("/migrations")
         )
       )
       .use(_.clean[IO])
@@ -75,7 +77,7 @@ class Fly4sTest extends AsyncFunSuite with AsyncIOSpec with Matchers with H2Supp
       .make[IO](
         url = h2Settings.getUrl,
         config = Fly4sConfig(
-          locations = Location.ofAll("/migrations")
+          locations = Location.of("/migrations")
         )
       )
       .use(_.baseline[IO])
@@ -87,7 +89,7 @@ class Fly4sTest extends AsyncFunSuite with AsyncIOSpec with Matchers with H2Supp
       .make[IO](
         url = h2Settings.getUrl,
         config = Fly4sConfig(
-          locations = Location.ofAll("/migrations")
+          locations = Location.of("/migrations")
         )
       )
       .use(_.repair[IO])
@@ -99,7 +101,7 @@ class Fly4sTest extends AsyncFunSuite with AsyncIOSpec with Matchers with H2Supp
       .make[IO](
         url = h2Settings.getUrl,
         config = Fly4sConfig(
-          locations = Location.ofAll("/migrations")
+          locations = Location.of("/migrations")
         )
       )
       .use(_.info[IO])
@@ -114,13 +116,13 @@ class Fly4sTest extends AsyncFunSuite with AsyncIOSpec with Matchers with H2Supp
         user     = "USER".some,
         password = "PWD".toCharArray.some,
         config = Fly4sConfig(
-          locations = Location.ofAll("/migrations")
+          locations = Location.of("/migrations")
         )
       )
       .use(
         _.reconfigure[IO](
           Fly4sConfig(
-            locations = Location.ofAll("/new_migrations")
+            locations = Location.of("/new_migrations")
           )
         )
       )
@@ -141,13 +143,13 @@ class Fly4sTest extends AsyncFunSuite with AsyncIOSpec with Matchers with H2Supp
         user     = "USER".some,
         password = "PWD".toCharArray.some,
         config = Fly4sConfig(
-          locations = Location.ofAll("/migrations")
+          locations = Location.of("/migrations")
         )
       )
       .use(
         _.reconfigure[IO]((current: Fly4sConfig) =>
           current.copy(
-            locations = Location.ofAll("/new_migrations")
+            locations = Location.of("/new_migrations")
           )
         )
       )

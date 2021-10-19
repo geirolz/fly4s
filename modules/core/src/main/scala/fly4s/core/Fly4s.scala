@@ -214,29 +214,30 @@ object Fly4s extends AllCoreInstances {
       mapFlywayConfig: Endo[FluentConfiguration],
       config: Fly4sConfig      = Fly4sConfig.default,
       classLoader: ClassLoader = Thread.currentThread.getContextClassLoader
-    )(implicit F: Async[F]): Resource[F, Fly4s] =
-      Resource
-        .make(
-          fromJavaConfig[F](
-            mapFlywayConfig(
-              Flyway
-                .configure(classLoader)
-                .configuration(Fly4sConfig.toJava(config))
-            )
-          )
-        )(f4s =>
-          F.delay(
-            f4s.flyway.getConfiguration.getDataSource.getConnection.close()
-          )
-        )
+    )(implicit F: Async[F]): Resource[F, Fly4s] = {
 
-    def reconfigure[F[_]: Async](fly4s: Fly4s, config: Fly4sConfig): F[Fly4s] = {
+      val acquireFly4s = for {
+        c1    <- Fly4sConfig.toJava(config, classLoader).liftTo[F]
+        c2    <- F.delay(Flyway.configure(classLoader).configuration(c1))
+        fly4s <- fromJavaConfig[F](mapFlywayConfig(c2))
+      } yield fly4s
+
+      Resource.make[F, Fly4s](acquireFly4s)(f4s =>
+        F.delay(
+          f4s.flyway.getConfiguration.getDataSource.getConnection.close()
+        )
+      )
+    }
+
+    def reconfigure[F[_]](fly4s: Fly4s, config: Fly4sConfig)(implicit F: Async[F]): F[Fly4s] = {
       for {
-        jConfig <- Async[F].delay {
-          val currentJConfig = fly4s.flyway.getConfiguration
-          val newJConfig =
-            new FluentConfiguration(currentJConfig.getClassLoader)
-              .configuration(Fly4sConfig.toJava(config))
+        currentJConfig <- F.pure(fly4s.flyway.getConfiguration)
+        classLoader = currentJConfig.getClassLoader
+        c: Configuration <- Fly4sConfig.toJava(config, classLoader).liftTo[F]
+        jConfig <- F.delay {
+
+          val newJConfig = new FluentConfiguration(classLoader)
+            .configuration(c)
 
           if (currentJConfig.getUrl == null) {
             newJConfig

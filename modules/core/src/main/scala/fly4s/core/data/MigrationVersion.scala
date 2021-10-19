@@ -1,6 +1,6 @@
 package fly4s.core.data
 
-import org.flywaydb.core.api.{MigrationVersion => JMigrationVersion}
+import org.flywaydb.core.api.MigrationVersion as JMigrationVersion
 
 object MigrationVersion {
 

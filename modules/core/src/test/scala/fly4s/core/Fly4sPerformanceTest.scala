@@ -10,7 +10,7 @@ import org.scalatest.matchers.should.Matchers
 import org.scalatest.Assertion
 
 import java.util.concurrent.TimeUnit
-import scala.concurrent.duration.{DurationInt, FiniteDuration, TimeUnit}
+import scala.concurrent.duration.{DurationInt, FiniteDuration}
 
 class Fly4sPerformanceTest extends AsyncFunSuite with AsyncIOSpec with Matchers {
 
@@ -28,7 +28,7 @@ class Fly4sPerformanceTest extends AsyncFunSuite with AsyncIOSpec with Matchers 
         .make[IO](
           url = fly4sDb.getUrl,
           config = Fly4sConfig(
-            locations = Location.ofAll("/migrations")
+            locations = Location.of("/migrations")
           )
         )
         .use(_.migrate[IO]),
@@ -55,8 +55,10 @@ class Fly4sPerformanceTest extends AsyncFunSuite with AsyncIOSpec with Matchers 
         .make[IO](
           url = fly4sDb.getUrl,
           config = Fly4sConfig(
-            locations               = Location.ofAll("/migrations"),
-            ignorePendingMigrations = true
+            locations = Location.of("/migrations"),
+            ignoreMigrationPatterns = List(
+              ValidatePattern.ignorePendingMigrations
+            )
           )
         )
         .use(_.validate[IO]),
@@ -65,7 +67,9 @@ class Fly4sPerformanceTest extends AsyncFunSuite with AsyncIOSpec with Matchers 
           .configure()
           .dataSource(flywayDb.getUrl, null, null)
           .locations("/migrations")
-          .ignorePendingMigrations(true)
+          .ignoreMigrationPatterns(
+            ValidatePattern.toPattern(ValidatePattern.ignorePendingMigrations).get
+          )
           .load()
           .validate()
       }
@@ -84,7 +88,7 @@ class Fly4sPerformanceTest extends AsyncFunSuite with AsyncIOSpec with Matchers 
         .make[IO](
           url = fly4sDb.getUrl,
           config = Fly4sConfig(
-            locations = Location.ofAll("/migrations")
+            locations = Location.of("/migrations")
           )
         )
         .use(_.clean[IO]),
@@ -111,7 +115,7 @@ class Fly4sPerformanceTest extends AsyncFunSuite with AsyncIOSpec with Matchers 
         .make[IO](
           url = fly4sDb.getUrl,
           config = Fly4sConfig(
-            locations = Location.ofAll("/migrations")
+            locations = Location.of("/migrations")
           )
         )
         .use(_.baseline[IO]),
@@ -138,7 +142,7 @@ class Fly4sPerformanceTest extends AsyncFunSuite with AsyncIOSpec with Matchers 
         .make[IO](
           url = fly4sDb.getUrl,
           config = Fly4sConfig(
-            locations = Location.ofAll("/migrations")
+            locations = Location.of("/migrations")
           )
         )
         .use(_.repair[IO]),
@@ -165,7 +169,7 @@ class Fly4sPerformanceTest extends AsyncFunSuite with AsyncIOSpec with Matchers 
         .make[IO](
           url = fly4sDb.getUrl,
           config = Fly4sConfig(
-            locations = Location.ofAll("/migrations")
+            locations = Location.of("/migrations")
           )
         )
         .use(_.info[IO]),

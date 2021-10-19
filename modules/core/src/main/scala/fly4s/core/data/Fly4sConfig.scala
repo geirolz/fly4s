@@ -5,6 +5,7 @@ import org.flywaydb.core.api.configuration.{Configuration, FluentConfiguration}
 
 import java.nio.charset.{Charset, StandardCharsets}
 import scala.jdk.CollectionConverters.{MapHasAsJava, MapHasAsScala}
+import scala.util.Try
 
 case class Fly4sConfig(
   connectRetries: Int                       = 0,
@@ -13,14 +14,15 @@ case class Fly4sConfig(
   schemaNames: Option[NonEmptyList[String]] = None,
   lockRetryCount: Int                       = 50,
   //--- migrations ---
-  installedBy: Option[String]       = None,
-  locations: List[Location]         = List(Location("db/migration")),
-  encoding: Charset                 = StandardCharsets.UTF_8,
-  table: String                     = "flyway_schema_history",
-  tablespace: Option[String]        = None,
-  targetVersion: MigrationVersion   = MigrationVersion.latest,
-  baselineVersion: MigrationVersion = MigrationVersion.one,
-  baselineDescription: String       = "<< Flyway Baseline >>",
+  installedBy: Option[String]                    = None,
+  locations: List[Location]                      = List(Location("db/migration")),
+  encoding: Charset                              = StandardCharsets.UTF_8,
+  table: String                                  = "flyway_schema_history",
+  tablespace: Option[String]                     = None,
+  targetVersion: MigrationVersion                = MigrationVersion.latest,
+  baselineVersion: MigrationVersion              = MigrationVersion.one,
+  baselineDescription: String                    = "<< Flyway Baseline >>",
+  ignoreMigrationPatterns: List[ValidatePattern] = Nil,
   //--- placeholders ---
   placeholders: Map[String, String] = Map.empty,
   placeholderPrefix: String         = "${",
@@ -37,10 +39,6 @@ case class Fly4sConfig(
   //--- flags ---
   group: Boolean                   = false,
   mixed: Boolean                   = false,
-  ignoreMissingMigrations: Boolean = false,
-  ignoreIgnoredMigrations: Boolean = false,
-  ignorePendingMigrations: Boolean = false,
-  ignoreFutureMigrations: Boolean  = true,
   failOnMissingLocations: Boolean  = false,
   validateMigrationNaming: Boolean = false,
   validateOnMigrate: Boolean       = true,
@@ -56,6 +54,8 @@ case class Fly4sConfig(
 
 object Fly4sConfig {
 
+  import cats.implicits.*
+
   lazy val default: Fly4sConfig = Fly4sConfig()
 
   def fromJava(c: Configuration): Fly4sConfig =
@@ -67,14 +67,15 @@ object Fly4sConfig {
       schemaNames       = NonEmptyList.fromList(c.getSchemas.toList),
       lockRetryCount    = c.getLockRetryCount,
       //---------- migrations ----------
-      locations           = c.getLocations.toList,
-      installedBy         = Option(c.getInstalledBy),
-      encoding            = c.getEncoding,
-      table               = c.getTable,
-      tablespace          = Option(c.getTablespace),
-      targetVersion       = c.getTarget,
-      baselineVersion     = c.getBaselineVersion,
-      baselineDescription = c.getBaselineDescription,
+      locations               = c.getLocations.toList,
+      installedBy             = Option(c.getInstalledBy),
+      encoding                = c.getEncoding,
+      table                   = c.getTable,
+      tablespace              = Option(c.getTablespace),
+      targetVersion           = c.getTarget,
+      baselineVersion         = c.getBaselineVersion,
+      baselineDescription     = c.getBaselineDescription,
+      ignoreMigrationPatterns = c.getIgnoreMigrationPatterns.toList,
       //migrations - placeholders
       placeholders      = c.getPlaceholders.asScala.toMap,
       placeholderPrefix = c.getPlaceholderPrefix,
@@ -91,16 +92,12 @@ object Fly4sConfig {
       //---------- flags ----------
       group                   = c.isGroup,
       mixed                   = c.isMixed,
-      ignoreMissingMigrations = c.isIgnoreMissingMigrations,
-      ignoreIgnoredMigrations = c.isIgnoreIgnoredMigrations,
-      ignorePendingMigrations = c.isIgnorePendingMigrations,
-      ignoreFutureMigrations  = c.isIgnoreFutureMigrations,
-      failOnMissingLocations  = c.getFailOnMissingLocations,
+      failOnMissingLocations  = c.isFailOnMissingLocations,
       validateMigrationNaming = c.isValidateMigrationNaming,
       validateOnMigrate       = c.isValidateOnMigrate,
       cleanOnValidationError  = c.isCleanOnValidationError,
       cleanDisabled           = c.isCleanDisabled,
-      createSchemas           = c.getCreateSchemas,
+      createSchemas           = c.isCreateSchemas,
       placeholderReplacement  = c.isPlaceholderReplacement,
       baselineOnMigrate       = c.isBaselineOnMigrate,
       outOfOrder              = c.isOutOfOrder,
@@ -108,9 +105,12 @@ object Fly4sConfig {
       skipDefaultResolvers    = c.isSkipDefaultResolvers
     )
 
-  def toJava(c: Fly4sConfig): Configuration =
+  def toJava(
+    c: Fly4sConfig,
+    classLoader: ClassLoader = Thread.currentThread.getContextClassLoader
+  ): Try[Configuration] = Try {
     //---------- connection ----------
-    new FluentConfiguration()
+    new FluentConfiguration(classLoader)
       .connectRetries(c.connectRetries)
       .initSql(c.initSql.orNull)
       .defaultSchema(c.defaultSchemaName.orNull)
@@ -126,6 +126,7 @@ object Fly4sConfig {
       .target(c.targetVersion)
       .baselineVersion(c.baselineVersion)
       .baselineDescription(c.baselineDescription)
+      .ignoreMigrationPatterns(c.ignoreMigrationPatterns.traverse(ValidatePattern.toPattern).get*)
       //placeholders
       .placeholders(c.placeholders.asJava)
       .placeholderPrefix(c.placeholderPrefix)
@@ -142,10 +143,6 @@ object Fly4sConfig {
       //---------- flags ----------
       .group(c.group)
       .mixed(c.mixed)
-      .ignoreMissingMigrations(c.ignoreMissingMigrations)
-      .ignoreIgnoredMigrations(c.ignoreIgnoredMigrations)
-      .ignorePendingMigrations(c.ignorePendingMigrations)
-      .ignoreFutureMigrations(c.ignoreFutureMigrations)
       .failOnMissingLocations(c.failOnMissingLocations)
       .validateMigrationNaming(c.validateMigrationNaming)
       .validateOnMigrate(c.validateOnMigrate)
@@ -157,4 +154,5 @@ object Fly4sConfig {
       .outOfOrder(c.outOfOrder)
       .skipDefaultCallbacks(c.skipDefaultCallbacks)
       .skipDefaultResolvers(c.skipDefaultResolvers)
+  }
 }
