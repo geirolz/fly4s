@@ -14,7 +14,7 @@ final class Fly4s private (private val flyway: Flyway, val config: Fly4sConfig) 
 
   import cats.implicits.*
 
-  //------------------------------------- CONFIG -------------------------------------
+  // ------------------------------------- CONFIG -------------------------------------
 
   /** Retrieves the url, user and password used to construct the dataSource. May be `None` if the
     * dataSource was passed in directly.
@@ -50,7 +50,7 @@ final class Fly4s private (private val flyway: Flyway, val config: Fly4sConfig) 
   def reconfigure[F[_]: Async](updateConfig: Endo[Fly4sConfig]): F[Fly4s] =
     Fly4s.Unsafe.reconfigure[F](this, updateConfig(config))
 
-  //------------------------------------- OPS -------------------------------------
+  // ------------------------------------- OPS -------------------------------------
   /** Validate and then runs migrations.
     *
     * <b><i>1. Validation</i></b> To apply the validation we reconfigure the [[Fly4s]] with
