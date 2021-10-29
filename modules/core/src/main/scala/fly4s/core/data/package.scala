@@ -24,7 +24,7 @@ import org.flywaydb.core.api.resolver.MigrationResolver as JMigrationResolver
 
 package object data {
 
-  //results
+  // results
   type ValidatedMigrateResult = ValidatedNel[ValidateOutput, MigrateResult]
   type MigrationInfoService   = JMigrationInfoService
   type MigrateResult          = JMigrateResult
@@ -36,7 +36,7 @@ package object data {
   type RepairResult           = JRepairResult
   type ErrorDetails           = JErrorDetails
   type ErrorCode              = JErrorCode
-  //conf
+  // conf
   type Location          = JLocation
   type MigrationVersion  = JMigrationVersion
   type Callback          = JCallback
