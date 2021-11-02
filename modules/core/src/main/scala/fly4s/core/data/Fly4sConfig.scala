@@ -126,7 +126,7 @@ object Fly4sConfig {
       .target(c.targetVersion)
       .baselineVersion(c.baselineVersion)
       .baselineDescription(c.baselineDescription)
-      .ignoreMigrationPatterns(c.ignoreMigrationPatterns.traverse(ValidatePattern.toPattern).get*)
+      .ignoreMigrationPatterns(c.ignoreMigrationPatterns*)
       // placeholders
       .placeholders(c.placeholders.asJava)
       .placeholderPrefix(c.placeholderPrefix)
