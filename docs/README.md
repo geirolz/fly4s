@@ -1,4 +1,4 @@
-# Fly4s
+# @DOCS_TITLE@
 [![Build Status](https://github.com/geirolz/fly4s/actions/workflows/cicd.yml/badge.svg)](https://github.com/geirolz/fly4s/actions)
 [![codecov](https://img.shields.io/codecov/c/github/geirolz/fly4s)](https://codecov.io/gh/geirolz/fly4s)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/db3274b55e0c4031803afb45f58d4413)](https://www.codacy.com/manual/david.geirola/fly4s?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=geirolz/fly4s&amp;utm_campaign=Badge_Grade)
@@ -35,7 +35,7 @@ So, add the dependency in your `build.sbt` file.
 Fly4s depends on Flyway, so we'll have access to Flyway as well
 
 ```sbt
-libraryDependencies += "com.github.geirolz" %% "fly4s-core" % "0.0.5"
+libraryDependencies += "com.github.geirolz" %% "fly4s-core" % "@VERSION@"
 ```
 
 ### Migrations files
@@ -69,7 +69,7 @@ or others
 config libraries make your app very robust from the configuration point of view)
 
 Let's create a simple case class to achieve this.
-```scala
+```scala mdoc:silent
 case class DatabaseConfig(
   url: String,
   user: Option[String],
@@ -96,7 +96,7 @@ that when released/interrupted safely close the `DataSource` connection.
 In both `make` and `makeFor` methods, we can specify the parameter `config`. `Fly4sConfig` is a trivial wrapper for
 flyway `Configuration` but instead of having a builder we have a case class.
 
-```scala
+```scala mdoc
 import fly4s.core.*
 import fly4s.core.data.*
 import cats.effect.*
@@ -108,13 +108,6 @@ val dbConfig: DatabaseConfig = DatabaseConfig(
   migrationsTable     = "flyway",
   migrationsLocations = List("db")
 )
-// dbConfig: DatabaseConfig = DatabaseConfig(
-//   url = "url",
-//   user = Some(value = "user"),
-//   password = None,
-//   migrationsTable = "flyway",
-//   migrationsLocations = List("db")
-// )
 
 val fly4sRes: Resource[IO, Fly4s] = Fly4s.make[IO](
   url                 = dbConfig.url,
@@ -125,9 +118,6 @@ val fly4sRes: Resource[IO, Fly4s] = Fly4s.make[IO](
     locations = Location.of(dbConfig.migrationsLocations)
   )
 )
-// fly4sRes: Resource[IO, Fly4s] = Allocate(
-//   resource = cats.effect.kernel.Resource$$$Lambda$15884/0x0000000802138998@208f7285
-// )
 ```
 
 ### Using Fly4s

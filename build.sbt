@@ -1,10 +1,13 @@
 import sbt.project
-val prjname = "fly4s"
+import scala.language.postfixOps
+
+val prjName = "fly4s"
 val org     = "com.github.geirolz"
+
 inThisBuild(
   List(
     organization := org,
-    homepage := Some(url(s"https://github.com/geirolz/$prjname")),
+    homepage := Some(url(s"https://github.com/geirolz/${prjName.toLowerCase}")),
     licenses := List("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
     developers := List(
       Developer(
@@ -23,31 +26,43 @@ lazy val fly4s: Project = project
   .settings(allSettings)
   .settings(noPublishSettings)
   .settings(
-    name := "fly4s",
+    name := prjName,
     description := "A functional wrapper for Flyway",
     organization := org
   )
-  .aggregate(core)
+  .dependsOn(core)
 
 lazy val core: Project =
-  buildModule("core", toPublish = true)
+  buildModule(
+    "core",
+    toPublish = true,
+    docs      = true
+  ).configure(
+    enableMdoc(docTitle = prjName).andThen(
+      _.settings(
+        mdocIn := file("docs"),
+        mdocOut := file(".")
+      )
+    )
+  )
 
 //=============================== MODULES UTILS ===============================
-def buildModule(path: String, toPublish: Boolean = false): Project = {
-  val id = path.split("-").reduce(_ + _.capitalize)
-  Project(id, file(s"modules/$path"))
-    .configure(buildProject(path, toPublish))
-}
+def buildModule(path: String, toPublish: Boolean, docs: Boolean): Project = {
+  val keys       = path.split("-")
+  val id         = keys.reduce(_ + _.capitalize)
+  val docName    = keys.mkString(" ")
+  val docNameStr = s"$prjName $docName"
+  val prjFile    = file(s"modules/$path")
 
-def buildProject(path: String, toPublish: Boolean = false)(project: Project) = {
-  val docName = path.split("-").mkString(" ")
-  project.settings(
-    description := s"$prjname $docName",
-    moduleName := s"$prjname-$path",
-    name := s"$prjname $docName",
-    publish / skip := !toPublish,
-    allSettings
-  )
+  Project(id, prjFile)
+    .configure(if (docs) enableMdoc(docTitle = docNameStr) else identity)
+    .settings(allSettings)
+    .settings(
+      description := moduleName.value,
+      moduleName := s"$prjName-$path",
+      name := s"$prjName $docName",
+      publish / skip := !toPublish
+    )
 }
 
 //=============================== SETTINGS ===============================
@@ -77,6 +92,21 @@ lazy val baseSettings = Seq(
   // fmt
   scalafmtOnCompile := true
 )
+
+def enableMdoc(docTitle: String): Project => Project =
+  prj =>
+    prj
+      .enablePlugins(MdocPlugin)
+      .settings(
+        mdocIn := prj.base / "docs",
+        mdocOut := prj.base,
+        mdocVariables := Map(
+          "ORG"        -> org,
+          "PRJ_NAME"   -> prjName.capitalize,
+          "DOCS_TITLE" -> docTitle.split(" ").map(_.capitalize).mkString(" "),
+          "VERSION"    -> previousStableVersion.value.getOrElse("<version>")
+        )
+      )
 
 def scalacSettings(scalaVersion: String): Seq[String] =
   Seq(
