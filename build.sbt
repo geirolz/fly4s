@@ -1,5 +1,4 @@
 import sbt.project
-import scala.language.postfixOps
 
 val prjName = "fly4s"
 val org     = "com.github.geirolz"
@@ -7,7 +6,7 @@ val org     = "com.github.geirolz"
 inThisBuild(
   List(
     organization := org,
-    homepage := Some(url(s"https://github.com/geirolz/${prjName.toLowerCase}")),
+    homepage := Some(url(s"https://github.com/geirolz/$prjName")),
     licenses := List("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
     developers := List(
       Developer(
@@ -30,7 +29,7 @@ lazy val fly4s: Project = project
     description := "A functional wrapper for Flyway",
     organization := org
   )
-  .dependsOn(core)
+  .aggregate(core)
 
 lazy val core: Project =
   buildModule(
@@ -56,12 +55,12 @@ def buildModule(path: String, toPublish: Boolean, docs: Boolean): Project = {
 
   Project(id, prjFile)
     .configure(if (docs) enableMdoc(docTitle = docNameStr) else identity)
-    .settings(allSettings)
     .settings(
       description := moduleName.value,
       moduleName := s"$prjName-$path",
       name := s"$prjName $docName",
-      publish / skip := !toPublish
+      publish / skip := !toPublish,
+      allSettings
     )
 }
 
