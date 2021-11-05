@@ -35,7 +35,7 @@ So, add the dependency in your `build.sbt` file.
 Fly4s depends on Flyway, so we'll have access to Flyway as well
 
 ```sbt
-libraryDependencies += "com.github.geirolz" %% "fly4s-core" % "0.0.5"
+libraryDependencies += "com.github.geirolz" %% "fly4s-core" % "0.0.6"
 ```
 
 ### Migrations files
@@ -126,7 +126,7 @@ val fly4sRes: Resource[IO, Fly4s] = Fly4s.make[IO](
   )
 )
 // fly4sRes: Resource[IO, Fly4s] = Allocate(
-//   resource = cats.effect.kernel.Resource$$$Lambda$15884/0x0000000802138998@208f7285
+//   resource = cats.effect.kernel.Resource$$$Lambda$13073/751578315@4a8ad256
 // )
 ```
 
