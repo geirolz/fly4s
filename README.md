@@ -126,7 +126,7 @@ val fly4sRes: Resource[IO, Fly4s] = Fly4s.make[IO](
   )
 )
 // fly4sRes: Resource[IO, Fly4s] = Allocate(
-//   resource = cats.effect.kernel.Resource$$$Lambda$13073/751578315@4a8ad256
+//   resource = cats.effect.kernel.Resource$$$Lambda$18416/511191893@562a79b
 // )
 ```
 
