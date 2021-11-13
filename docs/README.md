@@ -1,4 +1,4 @@
-# @DOCS_TITLE@
+# Fly4s
 [![Build Status](https://github.com/geirolz/@PRJ_NAME@/actions/workflows/cicd.yml/badge.svg)](https://github.com/geirolz/@PRJ_NAME@/actions)
 [![codecov](https://img.shields.io/codecov/c/github/geirolz/@PRJ_NAME@)](https://codecov.io/gh/geirolz/@PRJ_NAME@)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/db3274b55e0c4031803afb45f58d4413)](https://www.codacy.com/manual/david.geirola/@PRJ_NAME@?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=geirolz/@PRJ_NAME@&amp;utm_campaign=Badge_Grade)
@@ -130,8 +130,8 @@ them all together at the same time.
 
 We can create a simple util method to do this
 
-```scala
-  private def migrateDb(
+```scala :nofail
+    private def migrateDb(
     dbConfig: DatabaseConfig
   ): Resource[IO, Unit] =
     Fly4s.make[IO](

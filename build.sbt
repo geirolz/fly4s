@@ -1,4 +1,5 @@
 import sbt.project
+import ModuleMdocPlugin.autoImport.mdocScalacOptions
 
 val prjName = "fly4s"
 val org     = "com.github.geirolz"
@@ -33,35 +34,39 @@ lazy val fly4s: Project = project
 
 lazy val core: Project =
   buildModule(
-    "core",
+    path      = "core",
     toPublish = true,
-    docs      = true
-  ).configure(
-    enableMdoc(docTitle = prjName).andThen(
-      _.settings(
-        mdocIn := file("docs"),
-        mdocOut := file(".")
-      )
-    )
+    folder    = "."
   )
 
 //=============================== MODULES UTILS ===============================
-def buildModule(path: String, toPublish: Boolean, docs: Boolean): Project = {
+def buildModule(path: String, toPublish: Boolean, folder: String = "modules"): Project = {
   val keys       = path.split("-")
   val id         = keys.reduce(_ + _.capitalize)
   val docName    = keys.mkString(" ")
+  val prjFile    = file(s"$folder/$path")
   val docNameStr = s"$prjName $docName"
-  val prjFile    = file(s"modules/$path")
 
   Project(id, prjFile)
-    .configure(if (docs) enableMdoc(docTitle = docNameStr) else identity)
     .settings(
       description := moduleName.value,
       moduleName := s"$prjName-$path",
       name := s"$prjName $docName",
       publish / skip := !toPublish,
+      mdocIn := file(s"$folder/docs"),
+      mdocOut := file(folder),
+      mdocScalacOptions := Seq("-Xsource:3"),
+      mdocVariables := Map(
+        "ORG"         -> org,
+        "PRJ_NAME"    -> prjName,
+        "DOCS_TITLE"  -> docNameStr.split(" ").map(_.capitalize).mkString(" "),
+        "MODULE_NAME" -> moduleName.value,
+        "VERSION"     -> previousStableVersion.value.getOrElse("<version>")
+      ),
       allSettings
     )
+    .enablePlugins(ModuleMdocPlugin)
+
 }
 
 //=============================== SETTINGS ===============================
@@ -91,22 +96,6 @@ lazy val baseSettings = Seq(
   // fmt
   scalafmtOnCompile := true
 )
-
-def enableMdoc(docTitle: String): Project => Project =
-  prj =>
-    prj
-      .enablePlugins(MdocPlugin)
-      .settings(
-        mdocIn := prj.base / "docs",
-        mdocOut := prj.base,
-        mdocVariables := Map(
-          "ORG"         -> org,
-          "PRJ_NAME"    -> prjName,
-          "DOCS_TITLE"  -> docTitle.split(" ").map(_.capitalize).mkString(" "),
-          "MODULE_NAME" -> moduleName.value,
-          "VERSION"     -> previousStableVersion.value.getOrElse("<version>")
-        )
-      )
 
 def scalacSettings(scalaVersion: String): Seq[String] =
   Seq(

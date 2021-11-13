@@ -126,7 +126,7 @@ val fly4sRes: Resource[IO, Fly4s] = Fly4s.make[IO](
   )
 )
 // fly4sRes: Resource[IO, Fly4s] = Allocate(
-//   resource = cats.effect.kernel.Resource$$$Lambda$18416/511191893@562a79b
+//   resource = cats.effect.kernel.Resource$$$Lambda$52270/548546162@39e9562c
 // )
 ```
 
@@ -140,8 +140,8 @@ them all together at the same time.
 
 We can create a simple util method to do this
 
-```scala
-  private def migrateDb(
+```scala :nofail
+    private def migrateDb(
     dbConfig: DatabaseConfig
   ): Resource[IO, Unit] =
     Fly4s.make[IO](
