@@ -28,7 +28,7 @@ object ProjectDependencies {
     "org.scalactic" %% "scalactic" % "3.2.10",
     "org.scalatest" %% "scalatest" % "3.2.10" % Test,
     "com.h2database" % "h2" % "1.4.200" % Test,
-    "org.typelevel" %% "cats-effect-testing-scalatest" % "1.3.0" % Test
+    "org.typelevel" %% "cats-effect-testing-scalatest" % "1.4.0" % Test
   )
 
   private val db: Seq[ModuleID] = {
