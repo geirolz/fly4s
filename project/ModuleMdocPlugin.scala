@@ -1,6 +1,6 @@
 import mdoc.MdocPlugin
 import mdoc.MdocPlugin.autoImport._
-import sbt.{settingKey, _}
+import sbt.{settingKey, Def, _}
 import sbt.Keys._
 
 /** This is needed because unlike tut there is no separate classpath configuration for
@@ -17,10 +17,10 @@ object ModuleMdocPlugin extends AutoPlugin {
 
   import autoImport._
 
-  override def projectSettings: Seq[Setting[_]] = Seq(
+  override def projectSettings: Seq[Def.Setting[_]] = Seq(
     mdocIn := baseDirectory.value / "docs",
     mdocOut := baseDirectory.value,
-    mdocLibraryDependencies := Nil,
+//    mdocLibraryDependencies := Nil,
     mdocScalacOptions := Nil
   )
 

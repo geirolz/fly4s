@@ -4,25 +4,26 @@ import ModuleMdocPlugin.autoImport.mdocScalacOptions
 val prjName = "fly4s"
 val org     = "com.github.geirolz"
 
-inThisBuild(
-  List(
-    organization := org,
-    homepage := Some(url(s"https://github.com/geirolz/$prjName")),
-    licenses := List("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
-    developers := List(
-      Developer(
-        "DavidGeirola",
-        "David Geirola",
-        "david.geirola@gmail.com",
-        url("https://github.com/geirolz")
-      )
-    )
-  )
-)
-
 //## global project to no publish ##
 lazy val fly4s: Project = project
   .in(file("."))
+  .settings(
+    inThisBuild(
+      List(
+        organization := org,
+        homepage := Some(url(s"https://github.com/geirolz/$prjName")),
+        licenses := List("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
+        developers := List(
+          Developer(
+            "DavidGeirola",
+            "David Geirola",
+            "david.geirola@gmail.com",
+            url("https://github.com/geirolz")
+          )
+        )
+      )
+    )
+  )
   .settings(allSettings)
   .settings(noPublishSettings)
   .settings(
@@ -34,23 +35,23 @@ lazy val fly4s: Project = project
 
 lazy val core: Project =
   buildModule(
-    name      = "core",
-    toPublish = true,
-    folder    = "."
+    prjModuleName = "core",
+    toPublish     = true,
+    folder        = "."
   )
 
 //=============================== MODULES UTILS ===============================
-def buildModule(name: String, toPublish: Boolean, folder: String = "modules"): Project = {
-  val keys       = name.split("-")
+def buildModule(prjModuleName: String, toPublish: Boolean, folder: String = "modules"): Project = {
+  val keys       = prjModuleName.split("-")
   val id         = keys.reduce(_ + _.capitalize)
   val docName    = keys.mkString(" ")
-  val prjFile    = file(s"$folder/$name")
+  val prjFile    = file(s"$folder/$prjModuleName")
   val docNameStr = s"$prjName $docName"
 
   Project(id, prjFile)
     .settings(
       description := moduleName.value,
-      moduleName := s"$prjName-$name",
+      moduleName := s"$prjName-$prjModuleName",
       name := s"$prjName $docName",
       publish / skip := !toPublish,
       mdocIn := file(s"$folder/docs"),
@@ -66,20 +67,19 @@ def buildModule(name: String, toPublish: Boolean, folder: String = "modules"): P
       allSettings
     )
     .enablePlugins(ModuleMdocPlugin)
-
 }
 
 //=============================== SETTINGS ===============================
 lazy val allSettings = baseSettings
 
-lazy val noPublishSettings = Seq(
+lazy val noPublishSettings: Seq[Def.Setting[_]] = Seq(
   publish := {},
   publishLocal := {},
   publishArtifact := false,
   publish / skip := true
 )
 
-lazy val baseSettings = Seq(
+lazy val baseSettings: Seq[Def.Setting[_]] = Seq(
   // scala
   crossScalaVersions := List("2.13.7", "3.1.0"),
   scalaVersion := crossScalaVersions.value.head,
