@@ -34,23 +34,23 @@ lazy val fly4s: Project = project
 
 lazy val core: Project =
   buildModule(
-    path      = "core",
+    name      = "core",
     toPublish = true,
     folder    = "."
   )
 
 //=============================== MODULES UTILS ===============================
-def buildModule(path: String, toPublish: Boolean, folder: String = "modules"): Project = {
-  val keys       = path.split("-")
+def buildModule(name: String, toPublish: Boolean, folder: String = "modules"): Project = {
+  val keys       = name.split("-")
   val id         = keys.reduce(_ + _.capitalize)
   val docName    = keys.mkString(" ")
-  val prjFile    = file(s"$folder/$path")
+  val prjFile    = file(s"$folder/$name")
   val docNameStr = s"$prjName $docName"
 
   Project(id, prjFile)
     .settings(
       description := moduleName.value,
-      moduleName := s"$prjName-$path",
+      moduleName := s"$prjName-$name",
       name := s"$prjName $docName",
       publish / skip := !toPublish,
       mdocIn := file(s"$folder/docs"),
