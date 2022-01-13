@@ -28,7 +28,7 @@ jobs:
       matrix:
         # supported scala versions
         include:
-          - scala: 2.13.7
+          - scala: 2.13.8
             name: Scala2
             test-tasks: coverage test coverageReport
           - scala: 3.1.0
