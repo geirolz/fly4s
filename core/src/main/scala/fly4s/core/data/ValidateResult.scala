@@ -16,11 +16,13 @@ object ValidateResult {
       case true => F.pure(().valid)
       case false =>
         NonEmptyList
-          .fromList(v.invalidMigrations.asScala.toList)
-          .map(_.invalid[Unit])
-          .liftTo[F](
-            new RuntimeException("InvalidMigrations list are empty but must be NON-empty!")
-          )
+          .fromList(v.invalidMigrations.asScala.toList) match {
+          case Some(invalidMigrations) => invalidMigrations.invalid[Unit].pure[F]
+          case None =>
+            F.raiseError(
+              new RuntimeException("InvalidMigrations list are empty but must be NON-empty!")
+            )
+        }
     }
   }
 }
