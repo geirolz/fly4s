@@ -110,7 +110,7 @@ class Fly4sTest extends AsyncFunSuite with AsyncIOSpec with Matchers with H2Supp
 
   test("Reconfigure with a completely new config") {
 
-    val res = Fly4s
+    val res: IO[Fly4s[IO]] = Fly4s
       .make[IO](
         url      = h2Settings.getUrl,
         user     = "USER".some,
@@ -137,7 +137,7 @@ class Fly4sTest extends AsyncFunSuite with AsyncIOSpec with Matchers with H2Supp
 
   test("Reconfigure mapping current config") {
 
-    val res = Fly4s
+    val res: IO[Fly4s[IO]] = Fly4s
       .make[IO](
         url      = h2Settings.getUrl,
         user     = "USER".some,
