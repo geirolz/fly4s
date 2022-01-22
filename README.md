@@ -116,7 +116,7 @@ val dbConfig: DatabaseConfig = DatabaseConfig(
 //   migrationsLocations = List("db")
 // )
 
-val fly4sRes: Resource[IO, Fly4s] = Fly4s.make[IO](
+val fly4sRes: Resource[IO, Fly4s[IO]] = Fly4s.make[IO](
   url                 = dbConfig.url,
   user                = dbConfig.user,
   password            = dbConfig.password,
@@ -125,8 +125,8 @@ val fly4sRes: Resource[IO, Fly4s] = Fly4s.make[IO](
     locations = Location.of(dbConfig.migrationsLocations)
   )
 )
-// fly4sRes: Resource[IO, Fly4s] = Allocate(
-//   resource = cats.effect.kernel.Resource$$$Lambda$10926/116099959@64267f45
+// fly4sRes: Resource[IO, Fly4s[IO]] = Allocate(
+//   resource = cats.effect.kernel.Resource$$$Lambda$12147/778703545@44914209
 // )
 ```
 
@@ -140,27 +140,19 @@ them all together at the same time.
 
 We can create a simple util method to do this
 
-```scala :nofail
-    private def migrateDb(
-    dbConfig: DatabaseConfig
-  ): Resource[IO, Unit] =
-    Fly4s.make[IO](
-      url                 = dbConfig.url,
-      user                = dbConfig.user,
-      password            = dbConfig.password,
-      config = Fly4sConfig(
-        table     = dbConfig.migrationsTable,
-        locations = Location.of(dbConfig.migrationsLocations)
+```scala
+import fly4s.implicits.*
+
+def migrateDb(dbConfig: DatabaseConfig): Resource[IO, MigrateResult] =
+  Fly4s.make[IO](
+    url                 = dbConfig.url,
+    user                = dbConfig.user,
+    password            = dbConfig.password,
+    config = Fly4sConfig(
+      table     = dbConfig.migrationsTable,
+      locations = Location.of(dbConfig.migrationsLocations)
     )
-   ).evalMap(fly4s =>
-        for {
-          _               <- logger.debug(s"Applying migration for ${dbConfig.name}")
-          migrationResult <- fly4s.validateAndMigrate[IO].result
-          _ <- logger.info(
-            s" Applied ${migrationResult.migrationsExecuted} migrations to ${dbConfig.name} database"
-          )
-        } yield ()
-      )
+  ).evalMap(_.validateAndMigrate.result)
 ```
 
 ### Conclusions

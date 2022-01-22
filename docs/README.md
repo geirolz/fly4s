@@ -109,7 +109,7 @@ val dbConfig: DatabaseConfig = DatabaseConfig(
   migrationsLocations = List("db")
 )
 
-val fly4sRes: Resource[IO, Fly4s] = Fly4s.make[IO](
+val fly4sRes: Resource[IO, Fly4s[IO]] = Fly4s.make[IO](
   url                 = dbConfig.url,
   user                = dbConfig.user,
   password            = dbConfig.password,
@@ -130,27 +130,19 @@ them all together at the same time.
 
 We can create a simple util method to do this
 
-```scala :nofail
-    private def migrateDb(
-    dbConfig: DatabaseConfig
-  ): Resource[IO, Unit] =
-    Fly4s.make[IO](
-      url                 = dbConfig.url,
-      user                = dbConfig.user,
-      password            = dbConfig.password,
-      config = Fly4sConfig(
-        table     = dbConfig.migrationsTable,
-        locations = Location.of(dbConfig.migrationsLocations)
+```scala mdoc
+import fly4s.implicits.*
+
+def migrateDb(dbConfig: DatabaseConfig): Resource[IO, MigrateResult] =
+  Fly4s.make[IO](
+    url                 = dbConfig.url,
+    user                = dbConfig.user,
+    password            = dbConfig.password,
+    config = Fly4sConfig(
+      table     = dbConfig.migrationsTable,
+      locations = Location.of(dbConfig.migrationsLocations)
     )
-   ).evalMap(fly4s =>
-        for {
-          _               <- logger.debug(s"Applying migration for ${dbConfig.name}")
-          migrationResult <- fly4s.validateAndMigrate[IO].result
-          _ <- logger.info(
-            s" Applied ${migrationResult.migrationsExecuted} migrations to ${dbConfig.name} database"
-          )
-        } yield ()
-      )
+  ).evalMap(_.validateAndMigrate.result)
 ```
 
 ### Conclusions

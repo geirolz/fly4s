@@ -2,7 +2,6 @@ package fly4s.core
 
 import cats.effect.IO
 import cats.effect.testing.scalatest.AsyncIOSpec
-import fly4s.core.data.*
 import fly4s.utils.{H2Settings, H2Support}
 import org.scalatest.funsuite.AsyncFunSuite
 import org.scalatest.matchers.should.Matchers
@@ -11,6 +10,7 @@ class Fly4sTest extends AsyncFunSuite with AsyncIOSpec with Matchers with H2Supp
 
   import cats.implicits.*
   import fly4s.implicits.*
+  import fly4s.core.data.*
 
   val h2Settings: H2Settings = H2Settings.inMemory(
     name = "h2-test",
@@ -31,8 +31,7 @@ class Fly4sTest extends AsyncFunSuite with AsyncIOSpec with Matchers with H2Supp
           )
         )
       )
-      .use(_.validateAndMigrate)
-      .result
+      .use(_.validateAndMigrate.result)
       .asserting(_.migrationsExecuted shouldBe 2)
   }
 
