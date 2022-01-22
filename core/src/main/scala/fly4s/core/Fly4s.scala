@@ -10,7 +10,7 @@ import org.flywaydb.core.api.configuration.{Configuration, FluentConfiguration}
 
 import javax.sql.DataSource
 
-final class Fly4s private (private val flyway: Flyway, val config: Fly4sConfig) {
+final class Fly4s[F[_]] private (private val flyway: Flyway, val config: Fly4sConfig) {
 
   import cats.implicits.*
 
@@ -38,7 +38,7 @@ final class Fly4s private (private val flyway: Flyway, val config: Fly4sConfig) 
     * @return
     *   [[Fly4s]] instance with the new configuration
     */
-  def reconfigure[F[_]: Async](newConfig: Fly4sConfig): F[Fly4s] =
+  def reconfigure(newConfig: Fly4sConfig)(implicit F: Async[F]): F[Fly4s[F]] =
     Fly4s.Unsafe.reconfigure[F](this, newConfig)
 
   /** Re-instantiate a [[Fly4s]] instance with the updated configuration
@@ -47,7 +47,7 @@ final class Fly4s private (private val flyway: Flyway, val config: Fly4sConfig) 
     * @return
     *   [[Fly4s]] instance with the updated configuration
     */
-  def reconfigure[F[_]: Async](updateConfig: Endo[Fly4sConfig]): F[Fly4s] =
+  def reconfigure(updateConfig: Endo[Fly4sConfig])(implicit F: Async[F]): F[Fly4s[F]] =
     Fly4s.Unsafe.reconfigure[F](this, updateConfig(config))
 
   // ------------------------------------- OPS -------------------------------------
@@ -62,12 +62,12 @@ final class Fly4s private (private val flyway: Flyway, val config: Fly4sConfig) 
     * @return
     *   An `ValidatedNel` summarising the operation results.
     */
-  def validateAndMigrate[F[_]](implicit F: Async[F]): F[ValidatedMigrateResult] = {
+  def validateAndMigrate(implicit F: Async[F]): F[ValidatedMigrateResult] = {
     for {
-      validateResult   <- validate[F]
+      validateResult   <- validate
       validationResNel <- ValidateResult.toValidatedNel[F](validateResult)
       migrationRes <- validationResNel match {
-        case Valid(_)                 => migrate[F].map(_.valid)
+        case Valid(_)                 => migrate.map(_.valid)
         case i @ Validated.Invalid(_) => F.pure(i)
       }
     } yield migrationRes
@@ -80,7 +80,7 @@ final class Fly4s private (private val flyway: Flyway, val config: Fly4sConfig) 
     * @return
     *   An object summarising the successfully applied migrations.
     */
-  def migrate[F[_]](implicit F: Async[F]): F[MigrateResult] = F.blocking { flyway.migrate() }
+  def migrate(implicit F: Async[F]): F[MigrateResult] = F.blocking { flyway.migrate() }
 
   /** <p>Undoes the most recently applied versioned migration. If target is specified, Flyway will
     * attempt to undo versioned migrations in the order they were applied until it hits one with a
@@ -91,7 +91,7 @@ final class Fly4s private (private val flyway: Flyway, val config: Fly4sConfig) 
     * @return
     *   An object summarising the successfully undone migrations.
     */
-  def undo[F[_]](implicit F: Async[F]): F[UndoResult] = F.blocking { flyway.undo() }
+  def undo(implicit F: Async[F]): F[UndoResult] = F.blocking { flyway.undo() }
 
   /** <p>Validate applied migrations against resolved ones (on the filesystem or classpath) to
     * detect accidental changes that may prevent the schema(s) from being recreated exactly.</p>
@@ -104,7 +104,7 @@ final class Fly4s private (private val flyway: Flyway, val config: Fly4sConfig) 
     * @return
     *   An object summarising the validation results
     */
-  def validate[F[_]](implicit F: Async[F]): F[ValidateResult] = F.blocking {
+  def validate(implicit F: Async[F]): F[ValidateResult] = F.blocking {
     flyway.validateWithResult()
   }
 
@@ -115,7 +115,7 @@ final class Fly4s private (private val flyway: Flyway, val config: Fly4sConfig) 
     * @return
     *   An object summarising the actions taken
     */
-  def clean[F[_]](implicit F: Async[F]): F[CleanResult] = F.blocking { flyway.clean() }
+  def clean(implicit F: Async[F]): F[CleanResult] = F.blocking { flyway.clean() }
 
   /** <p>Retrieves the complete information about all the migrations including applied, pending and
     * current migrations with details and status.</p> <img
@@ -124,7 +124,7 @@ final class Fly4s private (private val flyway: Flyway, val config: Fly4sConfig) 
     * @return
     *   All migrations sorted by version, oldest first.
     */
-  def info[F[_]](implicit F: Async[F]): F[MigrationInfoService] = F.blocking { flyway.info() }
+  def info(implicit F: Async[F]): F[MigrationInfoService] = F.blocking { flyway.info() }
 
   /** <p>Baselines an existing database, excluding all migrations up to and including
     * baselineVersion.</p>
@@ -134,7 +134,7 @@ final class Fly4s private (private val flyway: Flyway, val config: Fly4sConfig) 
     * @return
     *   An object summarising the actions taken
     */
-  def baseline[F[_]](implicit F: Async[F]): F[BaselineResult] = F.blocking { flyway.baseline() }
+  def baseline(implicit F: Async[F]): F[BaselineResult] = F.blocking { flyway.baseline() }
 
   /** Repairs the Flyway schema history table. This will perform the following actions: <ul>
     * <li>Remove any failed migrations on databases without DDL transactions (User objects left
@@ -145,7 +145,7 @@ final class Fly4s private (private val flyway: Flyway, val config: Fly4sConfig) 
     * @return
     *   An object summarising the actions taken
     */
-  def repair[F[_]](implicit F: Async[F]): F[RepairResult] = F.blocking { flyway.repair() }
+  def repair(implicit F: Async[F]): F[RepairResult] = F.blocking { flyway.repair() }
 }
 
 object Fly4s extends AllCoreInstances {
@@ -176,7 +176,7 @@ object Fly4s extends AllCoreInstances {
     password: Option[Array[Char]] = None,
     config: Fly4sConfig           = Fly4sConfig.default,
     classLoader: ClassLoader      = Thread.currentThread.getContextClassLoader
-  ): Resource[F, Fly4s] =
+  ): Resource[F, Fly4s[F]] =
     Unsafe.makeFromRawConfigForDataSource[F](
       mapFlywayConfig = _.dataSource(url, user.orNull, password.map(_.mkString).orNull),
       config          = config,
@@ -197,7 +197,7 @@ object Fly4s extends AllCoreInstances {
     acquireDataSource: F[DataSource],
     config: Fly4sConfig      = Fly4sConfig.default,
     classLoader: ClassLoader = Thread.currentThread.getContextClassLoader
-  ): Resource[F, Fly4s] =
+  ): Resource[F, Fly4s[F]] =
     Resource
       .eval(acquireDataSource)
       .flatMap(ds => {
@@ -214,7 +214,7 @@ object Fly4s extends AllCoreInstances {
       mapFlywayConfig: Endo[FluentConfiguration],
       config: Fly4sConfig      = Fly4sConfig.default,
       classLoader: ClassLoader = Thread.currentThread.getContextClassLoader
-    )(implicit F: Async[F]): Resource[F, Fly4s] = {
+    )(implicit F: Async[F]): Resource[F, Fly4s[F]] = {
 
       val acquireFly4s = for {
         c1    <- Fly4sConfig.toJava(config, classLoader).liftTo[F]
@@ -222,14 +222,16 @@ object Fly4s extends AllCoreInstances {
         fly4s <- fromJavaConfig[F](mapFlywayConfig(c2))
       } yield fly4s
 
-      Resource.make[F, Fly4s](acquireFly4s)(f4s =>
+      Resource.make[F, Fly4s[F]](acquireFly4s)(f4s =>
         F.delay(
           f4s.flyway.getConfiguration.getDataSource.getConnection.close()
         )
       )
     }
 
-    def reconfigure[F[_]](fly4s: Fly4s, config: Fly4sConfig)(implicit F: Async[F]): F[Fly4s] = {
+    def reconfigure[F[_]](fly4s: Fly4s[F], config: Fly4sConfig)(implicit
+      F: Async[F]
+    ): F[Fly4s[F]] = {
       for {
         currentJConfig <- F.pure(fly4s.flyway.getConfiguration)
         classLoader = currentJConfig.getClassLoader
@@ -255,7 +257,7 @@ object Fly4s extends AllCoreInstances {
       } yield fly4s
     }
 
-    def fromJavaConfig[F[_]](configuration: Configuration)(implicit F: Async[F]): F[Fly4s] =
+    def fromJavaConfig[F[_]](configuration: Configuration)(implicit F: Async[F]): F[Fly4s[F]] =
       F.delay {
         val flyway = new Flyway(configuration)
         new Fly4s(

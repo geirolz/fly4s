@@ -31,7 +31,7 @@ class Fly4sTest extends AsyncFunSuite with AsyncIOSpec with Matchers with H2Supp
           )
         )
       )
-      .use(_.validateAndMigrate[IO])
+      .use(_.validateAndMigrate)
       .result
       .asserting(_.migrationsExecuted shouldBe 2)
   }
@@ -44,7 +44,7 @@ class Fly4sTest extends AsyncFunSuite with AsyncIOSpec with Matchers with H2Supp
           locations = Location.of("/migrations")
         )
       )
-      .use(_.migrate[IO])
+      .use(_.migrate)
       .asserting(_.migrationsExecuted shouldBe 2)
   }
 
@@ -56,7 +56,7 @@ class Fly4sTest extends AsyncFunSuite with AsyncIOSpec with Matchers with H2Supp
           locations = Location.of("/migrations")
         )
       )
-      .use(_.validate[IO])
+      .use(_.validate)
       .assertNoException
   }
 
@@ -68,7 +68,7 @@ class Fly4sTest extends AsyncFunSuite with AsyncIOSpec with Matchers with H2Supp
           locations = Location.of("/migrations")
         )
       )
-      .use(_.clean[IO])
+      .use(_.clean)
       .assertNoException
   }
 
@@ -80,7 +80,7 @@ class Fly4sTest extends AsyncFunSuite with AsyncIOSpec with Matchers with H2Supp
           locations = Location.of("/migrations")
         )
       )
-      .use(_.baseline[IO])
+      .use(_.baseline)
       .asserting(_.successfullyBaselined shouldBe true)
   }
 
@@ -92,7 +92,7 @@ class Fly4sTest extends AsyncFunSuite with AsyncIOSpec with Matchers with H2Supp
           locations = Location.of("/migrations")
         )
       )
-      .use(_.repair[IO])
+      .use(_.repair)
       .asserting(_.repairActions shouldBe empty)
   }
 
@@ -104,7 +104,7 @@ class Fly4sTest extends AsyncFunSuite with AsyncIOSpec with Matchers with H2Supp
           locations = Location.of("/migrations")
         )
       )
-      .use(_.info[IO])
+      .use(_.info)
       .assertNoException
   }
 
@@ -120,7 +120,7 @@ class Fly4sTest extends AsyncFunSuite with AsyncIOSpec with Matchers with H2Supp
         )
       )
       .use(
-        _.reconfigure[IO](
+        _.reconfigure(
           Fly4sConfig(
             locations = Location.of("/new_migrations")
           )
@@ -147,7 +147,7 @@ class Fly4sTest extends AsyncFunSuite with AsyncIOSpec with Matchers with H2Supp
         )
       )
       .use(
-        _.reconfigure[IO]((current: Fly4sConfig) =>
+        _.reconfigure((current: Fly4sConfig) =>
           current.copy(
             locations = Location.of("/new_migrations")
           )

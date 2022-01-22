@@ -31,7 +31,7 @@ class Fly4sPerformanceTest extends AsyncFunSuite with AsyncIOSpec with Matchers 
             locations = Location.of("/migrations")
           )
         )
-        .use(_.migrate[IO]),
+        .use(_.migrate),
       flywayOp = IO {
         Flyway
           .configure()
@@ -61,7 +61,7 @@ class Fly4sPerformanceTest extends AsyncFunSuite with AsyncIOSpec with Matchers 
             )
           )
         )
-        .use(_.validate[IO]),
+        .use(_.validate),
       flywayOp = IO {
         Flyway
           .configure()
@@ -91,7 +91,7 @@ class Fly4sPerformanceTest extends AsyncFunSuite with AsyncIOSpec with Matchers 
             locations = Location.of("/migrations")
           )
         )
-        .use(_.clean[IO]),
+        .use(_.clean),
       flywayOp = IO {
         Flyway
           .configure()
@@ -118,7 +118,7 @@ class Fly4sPerformanceTest extends AsyncFunSuite with AsyncIOSpec with Matchers 
             locations = Location.of("/migrations")
           )
         )
-        .use(_.baseline[IO]),
+        .use(_.baseline),
       flywayOp = IO {
         Flyway
           .configure()
@@ -145,7 +145,7 @@ class Fly4sPerformanceTest extends AsyncFunSuite with AsyncIOSpec with Matchers 
             locations = Location.of("/migrations")
           )
         )
-        .use(_.repair[IO]),
+        .use(_.repair),
       flywayOp = IO {
         Flyway
           .configure()
@@ -172,7 +172,7 @@ class Fly4sPerformanceTest extends AsyncFunSuite with AsyncIOSpec with Matchers 
             locations = Location.of("/migrations")
           )
         )
-        .use(_.info[IO]),
+        .use(_.info),
       flywayOp = IO {
         Flyway
           .configure()
