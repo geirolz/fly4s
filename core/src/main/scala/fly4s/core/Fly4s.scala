@@ -45,7 +45,7 @@ sealed trait Fly4s[F[_]] {
   // ------------------------------------- OPS -------------------------------------
   /** Validate and then runs migrations.
     *
-    * <b><i>1. Validation</i></b> To apply the validation we reconfigure the [[Fly4s]] with
+    * <b><i>1. Validation</i></b> To apply the validation you should reconfigure the [[Fly4s]] with
     * `ignorePendingMigrations` set as `true` Check [[Fly4s.validate]] for further details
     *
     * <b><i>2. Migration</i></b> If validation steps fails migration wont be applied. Check
