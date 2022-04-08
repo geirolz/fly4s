@@ -35,7 +35,7 @@ So, add the dependency in your `build.sbt` file.
 Fly4s depends on Flyway, so we'll have access to Flyway as well
 
 ```sbt
-libraryDependencies += "com.github.geirolz" %% "fly4s-core" % "0.0.10"
+libraryDependencies += "com.github.geirolz" %% "fly4s-core" % "0.0.12"
 ```
 
 ### Migrations files
