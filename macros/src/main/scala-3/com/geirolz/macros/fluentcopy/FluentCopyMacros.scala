@@ -1,13 +1,9 @@
 package com.geirolz.macros.fluentcopy
 
-import scala.annotation.{compileTimeOnly, StaticAnnotation}
-import scala.reflect.api.Trees
-import scala.reflect.macros.whitebox
-
 object FluentCopyMacros {
 
   @compileTimeOnly("enable macro paradise")
-  class FluentCopy extends StaticAnnotation {
+  class GenerateFluentCopy extends StaticAnnotation {
     def macroTransform(annottees: Any*): Any = macro Macro.impl
   }
 
@@ -15,7 +11,7 @@ object FluentCopyMacros {
     def impl(c: whitebox.Context)(annottees: c.Tree*): c.Expr[Any] = {
       import c.universe.*
 
-      def extractClassNameAndFields(classDecl: ClassDef): (c.TypeName, List[Trees#Tree]) =
+      def extractClassNameAndFields(classDecl: ClassDef): (c.TypeName, List[Trees#Tree]) = {
         try {
           val q"case class $className(..$fields) extends ..$_ { ..$_ }" = classDecl
           (className, fields.toList)
@@ -23,6 +19,7 @@ object FluentCopyMacros {
           case _: MatchError =>
             c.abort(c.enclosingPosition, "Annotation is only supported on case class")
         }
+      }
 
       def modifiedCompanion(
         compDeclOpt: Option[ModuleDef],
@@ -30,11 +27,12 @@ object FluentCopyMacros {
         className: TypeName
       ): c.universe.Tree = {
         compDeclOpt map { compDecl =>
+          // Add the formatter to the existing companion object
           val q"object $obj extends ..$bases { ..$body }" = compDecl
           q"""
           object $obj extends ..$bases {
+             $toAdd
             ..$body
-            $toAdd
           }
         """
         } getOrElse {
@@ -51,10 +49,12 @@ object FluentCopyMacros {
         }
 
         val opsName: c.universe.TypeName = TypeName(s"${className.toTermName}FluentConfigOps")
-        q"""  
-          implicit class $opsName(i: $className){
-            ..$newMethods
-          }
+        q"""
+          trait Testtt {
+            implicit class $opsName(i: $className){
+                ..$newMethods
+            }
+         }
          """
       }
 

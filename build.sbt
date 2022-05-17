@@ -96,8 +96,10 @@ lazy val baseSettings: Seq[Def.Setting[_]] = Seq(
   libraryDependencies ++= ProjectDependencies.common ++ {
     CrossVersion.partialVersion(scalaVersion.value) match {
       case Some((2, 13)) => ProjectDependencies.Plugins.compilerPluginsFor2_13
-      case Some((3, _))  => ProjectDependencies.Plugins.compilerPluginsFor3
-      case _             => Nil
+      case Some((3, _)) =>
+        ProjectDependencies.forScala3 ++
+        ProjectDependencies.Plugins.compilerPluginsFor3
+      case _ => Nil
     }
   },
   // fmt

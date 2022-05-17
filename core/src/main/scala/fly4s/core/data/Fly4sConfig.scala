@@ -1,14 +1,14 @@
 package fly4s.core.data
 
 import cats.data.NonEmptyList
-import com.geirolz.macros.fluentcopy.FluentCopyMacros.GenerateFluentCopy
+import com.geirolz.macros.fluentcopy.FluentCopyMacros.FluentCopy
 import org.flywaydb.core.api.configuration.{Configuration, FluentConfiguration}
 
 import java.nio.charset.{Charset, StandardCharsets}
 import scala.jdk.CollectionConverters.{MapHasAsJava, MapHasAsScala}
 import scala.util.Try
 
-@GenerateFluentCopy
+@FluentCopy
 case class Fly4sConfig(
   connectRetries: Int                       = 0,
   initSql: Option[String]                   = None,

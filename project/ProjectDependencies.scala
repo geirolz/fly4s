@@ -17,6 +17,10 @@ object ProjectDependencies {
     db
   ).flatten
 
+  lazy val forScala3: Seq[ModuleID] = Seq(
+    "org.scalameta" %% "scalameta" % "4.5.6"
+  )
+
   private val effects: Seq[ModuleID] = {
     Seq(
       "org.typelevel" %% "cats-core" % "2.7.0",
