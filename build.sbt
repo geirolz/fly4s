@@ -31,12 +31,19 @@ lazy val fly4s: Project = project
     description := "A functional wrapper for Flyway",
     organization := org
   )
-  .aggregate(core)
+  .aggregate(core, macros)
 
 lazy val core: Project =
   buildModule(
     prjModuleName = "core",
     toPublish     = true,
+    folder        = "."
+  ).dependsOn(macros)
+
+lazy val macros: Project =
+  buildModule(
+    prjModuleName = "macros",
+    toPublish     = false,
     folder        = "."
   )
 
@@ -151,7 +158,8 @@ def scalacSettings(scalaVersion: String): Seq[String] =
           "-Ywarn-unused:privates", // Warn if a private member is unused.
           "-Ywarn-macros:after", // Tells the compiler to make the unused checks after macro expansion
           "-Xsource:3",
-          "-P:kind-projector:underscore-placeholders"
+          "-P:kind-projector:underscore-placeholders",
+          "-Ymacro-annotations"
         )
       case _ => Nil
     }
