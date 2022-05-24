@@ -1,65 +1,117 @@
 package fly4s.core.data
 
 import cats.data.NonEmptyList
-import com.geirolz.macros.fluentcopy.FluentCopyMacros.FluentCopy
 import org.flywaydb.core.api.configuration.{Configuration, FluentConfiguration}
 
 import java.nio.charset.{Charset, StandardCharsets}
 import scala.jdk.CollectionConverters.{MapHasAsJava, MapHasAsScala}
 import scala.util.Try
 
-@FluentCopy
-case class Fly4sConfig(
-  connectRetries: Int                       = 0,
-  initSql: Option[String]                   = None,
-  defaultSchemaName: Option[String]         = None,
-  schemaNames: Option[NonEmptyList[String]] = None,
-  lockRetryCount: Int                       = 50,
-  // --- migrations ---
-  installedBy: Option[String]                    = None,
-  locations: List[Location]                      = List(Location("db/migration")),
-  encoding: Charset                              = StandardCharsets.UTF_8,
-  table: String                                  = "flyway_schema_history",
-  tablespace: Option[String]                     = None,
-  targetVersion: MigrationVersion                = MigrationVersion.latest,
-  baselineVersion: MigrationVersion              = MigrationVersion.one,
-  baselineDescription: String                    = "<< Flyway Baseline >>",
-  ignoreMigrationPatterns: List[ValidatePattern] = Nil,
-  // --- placeholders ---
-  placeholders: Map[String, String] = Map.empty,
-  placeholderPrefix: String         = "${",
-  placeholderSuffix: String         = "}",
-  // --- migrations naming ---
-  sqlMigrationPrefix: String           = "V",
-  sqlMigrationSuffixes: Seq[String]    = Seq(".sql"),
-  repeatableSqlMigrationPrefix: String = "R",
-  sqlMigrationSeparator: String        = "__",
-  // --- migrations functions ---
-  callbacks: List[Callback]                  = Nil,
-  resolvers: List[MigrationResolver]         = Nil,
-  resourceProvider: Option[ResourceProvider] = None,
-  // --- flags ---
-  group: Boolean                   = false,
-  mixed: Boolean                   = false,
-  failOnMissingLocations: Boolean  = false,
-  validateMigrationNaming: Boolean = false,
-  validateOnMigrate: Boolean       = true,
-  cleanOnValidationError: Boolean  = false,
-  cleanDisabled: Boolean           = false,
-  createSchemas: Boolean           = true,
-  placeholderReplacement: Boolean  = true,
-  baselineOnMigrate: Boolean       = false,
-  outOfOrder: Boolean              = false,
-  skipDefaultCallbacks: Boolean    = false,
-  skipDefaultResolvers: Boolean    = false
-)
+private[fly4s] trait Fly4sConfigContract {
+  val connectRetries: Int
+  val initSql: Option[String]
+  val defaultSchemaName: Option[String]
+  val schemaNames: Option[NonEmptyList[String]]
+  val lockRetryCount: Int
 
-object Fly4sConfig {
+  // --- migrations ---
+  val installedBy: Option[String]
+  val locations: List[Location]
+  val encoding: Charset
+  val table: String
+  val tablespace: Option[String]
+  val targetVersion: MigrationVersion
+  val baselineVersion: MigrationVersion
+  val baselineDescription: String
+  val ignoreMigrationPatterns: List[ValidatePattern]
+
+  // --- placeholders ---
+  val placeholders: Map[String, String]
+  val placeholderPrefix: String
+  val placeholderSuffix: String
+
+  // --- migrations naming ---
+  val sqlMigrationPrefix: String
+  val sqlMigrationSuffixes: Seq[String]
+  val repeatableSqlMigrationPrefix: String
+  val sqlMigrationSeparator: String
+
+  // --- migrations functions ---
+  val callbacks: List[Callback]
+  val resolvers: List[MigrationResolver]
+  val resourceProvider: Option[ResourceProvider]
+
+  // --- flags ---
+  val group: Boolean
+  val mixed: Boolean
+  val failOnMissingLocations: Boolean
+  val validateMigrationNaming: Boolean
+  val validateOnMigrate: Boolean
+  val cleanOnValidationError: Boolean
+  val cleanDisabled: Boolean
+  val createSchemas: Boolean
+  val placeholderReplacement: Boolean
+  val baselineOnMigrate: Boolean
+  val outOfOrder: Boolean
+  val skipDefaultCallbacks: Boolean
+  val skipDefaultResolvers: Boolean
+}
+private[fly4s] object Fly4sConfigContract {
+  val defaultConnectRetries: Int                       = 0
+  val defaultInitSql: Option[String]                   = None
+  val defaultDefaultSchemaName: Option[String]         = None
+  val defaultSchemaNames: Option[NonEmptyList[String]] = None
+  val defaultLockRetryCount: Int                       = 50
+
+  // --- migrations ---
+  val defaultInstalledBy: Option[String]                    = None
+  val defaultLocations: List[Location]                      = List(Location("db/migration"))
+  val defaultEncoding: Charset                              = StandardCharsets.UTF_8
+  val defaultTable: String                                  = "flyway_schema_history"
+  val defaultTablespace: Option[String]                     = None
+  val defaultTargetVersion: MigrationVersion                = MigrationVersion.latest
+  val defaultBaselineVersion: MigrationVersion              = MigrationVersion.one
+  val defaultBaselineDescription: String                    = "<< Flyway Baseline >>"
+  val defaultIgnoreMigrationPatterns: List[ValidatePattern] = Nil
+
+  // --- placeholders ---
+  val defaultPlaceholders: Map[String, String] = Map.empty
+  val defaultPlaceholderPrefix: String         = "${"
+  val defaultPlaceholderSuffix: String         = "}"
+
+  // --- migrations naming ---
+  val defaultSqlMigrationPrefix: String           = "V"
+  val defaultSqlMigrationSuffixes: Seq[String]    = Seq(".sql")
+  val defaultRepeatableSqlMigrationPrefix: String = "R"
+  val defaultSqlMigrationSeparator: String        = "__"
+
+  // --- migrations functions ---
+  val defaultCallbacks: List[Callback]                  = Nil
+  val defaultResolvers: List[MigrationResolver]         = Nil
+  val defaultResourceProvider: Option[ResourceProvider] = None
+
+  // --- flags ---
+  val defaultGroup: Boolean                   = false
+  val defaultMixed: Boolean                   = false
+  val defaultFailOnMissingLocations: Boolean  = false
+  val defaultValidateMigrationNaming: Boolean = false
+  val defaultValidateOnMigrate: Boolean       = true
+  val defaultCleanOnValidationError: Boolean  = false
+  val defaultCleanDisabled: Boolean           = false
+  val defaultCreateSchemas: Boolean           = true
+  val defaultPlaceholderReplacement: Boolean  = true
+  val defaultBaselineOnMigrate: Boolean       = false
+  val defaultOutOfOrder: Boolean              = false
+  val defaultSkipDefaultCallbacks: Boolean    = false
+  val defaultSkipDefaultResolvers: Boolean    = false
+}
+
+private[fly4s] trait Fly4sConfigBuilder {
 
   lazy val default: Fly4sConfig = Fly4sConfig()
 
   def fromJava(c: Configuration): Fly4sConfig =
-    Fly4sConfig(
+    new Fly4sConfig(
       // ---------- connection ----------
       connectRetries    = c.getConnectRetries,
       initSql           = Option(c.getInitSql),
