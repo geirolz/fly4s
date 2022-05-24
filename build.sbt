@@ -43,7 +43,7 @@ lazy val core: Project =
 lazy val macros: Project =
   buildModule(
     prjModuleName = "macros",
-    toPublish     = false,
+    toPublish     = true,
     folder        = "."
   )
 
