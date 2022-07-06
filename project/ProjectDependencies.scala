@@ -19,7 +19,7 @@ object ProjectDependencies {
 
   private val effects: Seq[ModuleID] = {
     Seq(
-      "org.typelevel" %% "cats-core" % "2.7.0",
+      "org.typelevel" %% "cats-core" % "2.8.0",
       "org.typelevel" %% "cats-effect" % "3.3.12"
     )
   }
@@ -27,13 +27,13 @@ object ProjectDependencies {
   private val tests: Seq[ModuleID] = Seq(
     "org.scalactic" %% "scalactic" % "3.2.12",
     "org.scalatest" %% "scalatest" % "3.2.12" % Test,
-    "com.h2database" % "h2" % "2.1.212" % Test,
+    "com.h2database" % "h2" % "2.1.214" % Test,
     "org.typelevel" %% "cats-effect-testing-scalatest" % "1.4.0" % Test
   )
 
   private val db: Seq[ModuleID] = {
     Seq(
-      "org.flywaydb" % "flyway-core" % "8.5.11"
+      "org.flywaydb" % "flyway-core" % "8.5.13"
     )
   }
 }
