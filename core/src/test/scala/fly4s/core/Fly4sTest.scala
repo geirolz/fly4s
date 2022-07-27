@@ -64,7 +64,8 @@ class Fly4sTest extends AsyncFunSuite with AsyncIOSpec with Matchers with H2Supp
       .make[IO](
         url = h2Settings.getUrl,
         config = Fly4sConfig(
-          locations = Location.of("/migrations")
+          locations     = Location.of("/migrations"),
+          cleanDisabled = false
         )
       )
       .use(_.clean)

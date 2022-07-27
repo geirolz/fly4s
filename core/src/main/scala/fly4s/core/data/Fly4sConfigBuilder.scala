@@ -97,7 +97,7 @@ private[fly4s] object Fly4sConfigContract {
   val defaultValidateMigrationNaming: Boolean = false
   val defaultValidateOnMigrate: Boolean       = true
   val defaultCleanOnValidationError: Boolean  = false
-  val defaultCleanDisabled: Boolean           = false
+  val defaultCleanDisabled: Boolean           = true
   val defaultCreateSchemas: Boolean           = true
   val defaultPlaceholderReplacement: Boolean  = true
   val defaultBaselineOnMigrate: Boolean       = false
