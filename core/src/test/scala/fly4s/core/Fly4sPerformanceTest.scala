@@ -88,7 +88,8 @@ class Fly4sPerformanceTest extends AsyncFunSuite with AsyncIOSpec with Matchers 
         .make[IO](
           url = fly4sDb.getUrl,
           config = Fly4sConfig(
-            locations = Location.of("/migrations")
+            locations     = Location.of("/migrations"),
+            cleanDisabled = false
           )
         )
         .use(_.clean),
@@ -97,6 +98,7 @@ class Fly4sPerformanceTest extends AsyncFunSuite with AsyncIOSpec with Matchers 
           .configure()
           .dataSource(flywayDb.getUrl, null, null)
           .locations("/migrations")
+          .cleanDisabled(false)
           .load()
           .clean()
       }

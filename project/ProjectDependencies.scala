@@ -33,7 +33,7 @@ object ProjectDependencies {
 
   private val db: Seq[ModuleID] = {
     Seq(
-      "org.flywaydb" % "flyway-core" % "8.5.13"
+      "org.flywaydb" % "flyway-core" % "9.0.2"
     )
   }
 }
