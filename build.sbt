@@ -39,12 +39,17 @@ lazy val core: Project =
     toPublish     = true,
     folder        = "."
   ).dependsOn(macros)
+    .settings(
+      libraryDependencies ++= ProjectDependencies.Core.dedicated
+    )
 
 lazy val macros: Project =
   buildModule(
     prjModuleName = "macros",
     toPublish     = true,
     folder        = "."
+  ).settings(
+    libraryDependencies ++= ProjectDependencies.Macros.dedicated
   )
 
 //=============================== MODULES UTILS ===============================

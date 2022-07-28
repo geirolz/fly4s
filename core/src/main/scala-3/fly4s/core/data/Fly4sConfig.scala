@@ -1,7 +1,7 @@
 package fly4s.core.data
 
 import cats.data.NonEmptyList
-import fly4s.core.data.Fly4sConfigContract.*
+import fly4s.core.data.Fly4sConfigDefaults.*
 
 import java.nio.charset.Charset
 
