@@ -2,7 +2,7 @@ package fly4s.core.data
 
 import cats.data.NonEmptyList
 import com.geirolz.macros.fluentcopy.FluentCopyMacros.FluentCopy
-import fly4s.core.data.Fly4sConfigContract.*
+import fly4s.core.data.Fly4sConfigDefaults.*
 
 import java.nio.charset.Charset
 
@@ -50,5 +50,5 @@ case class Fly4sConfig(
   outOfOrder: Boolean              = defaultOutOfOrder,
   skipDefaultCallbacks: Boolean    = defaultSkipDefaultCallbacks,
   skipDefaultResolvers: Boolean    = defaultSkipDefaultResolvers
-) extends Fly4sConfigContract
+) extends Fly4sConfigDefaults
 object Fly4sConfig extends Fly4sConfigBuilder

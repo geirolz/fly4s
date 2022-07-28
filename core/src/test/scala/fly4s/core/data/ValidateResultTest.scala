@@ -1,13 +1,11 @@
 package fly4s.core.data
 
-import cats.data.{NonEmptyList, ValidatedNel}
+import cats.data.NonEmptyList
 import cats.data.Validated.{Invalid, Valid}
-import org.scalatest.funsuite.AnyFunSuite
-import org.scalatest.matchers.should.Matchers
 
 import scala.util.{Success, Try}
 
-class ValidateResultTest extends AnyFunSuite with Matchers {
+class ValidateResultTest extends munit.FunSuite {
 
   test("ValidateResult success toValidatedNel should be Success(Valid)") {
 
@@ -15,10 +13,11 @@ class ValidateResultTest extends AnyFunSuite with Matchers {
       validationSuccessful = true,
       invalidMigrations    = Nil
     )
-    val result: Try[ValidatedNel[ValidateOutput, Unit]] =
-      ValidateResult.toValidatedNel[Try](validateResult)
 
-    result shouldBe Success(Valid(()))
+    assertEquals(
+      obtained = ValidateResult.toValidatedNel[Try](validateResult),
+      expected = Success(Valid(()))
+    )
   }
 
   test("ValidateResult failed with errors toValidatedNel should be Success(Invalid)") {
@@ -29,9 +28,10 @@ class ValidateResultTest extends AnyFunSuite with Matchers {
       invalidMigrations    = invalidMigrations.toList
     )
 
-    val result = ValidateResult.toValidatedNel[Try](validateResult)
-
-    result shouldBe Success(Invalid(invalidMigrations))
+    assertEquals(
+      obtained = ValidateResult.toValidatedNel[Try](validateResult),
+      expected = Success(Invalid(invalidMigrations))
+    )
   }
 
   test("ValidateResult failed without errors toValidatedNel should be Failure") {
@@ -41,8 +41,9 @@ class ValidateResultTest extends AnyFunSuite with Matchers {
       invalidMigrations    = Nil
     )
 
-    val result = ValidateResult.toValidatedNel[Try](validateResult)
-
-    result.isFailure shouldBe true
+    assertEquals(
+      obtained = ValidateResult.toValidatedNel[Try](validateResult).isFailure,
+      expected = true
+    )
   }
 }

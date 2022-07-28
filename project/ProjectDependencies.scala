@@ -2,6 +2,16 @@ import sbt._
 
 object ProjectDependencies {
 
+  lazy val common: Seq[ModuleID] = Seq(
+    "org.typelevel" %% "cats-core" % "2.8.0",
+    "org.typelevel" %% "cats-effect" % "3.3.14",
+    "org.flywaydb" % "flyway-core" % "9.0.4",
+
+    // test
+    "org.scalameta" %% "munit" % "0.7.29" % Test,
+    "org.typelevel" %% "munit-cats-effect-3" % "1.0.7" % Test
+  )
+
   object Plugins {
     val compilerPluginsFor2_13: Seq[ModuleID] = Seq(
       compilerPlugin("org.typelevel" %% "kind-projector" % "0.13.2" cross CrossVersion.full),
@@ -11,29 +21,15 @@ object ProjectDependencies {
     val compilerPluginsFor3: Seq[ModuleID] = Nil
   }
 
-  lazy val common: Seq[ModuleID] = Seq(
-    effects,
-    tests,
-    db
-  ).flatten
-
-  private val effects: Seq[ModuleID] = {
-    Seq(
-      "org.typelevel" %% "cats-core" % "2.8.0",
-      "org.typelevel" %% "cats-effect" % "3.3.14"
+  object Core {
+    lazy val dedicated: Seq[ModuleID] = Seq(
+      "com.h2database" % "h2" % "2.1.214" % Test
     )
   }
 
-  private val tests: Seq[ModuleID] = Seq(
-    "org.scalactic" %% "scalactic" % "3.2.13",
-    "org.scalatest" %% "scalatest" % "3.2.13" % Test,
-    "com.h2database" % "h2" % "2.1.214" % Test,
-    "org.typelevel" %% "cats-effect-testing-scalatest" % "1.4.0" % Test
-  )
-
-  private val db: Seq[ModuleID] = {
-    Seq(
-      "org.flywaydb" % "flyway-core" % "9.1.2"
+  object Macros {
+    lazy val dedicated: Seq[ModuleID] = Seq(
+      "org.scala-lang" % "scala-reflect" % "2.13.8"
     )
   }
 }
