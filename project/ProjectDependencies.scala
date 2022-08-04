@@ -26,7 +26,7 @@ object ProjectDependencies {
 
   private val tests: Seq[ModuleID] = Seq(
     "org.scalactic" %% "scalactic" % "3.2.12",
-    "org.scalatest" %% "scalatest" % "3.2.13" % Test,
+    "org.scalatest" %% "scalatest" % "3.2.12" % Test,
     "com.h2database" % "h2" % "2.1.214" % Test,
     "org.typelevel" %% "cats-effect-testing-scalatest" % "1.4.0" % Test
   )
