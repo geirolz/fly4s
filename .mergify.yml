@@ -24,7 +24,7 @@ pull_request_rules:
       merge:
         method: rebase
         priority: medium
-   - name: automatic merge for master when CI passes and author is dependabot
+  - name: automatic merge for master when CI passes and author is dependabot
     conditions:
       - author=dependabot
       - check-success=codecov/patch
