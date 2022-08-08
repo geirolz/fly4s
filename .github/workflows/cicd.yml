@@ -36,7 +36,7 @@ jobs:
             test-tasks: test # scoverage doesn’t support Scala 3
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       #----------- JDK -----------
       - name: Set up JDK 11
@@ -68,7 +68,7 @@ jobs:
     needs: [build]
     if: github.event_name != 'pull_request'
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       #----------- JDK -----------
       - name: Set up JDK 11
