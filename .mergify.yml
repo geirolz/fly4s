@@ -26,7 +26,7 @@ pull_request_rules:
         priority: medium
   - name: automatic merge for master when CI passes and author is dependabot
     conditions:
-      - author=dependabot
+      - author=dependabot[bot]
       - check-success=codecov/patch
       - check-success=codecov/project
       - check-success=build (Scala2)
