@@ -56,7 +56,8 @@ private[fly4s] trait Fly4sConfigContract {
   val skipDefaultCallbacks: Boolean
   val skipDefaultResolvers: Boolean
 }
-private[fly4s] object Fly4sConfigContract {
+
+private[fly4s] object Fly4sConfigDefaults {
   val defaultConnectRetries: Int                       = 0
   val defaultInitSql: Option[String]                   = None
   val defaultDefaultSchemaName: Option[String]         = None

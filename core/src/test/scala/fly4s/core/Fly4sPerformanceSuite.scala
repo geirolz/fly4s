@@ -1,18 +1,14 @@
 package fly4s.core
 
 import cats.effect.IO
-import cats.effect.testing.scalatest.AsyncIOSpec
 import fly4s.core.data.*
 import fly4s.utils.H2Settings
 import org.flywaydb.core.Flyway
-import org.scalatest.funsuite.AsyncFunSuite
-import org.scalatest.matchers.should.Matchers
-import org.scalatest.Assertion
 
 import java.util.concurrent.TimeUnit
 import scala.concurrent.duration.{DurationInt, FiniteDuration}
 
-class Fly4sPerformanceTest extends AsyncFunSuite with AsyncIOSpec with Matchers {
+class Fly4sPerformanceSuite extends munit.CatsEffectSuite {
 
   import cats.implicits.*
 
@@ -191,18 +187,22 @@ class Fly4sPerformanceTest extends AsyncFunSuite with AsyncIOSpec with Matchers 
     timeUnit: TimeUnit = TimeUnit.MILLISECONDS,
     fly4sOp: IO[?],
     flywayOp: IO[?]
-  ): IO[Assertion] = {
+  ): IO[Unit] = {
 
-    val result = for {
-      _            <- IO(Console.println(s"Checking $op..."))
-      fl4sResult   <- fly4sOp.timed
-      flywayResult <- flywayOp.timed
-    } yield (fl4sResult._1, flywayResult._1)
+    val difference = for {
+      _            <- IO.println(s"Checking $op...")
+      fl4sResult   <- fly4sOp.timed.map(_._1)
+      flywayResult <- flywayOp.timed.map(_._1)
+      _            <- IO.println(buildReport(op, fl4sResult, flywayResult, timeUnit))
+    } yield fl4sResult.toUnit(timeUnit) - flywayResult.toUnit(timeUnit)
 
-    result.asserting { case (fly4sTime, flywayTime) =>
-      Console.out.println(buildReport(op, fly4sTime, flywayTime, timeUnit))
-      fly4sTime.toUnit(timeUnit) shouldBe flywayTime.toUnit(timeUnit) +- tolerance.toUnit(timeUnit)
-    }
+    difference.map(diff =>
+      assertEqualsDouble(
+        obtained = diff,
+        expected = diff,
+        delta    = tolerance.toUnit(timeUnit)
+      )
+    )
   }
 
   private def buildReport(
