@@ -7,7 +7,7 @@ import java.nio.charset.{Charset, StandardCharsets}
 import scala.jdk.CollectionConverters.{MapHasAsJava, MapHasAsScala}
 import scala.util.Try
 
-private[fly4s] trait Fly4sConfigDefaults {
+private[fly4s] trait Fly4sConfigContract {
   val connectRetries: Int
   val initSql: Option[String]
   val defaultSchemaName: Option[String]
@@ -56,6 +56,7 @@ private[fly4s] trait Fly4sConfigDefaults {
   val skipDefaultCallbacks: Boolean
   val skipDefaultResolvers: Boolean
 }
+
 private[fly4s] object Fly4sConfigDefaults {
   val defaultConnectRetries: Int                       = 0
   val defaultInitSql: Option[String]                   = None

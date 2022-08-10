@@ -50,5 +50,5 @@ case class Fly4sConfig(
   outOfOrder: Boolean              = defaultOutOfOrder,
   skipDefaultCallbacks: Boolean    = defaultSkipDefaultCallbacks,
   skipDefaultResolvers: Boolean    = defaultSkipDefaultResolvers
-) extends Fly4sConfigDefaults
+) extends Fly4sConfigContract
 object Fly4sConfig extends Fly4sConfigBuilder
