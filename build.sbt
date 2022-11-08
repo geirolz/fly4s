@@ -93,7 +93,7 @@ lazy val noPublishSettings: Seq[Def.Setting[_]] = Seq(
 
 lazy val baseSettings: Seq[Def.Setting[_]] = Seq(
   // scala
-  crossScalaVersions := List("2.13.8", "3.2.0"),
+  crossScalaVersions := List("2.13.8", "3.2.1"),
   scalaVersion := crossScalaVersions.value.head,
   scalacOptions ++= scalacSettings(scalaVersion.value),
   // dependencies
