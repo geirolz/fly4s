@@ -1,8 +1,13 @@
 import sbt.project
 import ModuleMdocPlugin.autoImport.mdocScalacOptions
 
-val prjName = "fly4s"
-val org     = "com.github.geirolz"
+lazy val prjName                = "cats-xml"
+lazy val prjPackageName         = prjName.replaceAll("[^\\p{Alpha}\\d]+", ".")
+lazy val prjDescription         = "A functional wrapper for Flywayy"
+lazy val prjOrg                 = "com.github.geirolz"
+lazy val scala213               = "2.13.10"
+lazy val scala32                = "3.2.1"
+lazy val supportedScalaVersions = List(scala213, scala32)
 
 //## global project to no publish ##
 lazy val fly4s: Project = project
@@ -10,7 +15,7 @@ lazy val fly4s: Project = project
   .settings(
     inThisBuild(
       List(
-        organization := org,
+        organization := prjOrg,
         homepage := Some(url(s"https://github.com/geirolz/$prjName")),
         licenses := List("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
         developers := List(
@@ -26,11 +31,6 @@ lazy val fly4s: Project = project
   )
   .settings(allSettings)
   .settings(noPublishSettings)
-  .settings(
-    name := prjName,
-    description := "A functional wrapper for Flyway",
-    organization := org
-  )
   .aggregate(core, macros)
 
 lazy val core: Project =
@@ -55,12 +55,11 @@ lazy val macros: Project =
 //=============================== MODULES UTILS ===============================
 def buildModule(prjModuleName: String, toPublish: Boolean, folder: String = "modules"): Project = {
   val keys       = prjModuleName.split("-")
-  val id         = keys.reduce(_ + _.capitalize)
   val docName    = keys.mkString(" ")
   val prjFile    = file(s"$folder/$prjModuleName")
   val docNameStr = s"$prjName $docName"
 
-  Project(id, prjFile)
+  Project(prjModuleName, prjFile)
     .settings(
       description := moduleName.value,
       moduleName := s"$prjName-$prjModuleName",
@@ -70,7 +69,7 @@ def buildModule(prjModuleName: String, toPublish: Boolean, folder: String = "mod
       mdocOut := file(folder),
       mdocScalacOptions := Seq("-Xsource:3"),
       mdocVariables := Map(
-        "ORG"         -> org,
+        "ORG"         -> prjOrg,
         "PRJ_NAME"    -> prjName,
         "DOCS_TITLE"  -> docNameStr.split(" ").map(_.capitalize).mkString(" "),
         "MODULE_NAME" -> moduleName.value,
@@ -92,10 +91,15 @@ lazy val noPublishSettings: Seq[Def.Setting[_]] = Seq(
 )
 
 lazy val baseSettings: Seq[Def.Setting[_]] = Seq(
+  // project
+  name := prjName,
+  description := prjDescription,
+  organization := prjOrg,
   // scala
-  crossScalaVersions := List("2.13.8", "3.2.1"),
-  scalaVersion := crossScalaVersions.value.head,
+  crossScalaVersions := supportedScalaVersions,
+  scalaVersion := supportedScalaVersions.head,
   scalacOptions ++= scalacSettings(scalaVersion.value),
+  versionScheme := Some("early-semver"),
   // dependencies
   resolvers ++= ProjectResolvers.all,
   libraryDependencies ++= ProjectDependencies.common ++ {
