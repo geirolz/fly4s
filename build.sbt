@@ -176,3 +176,9 @@ def scalacSettings(scalaVersion: String): Seq[String] =
 
 //=============================== ALIASES ===============================
 addCommandAlias("check", ";clean;test")
+addCommandAlias(
+  "gen-doc",
+  List(
+    core
+  ).map(prj => s"project ${prj.id}-docs; mdoc").mkString(";") + s";project $prjName;"
+)
