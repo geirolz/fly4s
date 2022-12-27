@@ -6,7 +6,7 @@ Full guide here: [sbt-ci-release](https://github.com/olafurpg/sbt-ci-release)
 gpg --gen-key
 ```
 **data**
-- name: `%project_name%-release-bot`
+- name: `$PRJ_NAME-release-bot`
 - email: use your own email address
 - For passphrase, generate a random password with a password manager
 
@@ -14,17 +14,19 @@ gpg --gen-key
 ```
 pub   rsa2048 2018-06-10 [SC] [expires: 2020-06-09]
       $LONG_ID
-uid                      $PROJECT_NAME bot <$EMAIL>
+uid                      $PRJ_NAME-release-bot bot <$EMAIL>
 ```
 
-### 2. Set LONG_ID
+### 2. Set PRJ_NAME and LONG_ID
 
 **example**
 ```
 //On UNIX
+PRJ_NAME=example-release-bot
 LONG_ID=6E8ED79B03AD527F1B281169D28FC818985732D9
 
 //On Windows
+set PRJ_NAME=example-release-bot
 set LONG_ID=6E8ED79B03AD527F1B281169D28FC818985732D9
 ```
 
@@ -42,11 +44,11 @@ gpg --armor --export %LONG_ID%
 **file**
 ```
 # macOS
-gpg --armor --export $LONG_ID > $project_name$-release-bot-public.gpg
+gpg --armor --export $LONG_ID > $PRJ_NAME-release-bot-public.gpg
 # linux
-gpg --armor --export $LONG_ID > $project_name$-release-bot-public.gpg
+gpg --armor --export $LONG_ID > $PRJ_NAME-release-bot-public.gpg
 # Windows
-gpg --armor --export %LONG_ID% > $project_name$-release-bot-public.gpg
+gpg --armor --export %LONG_ID% > %PRJ_NAME%-release-bot-public.gpg
 ```
 
 ### 4. Export private key in base64
@@ -63,11 +65,11 @@ gpg --armor --export-secret-keys %LONG_ID% | openssl base64
 **file**
 ```
 # macOS
-gpg --armor --export-secret-keys $LONG_ID | base64 > $project_name$-release-bot-private.gpg
+gpg --armor --export-secret-keys $LONG_ID | base64 > $PRJ_NAME-release-bot-private.gpg
 # Ubuntu (assuming GNU base64)
-gpg --armor --export-secret-keys $LONG_ID | base64 -w0 > $project_name$-release-bot-private.gpg
+gpg --armor --export-secret-keys $LONG_ID | base64 -w0 > $PRJ_NAME-release-bot-private.gpg
 # Windows
-gpg --armor --export-secret-keys %LONG_ID% | openssl base64 > $project_name$-release-bot-private.gpg
+gpg --armor --export-secret-keys %LONG_ID% | openssl base64 > %PRJ_NAME%-release-bot-private.gpg
 ```  
 
 ### 5. Public the public key to keyserver
