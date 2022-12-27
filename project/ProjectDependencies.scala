@@ -6,7 +6,6 @@ object ProjectDependencies {
     "org.typelevel" %% "cats-core" % "2.9.0",
     "org.typelevel" %% "cats-effect" % "3.4.3",
     "org.flywaydb" % "flyway-core" % "9.1.5",
-
     // test
     "org.scalameta" %% "munit" % "0.7.29" % Test,
     "org.typelevel" %% "munit-cats-effect-3" % "1.0.7" % Test
@@ -25,11 +24,9 @@ object ProjectDependencies {
     lazy val dedicated: Seq[ModuleID] = Seq(
       "com.h2database" % "h2" % "2.1.214" % Test
     )
-  }
 
-  object Macros {
-    lazy val dedicated: Seq[ModuleID] = Seq(
-      "org.scala-lang" % "scala-reflect" % "2.13.10"
+    lazy val for2_13_Only: Seq[ModuleID] = Seq(
+      "com.github.geirolz" %% "fluent-copy" % "0.0.1"
     )
   }
 }

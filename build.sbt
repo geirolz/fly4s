@@ -34,25 +34,21 @@ lazy val fly4s: Project = project
   .settings(
     crossScalaVersions := Nil
   )
-  .aggregate(core, macros)
+  .aggregate(core)
 
 lazy val core: Project =
   buildModule(
     prjModuleName = "core",
     toPublish     = true,
     folder        = "."
-  ).dependsOn(macros)
-    .settings(
-      libraryDependencies ++= ProjectDependencies.Core.dedicated
-    )
-
-lazy val macros: Project =
-  buildModule(
-    prjModuleName = "macros",
-    toPublish     = true,
-    folder        = "."
   ).settings(
-    libraryDependencies ++= ProjectDependencies.Macros.dedicated
+    libraryDependencies ++= ProjectDependencies.Core.dedicated,
+    libraryDependencies ++= {
+      CrossVersion.partialVersion(Keys.scalaVersion.value) match {
+        case Some((2, _)) => ProjectDependencies.Core.for2_13_Only
+        case _            => Nil
+      }
+    }
   )
 
 //=============================== MODULES UTILS ===============================

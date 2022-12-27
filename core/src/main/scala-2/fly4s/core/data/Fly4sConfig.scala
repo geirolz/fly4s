@@ -1,12 +1,12 @@
 package fly4s.core.data
 
 import cats.data.NonEmptyList
-import com.geirolz.macros.fluentcopy.FluentCopyMacros.FluentCopy
+import com.geirolz.macros.fluent.copy.FluentCopy
 import fly4s.core.data.Fly4sConfigDefaults.*
 
 import java.nio.charset.Charset
 
-@FluentCopy
+@FluentCopy(collection = true)
 case class Fly4sConfig(
   connectRetries: Int                       = defaultConnectRetries,
   initSql: Option[String]                   = defaultInitSql,
