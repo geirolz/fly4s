@@ -30,7 +30,7 @@ jobs:
         include:
           - scala: 2.13.10
             name: Scala2_13
-            test-tasks: coverage test coverageReport gen-doc
+            test-tasks: coverage test coverageReport
           - scala: 3.2.1
             name: Scala3_2
             test-tasks: coverage test coverageReport
