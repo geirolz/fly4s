@@ -31,6 +31,9 @@ lazy val fly4s: Project = project
   )
   .settings(allSettings)
   .settings(noPublishSettings)
+  .settings(
+    crossScalaVersions := Nil
+  )
   .aggregate(core, macros)
 
 lazy val core: Project =
