@@ -1,7 +1,7 @@
 import sbt.project
 import ModuleMdocPlugin.autoImport.mdocScalacOptions
 
-lazy val prjName                = "cats-xml"
+lazy val prjName                = "fly4s"
 lazy val prjPackageName         = prjName.replaceAll("[^\\p{Alpha}\\d]+", ".")
 lazy val prjDescription         = "A functional wrapper for Flywayy"
 lazy val prjOrg                 = "com.github.geirolz"
