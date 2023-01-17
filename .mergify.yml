@@ -14,7 +14,7 @@ pull_request_rules:
         priority: high
   - name: automatic merge for master when CI passes and author is steward
     conditions:
-      - author=scala-steward
+      - author=scala-steward-geirolz
       - check-success=build (Scala2_13)
       - check-success=build (Scala3_2)
       - base=main
