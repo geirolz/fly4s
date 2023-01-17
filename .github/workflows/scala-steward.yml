@@ -1,0 +1,17 @@
+on:
+  schedule:
+    - cron: '0 0 * * 0'
+
+name: Scala Steward
+
+jobs:
+  scala-steward:
+    runs-on: ubuntu-22.04
+    name: Launch Scala Steward
+    steps:
+      - name: Launch Scala Steward
+        uses: scala-steward-org/scala-steward-action@v2
+        with:
+          github-app-id: ${{ secrets.STEWARD_APP_ID }}
+          github-app-installation-id: ${{ secrets.STEWARD_APP_INSTALLATION_ID }}
+          github-app-key: ${{ secrets.STEWARD_APP_PRIVATE_KEY }}
