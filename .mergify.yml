@@ -11,17 +11,15 @@ pull_request_rules:
     actions:
       merge:
         method: rebase
-        priority: high
   - name: automatic merge for master when CI passes and author is steward
     conditions:
-      - author=scala-steward-geirolz
+      - author=scala-steward-geirolz[bot]
       - check-success=build (Scala2_13)
       - check-success=build (Scala3_2)
       - base=main
     actions:
       merge:
         method: rebase
-        priority: medium
   - name: automatic merge for master when CI passes and author is dependabot
     conditions:
       - author=dependabot[bot]
@@ -31,4 +29,3 @@ pull_request_rules:
     actions:
       merge:
         method: rebase
-        priority: medium     
