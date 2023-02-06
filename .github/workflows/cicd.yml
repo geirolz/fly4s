@@ -47,7 +47,7 @@ jobs:
 
       #----------- CACHE -----------
       - name: Cache SBT
-        uses: actions/cache@v3.2.3
+        uses: actions/cache@v3.2.4
         with:
           # A list of files, directories, and wildcard patterns to cache and restore
           path: |
@@ -80,7 +80,7 @@ jobs:
 
       #----------- CACHE -----------
       - name: Cache SBT
-        uses: actions/cache@v3.2.3
+        uses: actions/cache@v3.2.4
         with:
           # A list of files, directories, and wildcard patterns to cache and restore
           path: |
