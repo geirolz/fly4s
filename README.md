@@ -8,7 +8,16 @@
 [![GitHub license](https://img.shields.io/github/license/geirolz/fly4s)](https://github.com/geirolz/fly4s/blob/main/LICENSE)
 
 
+https://img.shields.io/endpoint.svg?url=https://api.mergify.com/v1/badges/<owner>/fly4s&style=flat
+
 A lightweight, simple and functional wrapper for Flyway using cats-effect.
+
+### Compatibility matrix
+
+| **Fly4s**                                                            | **Flyway** |
+|----------------------------------------------------------------------|------------|
+| [0.x](https://github.com/geirolz/fly4s/releases?q=0.&expanded=false) | 9.x        |
+
 
 The most famous library to handle database migrations in Java is for sure Flyway.
 It works very well and the community edition has a lot of features as well.
@@ -35,7 +44,7 @@ So, add the dependency in your `build.sbt` file.
 Fly4s depends on Flyway, so we'll have access to Flyway as well
 
 ```sbt
-libraryDependencies += "com.github.geirolz" %% "fly4s-core" % "0.0.15"
+libraryDependencies += "com.github.geirolz" %% "fly4s-core" % "0.0.16"
 ```
 
 ### Migrations files
@@ -126,7 +135,7 @@ val fly4sRes: Resource[IO, Fly4s[IO]] = Fly4s.make[IO](
   )
 )
 // fly4sRes: Resource[IO, Fly4s[IO]] = Allocate(
-//   resource = cats.effect.kernel.Resource$$$Lambda$10816/0x0000000802a2f720@134f3c7
+//   resource = cats.effect.kernel.Resource$$$Lambda$14724/0x0000000802e11ae0@68452df0
 // )
 ```
 
