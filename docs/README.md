@@ -12,6 +12,13 @@ https://img.shields.io/endpoint.svg?url=https://api.mergify.com/v1/badges/<owner
 
 A lightweight, simple and functional wrapper for Flyway using cats-effect.
 
+### Compatibility matrix
+
+| **Fly4s**                                                            | **Flyway** |
+|----------------------------------------------------------------------|------------|
+| [0.x](https://github.com/geirolz/fly4s/releases?q=0.&expanded=false) | 9.x        |
+
+
 The most famous library to handle database migrations in Java is for sure Flyway.
 It works very well and the community edition has a lot of features as well.
 But Flyway APIs are written in the standard OOP paradigm, so throwing exceptions, manually managing resources, etc...
