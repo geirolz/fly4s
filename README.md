@@ -7,9 +7,6 @@
 [![Mergify Status](https://img.shields.io/endpoint.svg?url=https://api.mergify.com/v1/badges/geirolz/fly4s&style=flat)](https://mergify.io)
 [![GitHub license](https://img.shields.io/github/license/geirolz/fly4s)](https://github.com/geirolz/fly4s/blob/main/LICENSE)
 
-
-https://img.shields.io/endpoint.svg?url=https://api.mergify.com/v1/badges/<owner>/fly4s&style=flat
-
 A lightweight, simple and functional wrapper for Flyway using cats-effect.
 
 ### Compatibility matrix
@@ -44,7 +41,7 @@ So, add the dependency in your `build.sbt` file.
 Fly4s depends on Flyway, so we'll have access to Flyway as well
 
 ```sbt
-libraryDependencies += "com.github.geirolz" %% "fly4s-core" % "0.0.16"
+libraryDependencies += "com.github.geirolz" %% "fly4s-core" % "0.0.17"
 ```
 
 ### Migrations files
@@ -135,7 +132,7 @@ val fly4sRes: Resource[IO, Fly4s[IO]] = Fly4s.make[IO](
   )
 )
 // fly4sRes: Resource[IO, Fly4s[IO]] = Allocate(
-//   resource = cats.effect.kernel.Resource$$$Lambda$14724/0x0000000802e11ae0@68452df0
+//   resource = cats.effect.kernel.Resource$$$Lambda$9442/0x0000000802588000@7b7afdf1
 // )
 ```
 
