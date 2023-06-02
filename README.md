@@ -56,7 +56,7 @@ For this example, we are going to use a simple `baseline migration` to add a tab
 
 Baseline migrations are versioned and executed only when needed. The version is retrieved from the script file name.
 
-So in this case, `V001_create_user_table.sql`, the version will be `001`(remember the double underscore after `V<version>`).
+So in this case, `V001__create_user_table.sql`, the version will be `001`(remember the double underscore after `V<version>`).
 
 Here we have our first migration(for MySQL database)
 
