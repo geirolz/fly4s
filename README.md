@@ -60,7 +60,7 @@ So in this case, `V001__create_user_table.sql`, the version will be `001`(rememb
 
 Here we have our first migration(for MySQL database)
 
-`resources/db/V__001_create_user_table.sql`
+`resources/db/V001__create_user_table.sql`
 ```sql
 CREATE TABLE `user` (
     `id` bigint(20) NOT NULL AUTO_INCREMENT PRIMARY KEY,
