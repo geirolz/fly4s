@@ -7,6 +7,10 @@
 [![Mergify Status](https://img.shields.io/endpoint.svg?url=https://api.mergify.com/v1/badges/geirolz/@PRJ_NAME@&style=flat)](https://mergify.io)
 [![GitHub license](https://img.shields.io/github/license/geirolz/@PRJ_NAME@)](https://github.com/geirolz/@PRJ_NAME@/blob/main/LICENSE)
 
+<div align="center">
+ <img src="images/logo.png" alt="logo" width="50%"/>
+</div>
+
 A lightweight, simple and functional wrapper for Flyway using cats-effect.
 
 ### Compatibility matrix
