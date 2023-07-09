@@ -22,7 +22,7 @@ object ProjectDependencies {
 
   object Core {
     lazy val dedicated: Seq[ModuleID] = Seq(
-      "com.h2database" % "h2" % "2.1.214" % Test
+      "com.h2database" % "h2" % "2.2.220" % Test
     )
 
     lazy val for2_13_Only: Seq[ModuleID] = Seq(
