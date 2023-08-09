@@ -31,8 +31,8 @@ jobs:
           - scala: 2.13.11
             name: Scala2_13
             test-tasks: coverage test coverageReport gen-doc
-          - scala: 3.2.2
-            name: Scala3_2
+          - scala: 3.3.0
+            name: Scala3_3
             test-tasks: coverage test coverageReport
 
     steps:
