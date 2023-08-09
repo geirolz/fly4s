@@ -4,7 +4,7 @@ object ProjectDependencies {
 
   lazy val common: Seq[ModuleID] = Seq(
     "org.typelevel" %% "cats-core" % "2.9.0",
-    "org.typelevel" %% "cats-effect" % "3.5.0",
+    "org.typelevel" %% "cats-effect" % "3.5.1",
     "org.flywaydb" % "flyway-core" % "9.21.1",
     // test
     "org.scalameta" %% "munit" % "0.7.29" % Test,
