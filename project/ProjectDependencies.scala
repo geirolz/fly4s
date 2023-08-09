@@ -4,8 +4,8 @@ object ProjectDependencies {
 
   lazy val common: Seq[ModuleID] = Seq(
     "org.typelevel" %% "cats-core" % "2.9.0",
-    "org.typelevel" %% "cats-effect" % "3.5.0",
-    "org.flywaydb" % "flyway-core" % "9.19.1",
+    "org.typelevel" %% "cats-effect" % "3.5.1",
+    "org.flywaydb" % "flyway-core" % "9.21.1",
     // test
     "org.scalameta" %% "munit" % "0.7.29" % Test,
     "org.typelevel" %% "munit-cats-effect-3" % "1.0.7" % Test
@@ -22,7 +22,7 @@ object ProjectDependencies {
 
   object Core {
     lazy val dedicated: Seq[ModuleID] = Seq(
-      "com.h2database" % "h2" % "2.1.214" % Test
+      "com.h2database" % "h2" % "2.2.220" % Test
     )
 
     lazy val for2_13_Only: Seq[ModuleID] = Seq(

@@ -7,6 +7,10 @@
 [![Mergify Status](https://img.shields.io/endpoint.svg?url=https://api.mergify.com/v1/badges/geirolz/fly4s&style=flat)](https://mergify.io)
 [![GitHub license](https://img.shields.io/github/license/geirolz/fly4s)](https://github.com/geirolz/fly4s/blob/main/LICENSE)
 
+<div align="center">
+ <img src="images/logo.png" alt="logo" width="50%"/>
+</div>
+
 A lightweight, simple and functional wrapper for Flyway using cats-effect.
 
 ### Compatibility matrix
@@ -41,7 +45,7 @@ So, add the dependency in your `build.sbt` file.
 Fly4s depends on Flyway, so we'll have access to Flyway as well
 
 ```sbt
-libraryDependencies += "com.github.geirolz" %% "fly4s-core" % "0.0.17"
+libraryDependencies += "com.github.geirolz" %% "fly4s-core" % "0.0.18"
 ```
 
 ### Migrations files
@@ -56,7 +60,7 @@ For this example, we are going to use a simple `baseline migration` to add a tab
 
 Baseline migrations are versioned and executed only when needed. The version is retrieved from the script file name.
 
-So in this case, `V001__create_user_table.sql`, the version will be `001`(remember the double underscore after `V<version>`).
+So in this case, `V001__create_user_table.sql`, the version will be `001`(remember the double underscore after `V`).
 
 Here we have our first migration(for MySQL database)
 
@@ -132,7 +136,7 @@ val fly4sRes: Resource[IO, Fly4s[IO]] = Fly4s.make[IO](
   )
 )
 // fly4sRes: Resource[IO, Fly4s[IO]] = Allocate(
-//   resource = cats.effect.kernel.Resource$$$Lambda$9442/0x0000000802588000@7b7afdf1
+//   resource = cats.effect.kernel.Resource$$$Lambda$13201/0x00000008034be2e8@5c96bc35
 // )
 ```
 

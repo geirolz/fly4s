@@ -5,9 +5,9 @@ lazy val prjName                = "fly4s"
 lazy val prjPackageName         = prjName.replaceAll("[^\\p{Alpha}\\d]+", ".")
 lazy val prjDescription         = "A functional wrapper for Flywayy"
 lazy val prjOrg                 = "com.github.geirolz"
-lazy val scala213               = "2.13.10"
-lazy val scala32                = "3.3.0"
-lazy val supportedScalaVersions = List(scala213, scala32)
+lazy val scala213               = "2.13.11"
+lazy val scala33                = "3.3.0"
+lazy val supportedScalaVersions = List(scala213, scala33)
 
 //## global project to no publish ##
 lazy val fly4s: Project = project
