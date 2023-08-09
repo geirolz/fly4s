@@ -29,7 +29,7 @@ class Fly4sTest extends munit.CatsEffectSuite {
         .make[IO](
           url = fixture.h2Settings.getUrl,
           config = Fly4sConfig(
-            locations = Location.of("/migrations"),
+            locations = List(Location("/migrations")),
             ignoreMigrationPatterns = List(
               ValidatePattern.ignorePendingMigrations
             )
@@ -47,7 +47,7 @@ class Fly4sTest extends munit.CatsEffectSuite {
         .make[IO](
           url = fixture.h2Settings.getUrl,
           config = Fly4sConfig(
-            locations = Location.of("/migrations")
+            locations = List(Location("/migrations"))
           )
         )
         .use(_.migrate)
@@ -62,7 +62,7 @@ class Fly4sTest extends munit.CatsEffectSuite {
         .make[IO](
           url = fixture.h2Settings.getUrl,
           config = Fly4sConfig(
-            locations = Location.of("/migrations")
+            locations = List(Location("/migrations"))
           )
         )
         .use(_.validate)
@@ -76,7 +76,7 @@ class Fly4sTest extends munit.CatsEffectSuite {
         .make[IO](
           url = fixture.h2Settings.getUrl,
           config = Fly4sConfig(
-            locations     = Location.of("/migrations"),
+            locations     = List(Location("/migrations")),
             cleanDisabled = false
           )
         )
@@ -91,7 +91,7 @@ class Fly4sTest extends munit.CatsEffectSuite {
         .make[IO](
           url = fixture.h2Settings.getUrl,
           config = Fly4sConfig(
-            locations = Location.of("/migrations")
+            locations = List(Location("/migrations"))
           )
         )
         .use(_.baseline)
@@ -106,7 +106,7 @@ class Fly4sTest extends munit.CatsEffectSuite {
         .make[IO](
           url = fixture.h2Settings.getUrl,
           config = Fly4sConfig(
-            locations = Location.of("/migrations")
+            locations = List(Location("/migrations"))
           )
         )
         .use(_.repair)
@@ -121,7 +121,7 @@ class Fly4sTest extends munit.CatsEffectSuite {
         .make[IO](
           url = fixture.h2Settings.getUrl,
           config = Fly4sConfig(
-            locations = Location.of("/migrations")
+            locations = List(Location("/migrations"))
           )
         )
         .use(_.info)
@@ -136,13 +136,13 @@ class Fly4sTest extends munit.CatsEffectSuite {
         user     = "USER".some,
         password = "PWD".toCharArray.some,
         config = Fly4sConfig(
-          locations = Location.of("/migrations")
+          locations = List(Location("/migrations"))
         )
       )
       .use(
         _.reconfigure(
           Fly4sConfig(
-            locations = Location.of("/new_migrations")
+            locations = List(Location("/new_migrations"))
           )
         )
       )
@@ -174,13 +174,13 @@ class Fly4sTest extends munit.CatsEffectSuite {
         user     = "USER".some,
         password = "PWD".toCharArray.some,
         config = Fly4sConfig(
-          locations = Location.of("/migrations")
+          locations = List(Location("/migrations"))
         )
       )
       .use(
         _.reconfigure((current: Fly4sConfig) =>
           current.copy(
-            locations = Location.of("/new_migrations")
+            locations = List(Location("/migrations"))
           )
         )
       )
