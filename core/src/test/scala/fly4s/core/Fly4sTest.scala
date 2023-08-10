@@ -180,7 +180,7 @@ class Fly4sTest extends munit.CatsEffectSuite {
       .use(
         _.reconfigure((current: Fly4sConfig) =>
           current.copy(
-            locations = List(Location("/migrations"))
+            locations = List(Location("/new_migrations"))
           )
         )
       )
