@@ -1,6 +1,6 @@
 import cats.effect.IO
 import fly4s.core.Fly4s
-import fly4s.core.data.{Fly4sConfig, Location, ValidatedMigrateResult}
+import fly4s.core.data.{Fly4sConfig, Locations, ValidatedMigrateResult}
 
 case class DbConfig(
   name: String,
@@ -21,7 +21,7 @@ val res: IO[ValidatedMigrateResult] = Fly4s
     password = dbConfig.password,
     config = Fly4sConfig(
       table     = dbConfig.migrationsTable,
-      locations = Location.of(dbConfig.migrationsLocations)
+      locations = Locations(dbConfig.migrationsLocations)
     )
   )
-  .use(_.validateAndMigrate[IO])
+  .use(_.validateAndMigrate)

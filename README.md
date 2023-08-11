@@ -132,7 +132,7 @@ val fly4sRes: Resource[IO, Fly4s[IO]] = Fly4s.make[IO](
   password            = dbConfig.password,
   config = Fly4sConfig(
     table     = dbConfig.migrationsTable,
-    locations = Location.of(dbConfig.migrationsLocations)
+    locations = Locations(dbConfig.migrationsLocations)
   )
 )
 // fly4sRes: Resource[IO, Fly4s[IO]] = Allocate(
@@ -160,7 +160,7 @@ def migrateDb(dbConfig: DatabaseConfig): Resource[IO, MigrateResult] =
     password            = dbConfig.password,
     config = Fly4sConfig(
       table     = dbConfig.migrationsTable,
-      locations = Location.of(dbConfig.migrationsLocations)
+      locations = Locations(dbConfig.migrationsLocations)
     )
   ).evalMap(_.validateAndMigrate.result)
 ```

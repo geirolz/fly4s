@@ -66,7 +66,7 @@ private[fly4s] object Fly4sConfigDefaults {
 
   // --- migrations ---
   val defaultInstalledBy: Option[String]                    = None
-  val defaultLocations: List[Location]                      = List(Location("db/migration"))
+  val defaultLocations: List[Location]                      = Locations("db/migration")
   val defaultEncoding: Charset                              = StandardCharsets.UTF_8
   val defaultTable: String                                  = "flyway_schema_history"
   val defaultTablespace: Option[String]                     = None

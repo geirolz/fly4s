@@ -24,7 +24,7 @@ class Fly4sPerformanceSuite extends munit.CatsEffectSuite {
         .make[IO](
           url = fly4sDb.getUrl,
           config = Fly4sConfig(
-            locations = List(Location("/migrations"))
+            locations = Locations("/migrations")
           )
         )
         .use(_.migrate),
@@ -51,7 +51,7 @@ class Fly4sPerformanceSuite extends munit.CatsEffectSuite {
         .make[IO](
           url = fly4sDb.getUrl,
           config = Fly4sConfig(
-            locations = List(Location("/migrations")),
+            locations = Locations("/migrations"),
             ignoreMigrationPatterns = List(
               ValidatePattern.ignorePendingMigrations
             )
@@ -84,7 +84,7 @@ class Fly4sPerformanceSuite extends munit.CatsEffectSuite {
         .make[IO](
           url = fly4sDb.getUrl,
           config = Fly4sConfig(
-            locations     = List(Location("/migrations")),
+            locations     = Locations("/migrations"),
             cleanDisabled = false
           )
         )
@@ -113,7 +113,7 @@ class Fly4sPerformanceSuite extends munit.CatsEffectSuite {
         .make[IO](
           url = fly4sDb.getUrl,
           config = Fly4sConfig(
-            locations = List(Location("/migrations"))
+            locations = Locations("/migrations")
           )
         )
         .use(_.baseline),
@@ -140,7 +140,7 @@ class Fly4sPerformanceSuite extends munit.CatsEffectSuite {
         .make[IO](
           url = fly4sDb.getUrl,
           config = Fly4sConfig(
-            locations = List(Location("/migrations"))
+            locations = Locations("/migrations")
           )
         )
         .use(_.repair),
@@ -167,7 +167,7 @@ class Fly4sPerformanceSuite extends munit.CatsEffectSuite {
         .make[IO](
           url = fly4sDb.getUrl,
           config = Fly4sConfig(
-            locations = List(Location("/migrations"))
+            locations = Locations("/migrations")
           )
         )
         .use(_.info),
