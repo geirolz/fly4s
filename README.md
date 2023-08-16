@@ -38,6 +38,9 @@ To achieve this goal, `Fly4s` use the typelevel libraries `cats` and `cats-effec
 - [Useful links](#useful-links)
 ---
 
+### Adopters
+If you are using Fly4s in your company, please let me know and I'll add it to the list!
+
 ### Getting started
 Fly4s supports Scala 2.13 and 3.
 The first step, import the `Fly4s` library in our SBT project.
@@ -45,7 +48,7 @@ So, add the dependency in your `build.sbt` file.
 Fly4s depends on Flyway, so we'll have access to Flyway as well
 
 ```sbt
-libraryDependencies += "com.github.geirolz" %% "fly4s-core" % "0.0.18"
+libraryDependencies += "com.github.geirolz" %% "fly4s-core" % "0.0.19"
 ```
 
 ### Migrations files
