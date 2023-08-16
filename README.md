@@ -39,7 +39,7 @@ To achieve this goal, `Fly4s` use the typelevel libraries `cats` and `cats-effec
 ---
 
 ### Adopters
-If you are using Fly4s in your company, please let me know and I'll add it to the list!
+If you are using Fly4s in your company, please let me know and I'll add it to the list! It means a lot to me.
 
 ### Getting started
 Fly4s supports Scala 2.13 and 3.
