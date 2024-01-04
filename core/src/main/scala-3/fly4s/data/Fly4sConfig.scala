@@ -51,7 +51,7 @@ case class Fly4sConfig(
 ) extends Fly4sConfigContract
 object Fly4sConfig extends Fly4sConfigBuilder:
 
-  extension(i: data.Fly4sConfig)
+  extension (i: data.Fly4sConfig)
     def withConnectRetries(connectRetries: Int): data.Fly4sConfig =
       i.copy(connectRetries = connectRetries)
 
@@ -91,7 +91,9 @@ object Fly4sConfig extends Fly4sConfigBuilder:
     def withBaselineDescription(baselineDescription: String): data.Fly4sConfig =
       i.copy(baselineDescription = baselineDescription)
 
-    def withIgnoreMigrationPatterns(ignoreMigrationPatterns: List[ValidatePattern]): data.Fly4sConfig =
+    def withIgnoreMigrationPatterns(
+      ignoreMigrationPatterns: List[ValidatePattern]
+    ): data.Fly4sConfig =
       i.copy(ignoreMigrationPatterns = ignoreMigrationPatterns)
 
     def withPlaceholders(placeholders: Map[String, String]): data.Fly4sConfig =
