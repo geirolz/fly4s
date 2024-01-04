@@ -18,6 +18,7 @@ A lightweight, simple and functional wrapper for Flyway using cats-effect.
 | **Fly4s**                                                            | **Flyway** |
 |----------------------------------------------------------------------|------------|
 | [0.x](https://github.com/geirolz/fly4s/releases?q=0.&expanded=false) | 9.x        |
+| [1.x](https://github.com/geirolz/fly4s/releases?q=1.&expanded=false) | 10.x       |
 
 
 The most famous library to handle database migrations in Java is for sure Flyway.
