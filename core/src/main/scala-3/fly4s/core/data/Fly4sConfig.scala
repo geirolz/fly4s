@@ -49,9 +49,9 @@ case class Fly4sConfig(
   skipDefaultCallbacks: Boolean    = defaultSkipDefaultCallbacks,
   skipDefaultResolvers: Boolean    = defaultSkipDefaultResolvers
 ) extends Fly4sConfigContract
-object Fly4sConfig extends Fly4sConfigBuilder {
+object Fly4sConfig extends Fly4sConfigBuilder:
 
-  implicit class Fly4sConfigFluentConfigOps(i: Fly4sConfig) {
+  extension(i: Fly4sConfig)
     def withConnectRetries(connectRetries: Int): Fly4sConfig =
       i.copy(connectRetries = connectRetries)
 
@@ -162,5 +162,3 @@ object Fly4sConfig extends Fly4sConfigBuilder {
 
     def withSkipDefaultResolvers(skipDefaultResolvers: Boolean): Fly4sConfig =
       i.copy(skipDefaultResolvers = skipDefaultResolvers)
-  }
-}
