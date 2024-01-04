@@ -1,8 +1,8 @@
-package fly4s.core.data
+package fly4s.data
 
 import cats.data.NonEmptyList
 import com.geirolz.macros.fluent.copy.FluentCopy
-import fly4s.core.data.Fly4sConfigDefaults.*
+import fly4s.data.Fly4sConfigDefaults.*
 
 import java.nio.charset.Charset
 

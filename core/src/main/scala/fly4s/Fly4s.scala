@@ -1,9 +1,10 @@
-package fly4s.core
+package fly4s
 
 import cats.Endo
 import cats.data.Validated
 import cats.data.Validated.Valid
-import fly4s.core.data.*
+import fly4s.data.*
+import fly4s.data.Fly4sConfig
 import org.flywaydb.core.Flyway
 import org.flywaydb.core.api.configuration.{Configuration, FluentConfiguration}
 
@@ -74,7 +75,7 @@ sealed trait Fly4s[F[_]] {
     * @return
     *   An object summarising the successfully undone migrations.
     */
-  def undo: F[UndoResult]
+  def undo: F[OperationResult]
 
   /** <p>Validate applied migrations against resolved ones (on the filesystem or classpath) to
     * detect accidental changes that may prevent the schema(s) from being recreated exactly.</p>
@@ -131,9 +132,9 @@ sealed trait Fly4s[F[_]] {
   /** Close and release datasource connection. This method is private to avoid problems, indeed once
     * called this method this `Fly4s` instance is not usable anymore
     */
-  private[core] def close: F[Unit]
+  private[fly4s] def close: F[Unit]
 }
-object Fly4s extends AllCoreInstances {
+object Fly4s extends AllInstances {
 
   import cats.effect.*
   import cats.implicits.*
@@ -193,7 +194,7 @@ object Fly4s extends AllCoreInstances {
         )
       })
 
-  private[core] object Unsafe {
+  private[fly4s] object Unsafe {
 
     def makeFromRawConfigForDataSource[F[_]](
       mapFlywayConfig: Endo[FluentConfiguration],
@@ -276,7 +277,7 @@ object Fly4s extends AllCoreInstances {
       override def migrate: F[MigrateResult] =
         F.blocking { flyway.migrate() }
 
-      override def undo: F[UndoResult] =
+      override def undo: F[OperationResult] =
         F.blocking { flyway.undo() }
 
       override def validate: F[ValidateResult] =
@@ -294,7 +295,7 @@ object Fly4s extends AllCoreInstances {
       override def repair: F[RepairResult] =
         F.blocking { flyway.repair() }
 
-      override private[core] def close: F[Unit] =
+      override private[fly4s] def close: F[Unit] =
         F.delay { flyway.getConfiguration.getDataSource.getConnection.close() }
     }
 

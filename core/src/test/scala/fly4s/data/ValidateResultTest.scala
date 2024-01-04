@@ -1,4 +1,4 @@
-package fly4s.core.data
+package fly4s.data
 
 import cats.data.NonEmptyList
 import cats.data.Validated.{Invalid, Valid}

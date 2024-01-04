@@ -8,7 +8,12 @@ object ProjectDependencies {
     "org.flywaydb" % "flyway-core" % "10.4.1",
     // test
     "org.scalameta" %% "munit" % "0.7.29" % Test,
-    "org.typelevel" %% "munit-cats-effect-3" % "1.0.7" % Test
+    "org.typelevel" %% "munit-cats-effect-3" % "1.0.7" % Test,
+    "com.h2database" % "h2" % "2.2.224" % Test
+  )
+
+  lazy val for2_13_Only: Seq[ModuleID] = Seq(
+    "com.github.geirolz" %% "fluent-copy" % "0.0.1"
   )
 
   object Plugins {
@@ -18,15 +23,5 @@ object ProjectDependencies {
     )
 
     val compilerPluginsFor3: Seq[ModuleID] = Nil
-  }
-
-  object Core {
-    lazy val dedicated: Seq[ModuleID] = Seq(
-      "com.h2database" % "h2" % "2.2.224" % Test
-    )
-
-    lazy val for2_13_Only: Seq[ModuleID] = Seq(
-      "com.github.geirolz" %% "fluent-copy" % "0.0.1"
-    )
   }
 }

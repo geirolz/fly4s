@@ -1,4 +1,4 @@
-package fly4s.core
+package fly4s
 
 import cats.data.ValidatedNel
 import org.flywaydb.core.api.{
@@ -14,8 +14,8 @@ import org.flywaydb.core.api.output.{
   BaselineResult as JBaselineResult,
   CleanResult as JCleanResult,
   MigrateResult as JMigrateResult,
+  OperationResult as JOperationResult,
   RepairResult as JRepairResult,
-  UndoResult as JUndoResult,
   ValidateOutput as JValidateOutput,
   ValidateResult as JValidateResult
 }
@@ -31,7 +31,7 @@ package object data {
   type ValidateOutput         = JValidateOutput
   type ValidateResult         = JValidateResult
   type CleanResult            = JCleanResult
-  type UndoResult             = JUndoResult
+  type OperationResult        = JOperationResult
   type BaselineResult         = JBaselineResult
   type RepairResult           = JRepairResult
   type ErrorDetails           = JErrorDetails

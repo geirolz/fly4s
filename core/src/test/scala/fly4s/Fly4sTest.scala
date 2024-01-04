@@ -1,4 +1,4 @@
-package fly4s.core
+package fly4s
 
 import cats.effect.{IO, SyncIO}
 import fly4s.utils.{H2Database, H2Settings}
@@ -6,7 +6,7 @@ import fly4s.utils.{H2Database, H2Settings}
 class Fly4sTest extends munit.CatsEffectSuite {
 
   import cats.implicits.*
-  import fly4s.core.data.*
+  import fly4s.data.*
   import fly4s.implicits.*
 
   val fixture: SyncIO[FunFixture[H2Database]] = ResourceFixture(

@@ -29,12 +29,13 @@ lazy val fly4s: Project = project
       )
     )
   )
-  .settings(allSettings)
+  .settings(baseSettings)
   .settings(noPublishSettings)
   .settings(
     crossScalaVersions := Nil
   )
   .aggregate(core)
+
 
 lazy val core: Project =
   buildModule(
@@ -42,17 +43,16 @@ lazy val core: Project =
     toPublish     = true,
     folder        = "."
   ).settings(
-    libraryDependencies ++= ProjectDependencies.Core.dedicated,
     libraryDependencies ++= {
       CrossVersion.partialVersion(Keys.scalaVersion.value) match {
-        case Some((2, _)) => ProjectDependencies.Core.for2_13_Only
+        case Some((2, _)) => ProjectDependencies.for2_13_Only
         case _            => Nil
       }
     }
   )
 
 //=============================== MODULES UTILS ===============================
-def buildModule(prjModuleName: String, toPublish: Boolean, folder: String = "modules"): Project = {
+def buildModule(prjModuleName: String, toPublish: Boolean, folder: String): Project = {
   val keys       = prjModuleName.split("-")
   val docName    = keys.mkString(" ")
   val prjFile    = file(s"$folder/$prjModuleName")
@@ -60,9 +60,9 @@ def buildModule(prjModuleName: String, toPublish: Boolean, folder: String = "mod
 
   Project(prjModuleName, prjFile)
     .settings(
-      description := moduleName.value,
-      moduleName := s"$prjName-$prjModuleName",
-      name := s"$prjName $docName",
+      description    := moduleName.value,
+      moduleName     := s"$prjName-$prjModuleName",
+      name           := s"$prjName $docName",
       publish / skip := !toPublish,
       mdocIn := file(s"$folder/docs"),
       mdocOut := file(folder),
@@ -74,14 +74,11 @@ def buildModule(prjModuleName: String, toPublish: Boolean, folder: String = "mod
         "MODULE_NAME" -> moduleName.value,
         "VERSION"     -> previousStableVersion.value.getOrElse("<version>")
       ),
-      allSettings
-    )
-    .enablePlugins(ModuleMdocPlugin)
+      baseSettings
+    ).enablePlugins(ModuleMdocPlugin)
 }
 
 //=============================== SETTINGS ===============================
-lazy val allSettings = baseSettings
-
 lazy val noPublishSettings: Seq[Def.Setting[_]] = Seq(
   publish := {},
   publishLocal := {},

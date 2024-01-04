@@ -1,4 +1,4 @@
-package fly4s.core.data
+package fly4s.data
 
 object Location {
   def apply(value: String): Location = new Location(value)

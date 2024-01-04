@@ -111,8 +111,8 @@ In both `make` and `makeFor` methods, we can specify the parameter `config`. `Fl
 flyway `Configuration` but instead of having a builder we have a case class.
 
 ```scala
-import fly4s.core.*
-import fly4s.core.data.*
+import fly4s.*
+import fly4s.data.*
 import cats.effect.*
 
 val dbConfig: DatabaseConfig = DatabaseConfig(
