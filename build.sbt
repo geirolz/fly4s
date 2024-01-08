@@ -67,8 +67,8 @@ def module(modName: String)(folder: String, publishAs: Option[String] = None): P
   Project(modName, file(folder))
     .settings(
       name := s"$prjName $modDocName",
-      mdocIn := file(s"$folder/docs"),
-      mdocOut := file(folder),
+      mdocIn := file("docs"),
+      mdocOut := file("."),
       mdocScalacOptions := Seq("-Xsource:3"),
       mdocVariables := Map(
         "ORG"         -> prjOrg,
