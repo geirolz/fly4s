@@ -30,10 +30,10 @@ jobs:
         include:
           - scala: 2.13.12
             name: Scala2_13
-            test-tasks: coverage test coverageReport gen-doc mimaCheck
+            test-tasks: coverage test coverageReport gen-doc
           - scala: 3.3.1
             name: Scala3_3
-            test-tasks: coverage test coverageReport mimaCheck
+            test-tasks: coverage test coverageReport
 
     steps:
       - uses: actions/checkout@v4
@@ -59,6 +59,10 @@ jobs:
       #----------- COMPILE -----------
       - name: Compile, Format, Test and Coverage for ${{ matrix.scala }}
         run: sbt ++${{ matrix.scala }} clean scalafmtCheck ${{ matrix.test-tasks }}
+
+      #----------- MIMA -----------
+      - name: MiMa Report
+        run: sbt ++${{ matrix.scala }} mimaReportBinaryIssues
 
       #----------- COVERAGE -----------
       - name: Codecov

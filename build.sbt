@@ -16,8 +16,8 @@ lazy val root: Project = project
     inThisBuild(
       List(
         organization := prjOrg,
-        homepage := Some(url(s"https://github.com/geirolz/$prjName")),
-        licenses := List("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
+        homepage     := Some(url(s"https://github.com/geirolz/$prjName")),
+        licenses     := List("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
         developers := List(
           Developer(
             "DavidGeirola",
@@ -63,7 +63,7 @@ def module(modName: String)(
   val publishSettings = publishAs match {
     case Some(pubName) =>
       Seq(
-        moduleName := pubName,
+        moduleName     := pubName,
         publish / skip := false
       )
     case None => noPublishSettings
@@ -77,9 +77,9 @@ def module(modName: String)(
 
   Project(modName, file(folder))
     .settings(
-      name := s"$prjName $modDocName",
-      mdocIn := file("docs"),
-      mdocOut := file("."),
+      name              := s"$prjName $modDocName",
+      mdocIn            := file("docs"),
+      mdocOut           := file("."),
       mdocScalacOptions := Seq("-Xsource:3"),
       mdocVariables := Map(
         "ORG"         -> prjOrg,
@@ -99,20 +99,21 @@ def subProjectName(modPublishName: String): String = s"$prjName-$modPublishName"
 
 //=============================== SETTINGS ===============================
 lazy val noPublishSettings: Seq[Def.Setting[_]] = Seq(
-  publish := {},
-  publishLocal := {},
-  publishArtifact := false,
-  publish / skip := true
+  publish              := {},
+  publishLocal         := {},
+  publishArtifact      := false,
+  publish / skip       := true,
+  mimaFailOnNoPrevious := false
 )
 
 lazy val baseSettings: Seq[Def.Setting[_]] = Seq(
   // project
-  name := prjName,
-  description := prjDescription,
+  name         := prjName,
+  description  := prjDescription,
   organization := prjOrg,
   // scala
   crossScalaVersions := supportedScalaVersions,
-  scalaVersion := supportedScalaVersions.head,
+  scalaVersion       := supportedScalaVersions.head,
   scalacOptions ++= scalacSettings(scalaVersion.value),
   versionScheme := Some("early-semver"),
   // dependencies
@@ -196,11 +197,4 @@ addCommandAlias(
   List(
     core
   ).map(prj => s"project ${prj.id}-docs; mdoc").mkString(";") + s";project root;"
-)
-addCommandAlias(
-  "mimaCheck",
-  List(
-    core
-  ).map(prj => s"project ${prj.id}; mimaReportBinaryIssues")
-    .mkString(";") + s";project root;"
 )
