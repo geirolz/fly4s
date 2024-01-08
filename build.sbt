@@ -70,6 +70,7 @@ def module(modName: String)(
   }
 
   val mimaSettings = Seq(
+    mimaFailOnNoPrevious := false,
     mimaPreviousArtifacts := mimaCompatibleWith.map { version =>
       organization.value % s"${moduleName.value}_${scalaBinaryVersion.value}" % version
     }
