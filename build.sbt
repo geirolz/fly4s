@@ -25,7 +25,8 @@ lazy val fly4s: Project = project
             "david.geirola@gmail.com",
             url("https://github.com/geirolz")
           )
-        )
+        ),
+        mimaPreviousArtifacts := Set(prjOrg %% prjName % "1.0.0")
       )
     )
   )
@@ -36,12 +37,10 @@ lazy val fly4s: Project = project
   )
   .aggregate(core)
 
-
 lazy val core: Project =
-  buildModule(
-    prjModuleName = "core",
-    toPublish     = true,
-    folder        = "."
+  module("core")(
+    folder    = "./core",
+    publishAs = Some(prjName)
   ).settings(
     libraryDependencies ++= {
       CrossVersion.partialVersion(Keys.scalaVersion.value) match {
@@ -52,18 +51,22 @@ lazy val core: Project =
   )
 
 //=============================== MODULES UTILS ===============================
-def buildModule(prjModuleName: String, toPublish: Boolean, folder: String): Project = {
-  val keys       = prjModuleName.split("-")
-  val docName    = keys.mkString(" ")
-  val prjFile    = file(s"$folder/$prjModuleName")
-  val docNameStr = s"$prjName $docName"
+def module(modName: String)(folder: String, publishAs: Option[String] = None): Project = {
+  val keys       = modName.split("-")
+  val modDocName = keys.mkString(" ")
+  val docNameStr = s"$prjName $modDocName"
 
-  Project(prjModuleName, prjFile)
+  val publishSettings = publishAs match {
+    case Some(pubName) =>
+      Seq(
+        moduleName := pubName,
+        publish / skip := false
+      )
+    case None => noPublishSettings
+  }
+  Project(modName, file(folder))
     .settings(
-      description    := moduleName.value,
-      moduleName     := s"$prjName-$prjModuleName",
-      name           := s"$prjName $docName",
-      publish / skip := !toPublish,
+      name := s"$prjName $modDocName",
       mdocIn := file(s"$folder/docs"),
       mdocOut := file(folder),
       mdocScalacOptions := Seq("-Xsource:3"),
@@ -74,9 +77,12 @@ def buildModule(prjModuleName: String, toPublish: Boolean, folder: String): Proj
         "MODULE_NAME" -> moduleName.value,
         "VERSION"     -> previousStableVersion.value.getOrElse("<version>")
       ),
+      publishSettings,
       baseSettings
     ).enablePlugins(ModuleMdocPlugin)
 }
+
+def subProjectName(modPublishName: String): String = s"$prjName-$modPublishName"
 
 //=============================== SETTINGS ===============================
 lazy val noPublishSettings: Seq[Def.Setting[_]] = Seq(
