@@ -30,10 +30,10 @@ jobs:
         include:
           - scala: 2.13.12
             name: Scala2_13
-            test-tasks: coverage test coverageReport gen-doc
-          - scala: 3.3.0
+            test-tasks: coverage test coverageReport gen-doc mimaCheck
+          - scala: 3.3.1
             name: Scala3_3
-            test-tasks: coverage test coverageReport
+            test-tasks: coverage test coverageReport mimaCheck
 
     steps:
       - uses: actions/checkout@v4

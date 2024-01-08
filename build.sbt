@@ -10,7 +10,7 @@ lazy val scala33                = "3.3.1"
 lazy val supportedScalaVersions = List(scala213, scala33)
 
 //## global project to no publish ##
-lazy val fly4s: Project = project
+lazy val root: Project = project
   .in(file("."))
   .settings(
     inThisBuild(
@@ -25,8 +25,7 @@ lazy val fly4s: Project = project
             "david.geirola@gmail.com",
             url("https://github.com/geirolz")
           )
-        ),
-        mimaPreviousArtifacts := Set(prjOrg %% prjName % "1.0.0")
+        )
       )
     )
   )
@@ -39,8 +38,9 @@ lazy val fly4s: Project = project
 
 lazy val core: Project =
   module("core")(
-    folder    = "./core",
-    publishAs = Some(prjName)
+    folder             = "./core",
+    publishAs          = Some(prjName),
+    mimaCompatibleWith = Set("1.0.0")
   ).settings(
     libraryDependencies ++= {
       CrossVersion.partialVersion(Keys.scalaVersion.value) match {
@@ -51,7 +51,11 @@ lazy val core: Project =
   )
 
 //=============================== MODULES UTILS ===============================
-def module(modName: String)(folder: String, publishAs: Option[String] = None): Project = {
+def module(modName: String)(
+  folder: String,
+  publishAs: Option[String]       = None,
+  mimaCompatibleWith: Set[String] = Set.empty
+): Project = {
   val keys       = modName.split("-")
   val modDocName = keys.mkString(" ")
   val docNameStr = s"$prjName $modDocName"
@@ -64,6 +68,13 @@ def module(modName: String)(folder: String, publishAs: Option[String] = None): P
       )
     case None => noPublishSettings
   }
+
+  val mimaSettings = Seq(
+    mimaPreviousArtifacts := mimaCompatibleWith.map { version =>
+      organization.value % s"${moduleName.value}_${scalaBinaryVersion.value}" % version
+    }
+  )
+
   Project(modName, file(folder))
     .settings(
       name := s"$prjName $modDocName",
@@ -77,9 +88,11 @@ def module(modName: String)(folder: String, publishAs: Option[String] = None): P
         "MODULE_NAME" -> moduleName.value,
         "VERSION"     -> previousStableVersion.value.getOrElse("<version>")
       ),
+      mimaSettings,
       publishSettings,
       baseSettings
-    ).enablePlugins(ModuleMdocPlugin)
+    )
+    .enablePlugins(ModuleMdocPlugin)
 }
 
 def subProjectName(modPublishName: String): String = s"$prjName-$modPublishName"
@@ -182,5 +195,12 @@ addCommandAlias(
   "gen-doc",
   List(
     core
-  ).map(prj => s"project ${prj.id}-docs; mdoc").mkString(";") + s";project $prjName;"
+  ).map(prj => s"project ${prj.id}-docs; mdoc").mkString(";") + s";project root;"
+)
+addCommandAlias(
+  "mimaCheck",
+  List(
+    core
+  ).map(prj => s"project ${prj.id}; mimaReportBinaryIssues")
+    .mkString(";") + s";project root;"
 )
