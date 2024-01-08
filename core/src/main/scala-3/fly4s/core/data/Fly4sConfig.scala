@@ -51,7 +51,7 @@ case class Fly4sConfig(
 ) extends Fly4sConfigContract
 object Fly4sConfig extends Fly4sConfigBuilder:
 
-  extension(i: Fly4sConfig)
+  extension (i: Fly4sConfig)
     def withConnectRetries(connectRetries: Int): Fly4sConfig =
       i.copy(connectRetries = connectRetries)
 
