@@ -42,6 +42,14 @@ To achieve this goal, `Fly4s` use the typelevel libraries `cats` and `cats-effec
 ### Adopters
 If you are using Fly4s in your company, please let me know and I'll add it to the list! It means a lot to me.
 
+<a href="https://www.codacy.com/">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://www.codacy.com/hubfs/Codacy_2023/Images/logo_codacy_white.svg">
+   <source media="(prefers-color-scheme: light)" srcset="https://www.codacy.com/hubfs/Codacy_2023/Images/logo_codacy.svg">
+   <img alt="Codacy Logo" height=55 >
+ </picture>
+</a>
+
 ### Getting started
 Fly4s supports Scala 2.13 and 3.
 The first step, import the `Fly4s` library in our SBT project.
@@ -140,7 +148,7 @@ val fly4sRes: Resource[IO, Fly4s[IO]] = Fly4s.make[IO](
   )
 )
 // fly4sRes: Resource[IO, Fly4s[IO]] = Allocate(
-//   resource = cats.effect.kernel.Resource$$$Lambda$27110/0x00000008055d1368@511cd40c
+//   resource = cats.effect.kernel.Resource$$$Lambda/0x0000000802e670b8@3c7b2af6
 // )
 ```
 
