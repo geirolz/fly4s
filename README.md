@@ -60,6 +60,10 @@ Fly4s depends on Flyway, so we'll have access to Flyway as well
 libraryDependencies += "com.github.geirolz" %% "fly4s" % "1.0.0"
 ```
 
+Remember to also import the specific database module from Flyway
+
+https://documentation.red-gate.com/flyway/flyway-cli-and-api/supported-databases
+
 ### Migrations files
 As the plain Flyway, we have to create a folder that will contain our migrations scripts, often in `resources/db`.
 
@@ -148,7 +152,7 @@ val fly4sRes: Resource[IO, Fly4s[IO]] = Fly4s.make[IO](
   )
 )
 // fly4sRes: Resource[IO, Fly4s[IO]] = Allocate(
-//   resource = cats.effect.kernel.Resource$$$Lambda/0x0000000802e670b8@3c7b2af6
+//   resource = cats.effect.kernel.Resource$$$Lambda$11849/0x0000000802ef5540@3f5b0394
 // )
 ```
 

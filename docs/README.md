@@ -60,6 +60,10 @@ Fly4s depends on Flyway, so we'll have access to Flyway as well
 libraryDependencies += "@ORG@" %% "@MODULE_NAME@" % "@VERSION@"
 ```
 
+Remember to also import the specific database module from Flyway
+
+https://documentation.red-gate.com/flyway/flyway-cli-and-api/supported-databases
+
 ### Migrations files
 As the plain Flyway, we have to create a folder that will contain our migrations scripts, often in `resources/db`.
 
