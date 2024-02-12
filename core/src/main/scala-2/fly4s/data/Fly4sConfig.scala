@@ -13,6 +13,7 @@ case class Fly4sConfig(
   defaultSchemaName: Option[String]         = defaultDefaultSchemaName,
   schemaNames: Option[NonEmptyList[String]] = defaultSchemaNames,
   lockRetryCount: Int                       = defaultLockRetryCount,
+  loggers: List[LoggerType]                 = defaultLoggers,
   // --- migrations ---
   installedBy: Option[String]                    = defaultInstalledBy,
   locations: List[Location]                      = defaultLocations,

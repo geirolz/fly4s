@@ -12,6 +12,7 @@ case class Fly4sConfig(
   defaultSchemaName: Option[String]         = defaultDefaultSchemaName,
   schemaNames: Option[NonEmptyList[String]] = defaultSchemaNames,
   lockRetryCount: Int                       = defaultLockRetryCount,
+  loggers: List[LoggerType]                 = defaultLoggers,
   // --- migrations ---
   installedBy: Option[String]                    = defaultInstalledBy,
   locations: List[Location]                      = defaultLocations,
@@ -67,6 +68,9 @@ object Fly4sConfig extends Fly4sConfigBuilder:
 
     def withLockRetryCount(lockRetryCount: Int): Fly4sConfig =
       i.copy(lockRetryCount = lockRetryCount)
+
+    def withLoggers(loggers: List[LoggerType]): Fly4sConfig =
+      i.copy(loggers = loggers)
 
     def withInstalledBy(installedBy: Option[String]): Fly4sConfig =
       i.copy(installedBy = installedBy)

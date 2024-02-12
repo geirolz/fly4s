@@ -63,6 +63,7 @@ private[fly4s] object Fly4sConfigDefaults {
   val defaultDefaultSchemaName: Option[String]         = None
   val defaultSchemaNames: Option[NonEmptyList[String]] = None
   val defaultLockRetryCount: Int                       = 50
+  val defaultLoggers: List[LoggerType]                 = List(LoggerType.Auto)
 
   // --- migrations ---
   val defaultInstalledBy: Option[String]                    = None
@@ -119,6 +120,7 @@ private[fly4s] trait Fly4sConfigBuilder {
       defaultSchemaName = Option(c.getDefaultSchema),
       schemaNames       = NonEmptyList.fromList(c.getSchemas.toList),
       lockRetryCount    = c.getLockRetryCount,
+      loggers           = c.getLoggers.toList.map(LoggerType.fromFlywayValue(_)),
       // ---------- migrations ----------
       locations               = c.getLocations.toList,
       installedBy             = Option(c.getInstalledBy),
@@ -169,7 +171,7 @@ private[fly4s] trait Fly4sConfigBuilder {
       .defaultSchema(c.defaultSchemaName.orNull)
       .schemas(c.schemaNames.map(_.toList).getOrElse(Nil)*)
       .lockRetryCount(c.lockRetryCount)
-
+      .loggers(c.loggers.map(LoggerType.toFlywayValue(_))*)
       // ---------- migrations ----------
       .locations(c.locations*)
       .installedBy(c.installedBy.orNull)
