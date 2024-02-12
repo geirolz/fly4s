@@ -1,5 +1,6 @@
 import sbt.project
 import ModuleMdocPlugin.autoImport.mdocScalacOptions
+import com.typesafe.tools.mima.core.{DirectMissingMethodProblem, ProblemFilters}
 
 lazy val prjName                = "fly4s"
 lazy val prjPackageName         = prjName.replaceAll("[^\\p{Alpha}\\d]+", ".")
@@ -42,6 +43,11 @@ lazy val core: Project =
     publishAs          = Some(prjName),
     mimaCompatibleWith = Set("1.0.0")
   ).settings(
+    mimaBinaryIssueFilters ++= Seq(
+      ProblemFilters.exclude[DirectMissingMethodProblem]("fly4s.data.Fly4sConfig.apply"),
+      ProblemFilters.exclude[DirectMissingMethodProblem]("fly4s.data.Fly4sConfig.copy"),
+      ProblemFilters.exclude[DirectMissingMethodProblem]("fly4s.data.Fly4sConfig.this")
+    ),
     libraryDependencies ++= {
       CrossVersion.partialVersion(Keys.scalaVersion.value) match {
         case Some((2, _)) => ProjectDependencies.for2_13_Only

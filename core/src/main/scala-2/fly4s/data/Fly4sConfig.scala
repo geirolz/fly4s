@@ -49,6 +49,8 @@ case class Fly4sConfig(
   baselineOnMigrate: Boolean       = defaultBaselineOnMigrate,
   outOfOrder: Boolean              = defaultOutOfOrder,
   skipDefaultCallbacks: Boolean    = defaultSkipDefaultCallbacks,
-  skipDefaultResolvers: Boolean    = defaultSkipDefaultResolvers
+  skipDefaultResolvers: Boolean    = defaultSkipDefaultResolvers,
+  // --- mima after 1.0.0 ---
+  loggers: List[LoggerType] = defaultLoggers
 ) extends Fly4sConfigContract
 object Fly4sConfig extends Fly4sConfigBuilder

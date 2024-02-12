@@ -48,7 +48,9 @@ case class Fly4sConfig(
   baselineOnMigrate: Boolean       = defaultBaselineOnMigrate,
   outOfOrder: Boolean              = defaultOutOfOrder,
   skipDefaultCallbacks: Boolean    = defaultSkipDefaultCallbacks,
-  skipDefaultResolvers: Boolean    = defaultSkipDefaultResolvers
+  skipDefaultResolvers: Boolean    = defaultSkipDefaultResolvers,
+  // --- mima after 1.0.0 ---
+  loggers: List[LoggerType] = defaultLoggers
 ) extends Fly4sConfigContract
 object Fly4sConfig extends Fly4sConfigBuilder:
 
@@ -67,6 +69,9 @@ object Fly4sConfig extends Fly4sConfigBuilder:
 
     def withLockRetryCount(lockRetryCount: Int): Fly4sConfig =
       i.copy(lockRetryCount = lockRetryCount)
+
+    def withLoggers(loggers: List[LoggerType]): Fly4sConfig =
+      i.copy(loggers = loggers)
 
     def withInstalledBy(installedBy: Option[String]): Fly4sConfig =
       i.copy(installedBy = installedBy)
