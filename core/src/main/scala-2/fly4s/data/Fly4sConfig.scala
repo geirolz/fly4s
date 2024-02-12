@@ -13,7 +13,6 @@ case class Fly4sConfig(
   defaultSchemaName: Option[String]         = defaultDefaultSchemaName,
   schemaNames: Option[NonEmptyList[String]] = defaultSchemaNames,
   lockRetryCount: Int                       = defaultLockRetryCount,
-  loggers: List[LoggerType]                 = defaultLoggers,
   // --- migrations ---
   installedBy: Option[String]                    = defaultInstalledBy,
   locations: List[Location]                      = defaultLocations,
@@ -50,6 +49,8 @@ case class Fly4sConfig(
   baselineOnMigrate: Boolean       = defaultBaselineOnMigrate,
   outOfOrder: Boolean              = defaultOutOfOrder,
   skipDefaultCallbacks: Boolean    = defaultSkipDefaultCallbacks,
-  skipDefaultResolvers: Boolean    = defaultSkipDefaultResolvers
+  skipDefaultResolvers: Boolean    = defaultSkipDefaultResolvers,
+  // --- mima after 1.0.0 ---
+  loggers: List[LoggerType] = defaultLoggers
 ) extends Fly4sConfigContract
 object Fly4sConfig extends Fly4sConfigBuilder
