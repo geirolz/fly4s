@@ -13,6 +13,7 @@ private[fly4s] trait Fly4sConfigContract {
   val defaultSchemaName: Option[String]
   val schemaNames: Option[NonEmptyList[String]]
   val lockRetryCount: Int
+  val loggers: List[LoggerType]
 
   // --- migrations ---
   val installedBy: Option[String]
