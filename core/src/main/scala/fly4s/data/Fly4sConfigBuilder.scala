@@ -1,5 +1,6 @@
 package fly4s.data
 
+import cats.MonadThrow
 import cats.data.NonEmptyList
 import org.flywaydb.core.api.configuration.{Configuration, FluentConfiguration}
 
@@ -8,6 +9,7 @@ import scala.jdk.CollectionConverters.{MapHasAsJava, MapHasAsScala}
 import scala.util.Try
 
 private[fly4s] trait Fly4sConfigContract {
+  val baseJavaConfig: Option[Configuration]
   val connectRetries: Int
   val initSql: Option[String]
   val defaultSchemaName: Option[String]
@@ -115,6 +117,7 @@ private[fly4s] trait Fly4sConfigBuilder {
 
   def fromJava(c: Configuration): Fly4sConfig =
     new Fly4sConfig(
+      baseJavaConfig = Some(c),
       // ---------- connection ----------
       connectRetries    = c.getConnectRetries,
       initSql           = Option(c.getInitSql),
@@ -161,12 +164,25 @@ private[fly4s] trait Fly4sConfigBuilder {
       skipDefaultResolvers    = c.isSkipDefaultResolvers
     )
 
+  @deprecated("Use toJavaF[Try] instead, this will be removed in the future versions.", "1.0.1")
   def toJava(
     c: Fly4sConfig,
     classLoader: ClassLoader = Thread.currentThread.getContextClassLoader
-  ): Try[Configuration] = Try {
+  ): Try[Configuration] = toJavaF[Try](c, classLoader)
+
+  // TODO Remove this method in the future to `toJava`
+  def toJavaF[F[_]: MonadThrow](
+    c: Fly4sConfig,
+    classLoader: ClassLoader = Thread.currentThread.getContextClassLoader
+  ): F[Configuration] = MonadThrow[F].catchNonFatal {
+
+    val fluentConfiguration: FluentConfiguration = c.baseJavaConfig match {
+      case Some(jconf) => new FluentConfiguration(classLoader).configuration(jconf)
+      case None        => new FluentConfiguration(classLoader)
+    }
+
     // ---------- connection ----------
-    new FluentConfiguration(classLoader)
+    fluentConfiguration
       .connectRetries(c.connectRetries)
       .initSql(c.initSql.orNull)
       .defaultSchema(c.defaultSchemaName.orNull)

@@ -203,7 +203,7 @@ object Fly4s extends AllInstances {
     )(implicit F: Async[F]): Resource[F, Fly4s[F]] = {
 
       val acquireFly4s = for {
-        c1    <- Fly4sConfig.toJava(config, classLoader).liftTo[F]
+        c1    <- Fly4sConfig.toJavaF[F](config, classLoader)
         c2    <- F.delay(Flyway.configure(classLoader).configuration(c1))
         fly4s <- fromJavaConfig[F](mapFlywayConfig(c2))
       } yield fly4s
@@ -242,7 +242,7 @@ object Fly4s extends AllInstances {
         for {
           currentJConfig <- F.pure(flyway.getConfiguration)
           classLoader = currentJConfig.getClassLoader
-          c <- Fly4sConfig.toJava(newConfig, classLoader).liftTo[F]
+          c <- Fly4sConfig.toJavaF[F](newConfig, classLoader)
           jConfig <- F.delay {
 
             val newJConfig = new FluentConfiguration(classLoader)
