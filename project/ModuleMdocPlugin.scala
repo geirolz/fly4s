@@ -18,7 +18,7 @@ object ModuleMdocPlugin extends AutoPlugin {
   import autoImport._
 
   override def projectSettings: Seq[Def.Setting[_]] = Seq(
-    mdocIn := baseDirectory.value / "docs",
+    mdocIn  := baseDirectory.value / "docs",
     mdocOut := baseDirectory.value,
 //    mdocLibraryDependencies := Nil,
     mdocScalacOptions := Nil
@@ -34,14 +34,14 @@ object ModuleMdocPlugin extends AutoPlugin {
         .enablePlugins(MdocPlugin)
         .dependsOn(moduleProj)
         .settings(
-          name := docProjId,
-          mdocIn := (moduleProj / mdocIn).value,
+          name    := docProjId,
+          mdocIn  := (moduleProj / mdocIn).value,
           mdocOut := (moduleProj / mdocOut).value,
 //          mdocExtraArguments += "--no-link-hygiene",
           mdocVariables := (moduleProj / mdocVariables).value,
           libraryDependencies ++= (moduleProj / libraryDependencies).value,
-          scalacOptions := (moduleProj / mdocScalacOptions).value,
-          scalaVersion := (moduleProj / scalaVersion).value,
+          scalacOptions  := (moduleProj / mdocScalacOptions).value,
+          scalaVersion   := (moduleProj / scalaVersion).value,
           publish / skip := true
         )
 

@@ -4,7 +4,7 @@ object ProjectDependencies {
 
   lazy val common: Seq[ModuleID] = Seq(
     "org.typelevel" %% "cats-core"   % "2.10.0",
-    "org.typelevel" %% "cats-effect" % "3.5.2",
+    "org.typelevel" %% "cats-effect" % "3.5.3",
     "org.flywaydb"   % "flyway-core" % "10.8.1",
     // test
     "org.scalameta" %% "munit"               % "0.7.29"  % Test,
@@ -13,12 +13,12 @@ object ProjectDependencies {
   )
 
   lazy val for2_13_Only: Seq[ModuleID] = Seq(
-    "com.github.geirolz" %% "fluent-copy" % "0.0.1"
+    "com.github.geirolz" %% "fluent-copy" % "0.0.2"
   )
 
   object Plugins {
     val compilerPluginsFor2_13: Seq[ModuleID] = Seq(
-      compilerPlugin("org.typelevel" %% "kind-projector"     % "0.13.2" cross CrossVersion.full),
+      compilerPlugin("org.typelevel" %% "kind-projector"     % "0.13.3" cross CrossVersion.full),
       compilerPlugin("com.olegpy"    %% "better-monadic-for" % "0.3.1")
     )
 
