@@ -13,7 +13,7 @@ object ProjectDependencies {
   )
 
   lazy val for2_13_Only: Seq[ModuleID] = Seq(
-    "com.github.geirolz" %% "fluent-copy" % "0.0.1"
+    "com.github.geirolz" %% "fluent-copy" % "0.0.2"
   )
 
   object Plugins {
