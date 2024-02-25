@@ -13,12 +13,12 @@ object ProjectDependencies {
   )
 
   lazy val for2_13_Only: Seq[ModuleID] = Seq(
-    "com.github.geirolz" %% "fluent-copy" % "0.0.1"
+    "com.github.geirolz" %% "fluent-copy" % "0.0.2"
   )
 
   object Plugins {
     val compilerPluginsFor2_13: Seq[ModuleID] = Seq(
-      compilerPlugin("org.typelevel" %% "kind-projector"     % "0.13.2" cross CrossVersion.full),
+      compilerPlugin("org.typelevel" %% "kind-projector"     % "0.13.3" cross CrossVersion.full),
       compilerPlugin("com.olegpy"    %% "better-monadic-for" % "0.3.1")
     )
 
