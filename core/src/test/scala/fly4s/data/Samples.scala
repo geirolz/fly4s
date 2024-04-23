@@ -1,7 +1,6 @@
 package fly4s.data
 
-import org.flywaydb.core.api.ErrorCode
-import org.flywaydb.core.api.ErrorCode.VALIDATE_ERROR
+import org.flywaydb.core.api.CoreErrorCode.VALIDATE_ERROR
 
 import java.util
 import java.util.Collections
@@ -35,7 +34,7 @@ object Samples {
       "DESCRIPTION",
       "FILE_PATH",
       new ErrorDetails(
-        ErrorCode.VALIDATE_ERROR,
+        VALIDATE_ERROR,
         "ERROR_MESSAGE"
       )
     )
