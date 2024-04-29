@@ -64,9 +64,9 @@ jobs:
       - name: MiMa Report
         run: sbt ++${{ matrix.scala }} mimaReportBinaryIssues
 
-      #----------- COVERAGE -----------
-      - name: Codecov
-        run: bash <(curl -s https://codecov.io/bash)
+#      #----------- COVERAGE -----------
+#      - name: Codecov
+#        run: bash <(curl -s https://codecov.io/bash)
 
   deploy:
     runs-on: ubuntu-latest
