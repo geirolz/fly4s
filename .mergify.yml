@@ -2,8 +2,6 @@ pull_request_rules:
   - name: automatic merge for master when CI passes and 1 reviews and not WIP
     conditions:
       - "#approved-reviews-by>=1"
-      - check-success=codecov/patch
-      - check-success=codecov/project
       - check-success=build (Scala2_13)
       - check-success=build (Scala3_3)
       - base=main
