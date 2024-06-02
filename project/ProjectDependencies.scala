@@ -3,7 +3,7 @@ import sbt._
 object ProjectDependencies {
 
   lazy val common: Seq[ModuleID] = Seq(
-    "org.typelevel" %% "cats-core"   % "2.10.0",
+    "org.typelevel" %% "cats-core"   % "2.12.0",
     "org.typelevel" %% "cats-effect" % "3.5.4",
     "org.flywaydb"   % "flyway-core" % "10.13.0",
     // test
