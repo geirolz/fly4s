@@ -9,7 +9,8 @@ class ValidatedMigrateResultTest extends munit.FunSuite {
   import ValidateOutput.*
 
   test("ValidatedMigrateResult.valid.liftTo[Try] should be Success") {
-    val migrateResult = new MigrateResult("FLYWAY_VERSION", "DATABASE", "SCHEMA_NAME")
+    val migrateResult =
+      new MigrateResult("FLYWAY_VERSION", "DATABASE", "SCHEMA_NAME", "DATABASE_TYPE")
     val result = ValidatedMigrateResult.liftTo[Try](ValidatedMigrateResult.valid(migrateResult))
 
     assertEquals(
