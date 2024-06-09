@@ -9,7 +9,7 @@ class Fly4sTest extends munit.CatsEffectSuite {
   import fly4s.data.*
   import fly4s.implicits.*
 
-  val fixture: SyncIO[FunFixture[H2Database]] = ResourceFixture(
+  val fixture: SyncIO[FunFixture[H2Database]] = ResourceFunFixture(
     H2Database.make(
       H2Settings.inMemory(
         name = "h2-test",

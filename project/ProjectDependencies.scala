@@ -7,9 +7,9 @@ object ProjectDependencies {
     "org.typelevel" %% "cats-effect" % "3.5.4",
     "org.flywaydb"   % "flyway-core" % "10.14.0",
     // test
-    "org.scalameta" %% "munit"               % "1.0.0"   % Test,
-    "org.typelevel" %% "munit-cats-effect-3" % "2.0.0"   % Test,
-    "com.h2database" % "h2"                  % "2.2.224" % Test
+    "org.scalameta" %% "munit"             % "1.0.0"   % Test,
+    "org.typelevel" %% "munit-cats-effect" % "2.0.0"   % Test,
+    "com.h2database" % "h2"                % "2.2.224" % Test
   )
 
   lazy val for2_13_Only: Seq[ModuleID] = Seq(
