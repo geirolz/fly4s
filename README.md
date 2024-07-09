@@ -15,10 +15,10 @@ A lightweight, simple and functional wrapper for Flyway using cats-effect.
 
 ### Compatibility matrix
 
-|                              **Fly4s**                               | **Flyway** |                        **Branch**                        |
-|:--------------------------------------------------------------------:|:----------:|:--------------------------------------------------------:|
-| [0.x](https://github.com/geirolz/fly4s/releases?q=0.&expanded=false) |    9.x     | [0.x-9.x](https://github.com/geirolz/fly4s/tree/0.x-9.x) |
-| [1.x](https://github.com/geirolz/fly4s/releases?q=1.&expanded=false) |    10.x    |    [main](https://github.com/geirolz/fly4s/tree/main)    |
+|                               **Fly4s**                               | **Flyway** |                        **Branch**                        |
+|:---------------------------------------------------------------------:|:----------:|:--------------------------------------------------------:|
+| [0.x](https://github.com/geirolz/fly4s/releases?q=v0.&expanded=false) |    9.x     | [0.x-9.x](https://github.com/geirolz/fly4s/tree/0.x-9.x) |
+| [1.x](https://github.com/geirolz/fly4s/releases?q=v1.&expanded=false) |    10.x    |    [main](https://github.com/geirolz/fly4s/tree/main)    |
 
 
 The most famous library to handle database migrations in Java is for sure Flyway.
@@ -57,7 +57,7 @@ So, add the dependency in your `build.sbt` file.
 Fly4s depends on Flyway, so we'll have access to Flyway as well
 
 ```sbt
-libraryDependencies += "com.github.geirolz" %% "fly4s" % "1.0.0"
+libraryDependencies += "com.github.geirolz" %% "fly4s" % "1.0.5"
 ```
 
 Remember to also import the specific database module from Flyway
@@ -152,7 +152,7 @@ val fly4sRes: Resource[IO, Fly4s[IO]] = Fly4s.make[IO](
   )
 )
 // fly4sRes: Resource[IO, Fly4s[IO]] = Allocate(
-//   resource = cats.effect.kernel.Resource$$$Lambda$11849/0x0000000802ef5540@3f5b0394
+//   resource = cats.effect.kernel.Resource$$$Lambda/0x00000007030bf0c0@1950092a
 // )
 ```
 

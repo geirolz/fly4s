@@ -15,10 +15,10 @@ A lightweight, simple and functional wrapper for Flyway using cats-effect.
 
 ### Compatibility matrix
 
-|                              **Fly4s**                               | **Flyway** |                        **Branch**                        |
-|:--------------------------------------------------------------------:|:----------:|:--------------------------------------------------------:|
-| [0.x](https://github.com/geirolz/fly4s/releases?q=0.&expanded=false) |    9.x     | [0.x-9.x](https://github.com/geirolz/fly4s/tree/0.x-9.x) |
-| [1.x](https://github.com/geirolz/fly4s/releases?q=1.&expanded=false) |    10.x    |    [main](https://github.com/geirolz/fly4s/tree/main)    |
+|                               **Fly4s**                               | **Flyway** |                        **Branch**                        |
+|:---------------------------------------------------------------------:|:----------:|:--------------------------------------------------------:|
+| [0.x](https://github.com/geirolz/fly4s/releases?q=v0.&expanded=false) |    9.x     | [0.x-9.x](https://github.com/geirolz/fly4s/tree/0.x-9.x) |
+| [1.x](https://github.com/geirolz/fly4s/releases?q=v1.&expanded=false) |    10.x    |    [main](https://github.com/geirolz/fly4s/tree/main)    |
 
 
 The most famous library to handle database migrations in Java is for sure Flyway.
