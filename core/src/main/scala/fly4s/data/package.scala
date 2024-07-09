@@ -1,4 +1,4 @@
-package fly4s.core
+package fly4s
 
 import cats.data.ValidatedNel
 import org.flywaydb.core.api.{

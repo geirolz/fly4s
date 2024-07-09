@@ -1,9 +1,10 @@
-package fly4s.core
+package fly4s
 
 import cats.Endo
 import cats.data.Validated
 import cats.data.Validated.Valid
-import fly4s.core.data.*
+import fly4s.data.*
+import fly4s.data.Fly4sConfig
 import org.flywaydb.core.Flyway
 import org.flywaydb.core.api.configuration.{Configuration, FluentConfiguration}
 
@@ -131,9 +132,9 @@ sealed trait Fly4s[F[_]] {
   /** Close and release datasource connection. This method is private to avoid problems, indeed once
     * called this method this `Fly4s` instance is not usable anymore
     */
-  private[core] def close: F[Unit]
+  private[fly4s] def close: F[Unit]
 }
-object Fly4s extends AllCoreInstances {
+object Fly4s extends AllInstances {
 
   import cats.effect.*
   import cats.implicits.*
@@ -193,7 +194,7 @@ object Fly4s extends AllCoreInstances {
         )
       })
 
-  private[core] object Unsafe {
+  private[fly4s] object Unsafe {
 
     def makeFromRawConfigForDataSource[F[_]](
       mapFlywayConfig: Endo[FluentConfiguration],
@@ -202,7 +203,7 @@ object Fly4s extends AllCoreInstances {
     )(implicit F: Async[F]): Resource[F, Fly4s[F]] = {
 
       val acquireFly4s = for {
-        c1    <- Fly4sConfig.toJava(config, classLoader).liftTo[F]
+        c1    <- Fly4sConfig.toJavaF[F](config, classLoader)
         c2    <- F.delay(Flyway.configure(classLoader).configuration(c1))
         fly4s <- fromJavaConfig[F](mapFlywayConfig(c2))
       } yield fly4s
@@ -241,7 +242,7 @@ object Fly4s extends AllCoreInstances {
         for {
           currentJConfig <- F.pure(flyway.getConfiguration)
           classLoader = currentJConfig.getClassLoader
-          c <- Fly4sConfig.toJava(newConfig, classLoader).liftTo[F]
+          c <- Fly4sConfig.toJavaF[F](newConfig, classLoader)
           jConfig <- F.delay {
 
             val newJConfig = new FluentConfiguration(classLoader)
@@ -294,7 +295,7 @@ object Fly4s extends AllCoreInstances {
       override def repair: F[RepairResult] =
         F.blocking { flyway.repair() }
 
-      override private[core] def close: F[Unit] =
+      override private[fly4s] def close: F[Unit] =
         F.delay { flyway.getConfiguration.getDataSource.getConnection.close() }
     }
 

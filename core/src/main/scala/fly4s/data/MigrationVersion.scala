@@ -1,4 +1,4 @@
-package fly4s.core.data
+package fly4s.data
 
 import org.flywaydb.core.api.MigrationVersion as JMigrationVersion
 

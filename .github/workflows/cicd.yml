@@ -9,15 +9,7 @@ on:
   pull_request:
     branches:
       - main
-
-# env variables
-env:
-  CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-  CODACY_PROJECT_TOKEN: ${{ secrets.CODACY_PROJECT_TOKEN }}
-  SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
-  SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
-  PGP_SECRET: ${{ secrets.PGP_SECRET }}
-  PGP_PASSPHRASE: ${{ secrets.PGP_PASSPHRASE }}
+      - 0.x-9.x
 
 # jobs
 jobs:
@@ -28,10 +20,10 @@ jobs:
       matrix:
         # supported scala versions
         include:
-          - scala: 2.13.12
+          - scala: 2.13.14
             name: Scala2_13
             test-tasks: coverage test coverageReport gen-doc
-          - scala: 3.3.0
+          - scala: 3.3.3
             name: Scala3_3
             test-tasks: coverage test coverageReport
 
@@ -47,7 +39,7 @@ jobs:
 
       #----------- CACHE -----------
       - name: Cache SBT
-        uses: actions/cache@v3.3.2
+        uses: actions/cache@v4.0.2
         with:
           # A list of files, directories, and wildcard patterns to cache and restore
           path: |
@@ -60,9 +52,15 @@ jobs:
       - name: Compile, Format, Test and Coverage for ${{ matrix.scala }}
         run: sbt ++${{ matrix.scala }} clean scalafmtCheck ${{ matrix.test-tasks }}
 
+      #----------- MIMA -----------
+      - name: MiMa Report
+        run: sbt ++${{ matrix.scala }} mimaReportBinaryIssues
+
       #----------- COVERAGE -----------
-      - name: Codecov
-        run: bash <(curl -s https://codecov.io/bash)
+      - name: Upload Coverage to Codacy
+        run: bash <(curl -Ls https://coverage.codacy.com/get.sh)
+        env:
+          CODACY_PROJECT_TOKEN: ${{ secrets.CODACY_PROJECT_TOKEN }}
 
   deploy:
     runs-on: ubuntu-latest
@@ -80,7 +78,7 @@ jobs:
 
       #----------- CACHE -----------
       - name: Cache SBT
-        uses: actions/cache@v3.3.2
+        uses: actions/cache@v4.0.2
         with:
           # A list of files, directories, and wildcard patterns to cache and restore
           path: |
@@ -92,3 +90,8 @@ jobs:
       #----------- RELEASE -----------
       - name: Release
         run: sbt clean compile ci-release
+        env:
+          SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+          SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+          PGP_SECRET: ${{ secrets.PGP_SECRET }}
+          PGP_PASSPHRASE: ${{ secrets.PGP_PASSPHRASE }}

@@ -1,35 +1,35 @@
 import sbt.project
 import ModuleMdocPlugin.autoImport.mdocScalacOptions
+import com.typesafe.tools.mima.core.{DirectMissingMethodProblem, ProblemFilters}
 
 lazy val prjName                = "fly4s"
 lazy val prjPackageName         = prjName.replaceAll("[^\\p{Alpha}\\d]+", ".")
 lazy val prjDescription         = "A functional wrapper for Flywayy"
 lazy val prjOrg                 = "com.github.geirolz"
-lazy val scala213               = "2.13.12"
-lazy val scala33                = "3.3.1"
+lazy val scala213               = "2.13.14"
+lazy val scala33                = "3.3.3"
 lazy val supportedScalaVersions = List(scala213, scala33)
 
-//## global project to no publish ##
-lazy val fly4s: Project = project
-  .in(file("."))
-  .settings(
-    inThisBuild(
-      List(
-        organization := prjOrg,
-        homepage := Some(url(s"https://github.com/geirolz/$prjName")),
-        licenses := List("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
-        developers := List(
-          Developer(
-            "DavidGeirola",
-            "David Geirola",
-            "david.geirola@gmail.com",
-            url("https://github.com/geirolz")
-          )
-        )
+inThisBuild(
+  List(
+    organization := prjOrg,
+    homepage     := Some(url(s"https://github.com/geirolz/$prjName")),
+    licenses     := List("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
+    developers := List(
+      Developer(
+        "DavidGeirola",
+        "David Geirola",
+        "david.geirola@gmail.com",
+        url("https://github.com/geirolz")
       )
     )
   )
-  .settings(allSettings)
+)
+
+//## global project to no publish ##
+lazy val root: Project = project
+  .in(file("."))
+  .settings(baseSettings)
   .settings(noPublishSettings)
   .settings(
     crossScalaVersions := Nil
@@ -37,35 +37,55 @@ lazy val fly4s: Project = project
   .aggregate(core)
 
 lazy val core: Project =
-  buildModule(
-    prjModuleName = "core",
-    toPublish     = true,
-    folder        = "."
+  module("core")(
+    folder             = "./core",
+    publishAs          = Some(prjName),
+    mimaCompatibleWith = Set("0.1.0")
   ).settings(
-    libraryDependencies ++= ProjectDependencies.Core.dedicated,
+    mimaBinaryIssueFilters ++= Seq(
+      ProblemFilters.exclude[DirectMissingMethodProblem]("fly4s.data.Fly4sConfig.apply"),
+      ProblemFilters.exclude[DirectMissingMethodProblem]("fly4s.data.Fly4sConfig.copy"),
+      ProblemFilters.exclude[DirectMissingMethodProblem]("fly4s.data.Fly4sConfig.this")
+    ),
     libraryDependencies ++= {
       CrossVersion.partialVersion(Keys.scalaVersion.value) match {
-        case Some((2, _)) => ProjectDependencies.Core.for2_13_Only
+        case Some((2, _)) => ProjectDependencies.for2_13_Only
         case _            => Nil
       }
     }
   )
 
 //=============================== MODULES UTILS ===============================
-def buildModule(prjModuleName: String, toPublish: Boolean, folder: String = "modules"): Project = {
-  val keys       = prjModuleName.split("-")
-  val docName    = keys.mkString(" ")
-  val prjFile    = file(s"$folder/$prjModuleName")
-  val docNameStr = s"$prjName $docName"
+def module(modName: String)(
+  folder: String,
+  publishAs: Option[String]       = None,
+  mimaCompatibleWith: Set[String] = Set.empty
+): Project = {
+  val keys       = modName.split("-")
+  val modDocName = keys.mkString(" ")
+  val docNameStr = s"$prjName $modDocName"
 
-  Project(prjModuleName, prjFile)
+  val publishSettings = publishAs match {
+    case Some(pubName) =>
+      Seq(
+        moduleName     := pubName,
+        publish / skip := false
+      )
+    case None => noPublishSettings
+  }
+
+  val mimaSettings = Seq(
+    mimaFailOnNoPrevious := false,
+    mimaPreviousArtifacts := mimaCompatibleWith.map { version =>
+      organization.value % s"${moduleName.value}_${scalaBinaryVersion.value}" % version
+    }
+  )
+
+  Project(modName, file(folder))
     .settings(
-      description := moduleName.value,
-      moduleName := s"$prjName-$prjModuleName",
-      name := s"$prjName $docName",
-      publish / skip := !toPublish,
-      mdocIn := file(s"$folder/docs"),
-      mdocOut := file(folder),
+      name              := s"$prjName $modDocName",
+      mdocIn            := file("docs"),
+      mdocOut           := file("."),
       mdocScalacOptions := Seq("-Xsource:3"),
       mdocVariables := Map(
         "ORG"         -> prjOrg,
@@ -74,29 +94,32 @@ def buildModule(prjModuleName: String, toPublish: Boolean, folder: String = "mod
         "MODULE_NAME" -> moduleName.value,
         "VERSION"     -> previousStableVersion.value.getOrElse("<version>")
       ),
-      allSettings
+      mimaSettings,
+      publishSettings,
+      baseSettings
     )
     .enablePlugins(ModuleMdocPlugin)
 }
 
-//=============================== SETTINGS ===============================
-lazy val allSettings = baseSettings
+def subProjectName(modPublishName: String): String = s"$prjName-$modPublishName"
 
+//=============================== SETTINGS ===============================
 lazy val noPublishSettings: Seq[Def.Setting[_]] = Seq(
-  publish := {},
-  publishLocal := {},
-  publishArtifact := false,
-  publish / skip := true
+  publish              := {},
+  publishLocal         := {},
+  publishArtifact      := false,
+  publish / skip       := true,
+  mimaFailOnNoPrevious := false
 )
 
 lazy val baseSettings: Seq[Def.Setting[_]] = Seq(
   // project
-  name := prjName,
-  description := prjDescription,
+  name         := prjName,
+  description  := prjDescription,
   organization := prjOrg,
   // scala
   crossScalaVersions := supportedScalaVersions,
-  scalaVersion := supportedScalaVersions.head,
+  scalaVersion       := supportedScalaVersions.head,
   scalacOptions ++= scalacSettings(scalaVersion.value),
   versionScheme := Some("early-semver"),
   // dependencies
@@ -179,5 +202,5 @@ addCommandAlias(
   "gen-doc",
   List(
     core
-  ).map(prj => s"project ${prj.id}-docs; mdoc").mkString(";") + s";project $prjName;"
+  ).map(prj => s"project ${prj.id}-docs; mdoc").mkString(";") + s";project root;"
 )
