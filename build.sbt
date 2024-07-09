@@ -10,26 +10,25 @@ lazy val scala213               = "2.13.14"
 lazy val scala33                = "3.3.3"
 lazy val supportedScalaVersions = List(scala213, scala33)
 
-//## global project to no publish ##
-lazy val root: Project = project
-  .in(file("."))
-  .settings(
-    inThisBuild(
-      List(
-        organization := prjOrg,
-        homepage     := Some(url(s"https://github.com/geirolz/$prjName")),
-        licenses     := List("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
-        developers := List(
-          Developer(
-            "DavidGeirola",
-            "David Geirola",
-            "david.geirola@gmail.com",
-            url("https://github.com/geirolz")
-          )
-        )
+inThisBuild(
+  List(
+    organization := prjOrg,
+    homepage     := Some(url(s"https://github.com/geirolz/$prjName")),
+    licenses     := List("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
+    developers := List(
+      Developer(
+        "DavidGeirola",
+        "David Geirola",
+        "david.geirola@gmail.com",
+        url("https://github.com/geirolz")
       )
     )
   )
+)
+
+//## global project to no publish ##
+lazy val root: Project = project
+  .in(file("."))
   .settings(baseSettings)
   .settings(noPublishSettings)
   .settings(

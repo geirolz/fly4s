@@ -10,14 +10,6 @@ on:
     branches:
       - main
 
-# env variables
-env:
-  CODACY_PROJECT_TOKEN: ${{ secrets.CODACY_PROJECT_TOKEN }}
-  SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
-  SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
-  PGP_SECRET: ${{ secrets.PGP_SECRET }}
-  PGP_PASSPHRASE: ${{ secrets.PGP_PASSPHRASE }}
-
 # jobs
 jobs:
   build:
@@ -66,6 +58,8 @@ jobs:
       #----------- COVERAGE -----------
       - name: Upload Coverage to Codacy
         run: bash <(curl -Ls https://coverage.codacy.com/get.sh)
+        env:
+          CODACY_PROJECT_TOKEN: ${{ secrets.CODACY_PROJECT_TOKEN }}
 
   deploy:
     runs-on: ubuntu-latest
@@ -95,3 +89,8 @@ jobs:
       #----------- RELEASE -----------
       - name: Release
         run: sbt clean compile ci-release
+        env:
+          SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+          SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+          PGP_SECRET: ${{ secrets.PGP_SECRET }}
+          PGP_PASSPHRASE: ${{ secrets.PGP_PASSPHRASE }}
