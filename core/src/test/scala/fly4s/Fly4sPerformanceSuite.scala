@@ -1,7 +1,7 @@
-package fly4s.core
+package fly4s
 
 import cats.effect.IO
-import fly4s.core.data.*
+import fly4s.data.*
 import fly4s.utils.H2Settings
 import org.flywaydb.core.Flyway
 

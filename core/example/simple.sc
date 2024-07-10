@@ -1,6 +1,6 @@
 import cats.effect.IO
-import fly4s.core.Fly4s
-import fly4s.core.data.{Fly4sConfig, Locations, ValidatedMigrateResult}
+import fly4s.Fly4s
+import fly4s.data.{Fly4sConfig, Locations, ValidatedMigrateResult}
 
 case class DbConfig(
   name: String,

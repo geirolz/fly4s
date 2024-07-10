@@ -1,12 +1,13 @@
-package fly4s.core.data
+package fly4s.data
 
 import cats.data.NonEmptyList
+import fly4s.data.ValidatedMigrateResult
 
 import scala.util.{Success, Try}
 
 class ValidatedMigrateResultTest extends munit.FunSuite {
 
-  import ValidateOutput.*
+  import fly4s.data.ValidateOutput.*
 
   test("ValidatedMigrateResult.valid.liftTo[Try] should be Success") {
     val migrateResult = new MigrateResult("FLYWAY_VERSION", "DATABASE", "SCHEMA_NAME")

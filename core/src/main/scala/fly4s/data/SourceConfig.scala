@@ -1,4 +1,4 @@
-package fly4s.core.data
+package fly4s.data
 
 case class SourceConfig(
   url: Option[String]                        = None,
@@ -8,7 +8,7 @@ case class SourceConfig(
   def password: Option[Array[Char]] = _password.map(_.clone())
 }
 object SourceConfig {
-  private[core] def fromNullable(url: String, user: String, password: String): SourceConfig =
+  private[fly4s] def fromNullable(url: String, user: String, password: String): SourceConfig =
     SourceConfig(
       url       = Option(url),
       user      = Option(user),

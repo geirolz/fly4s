@@ -1,7 +1,8 @@
-package fly4s.core.data
+package fly4s.data
 
 import cats.data.NonEmptyList
-import fly4s.core.data.Fly4sConfigDefaults.*
+import fly4s.data.Fly4sConfigDefaults.*
+import org.flywaydb.core.api.configuration.Configuration
 
 import java.nio.charset.Charset
 
@@ -47,7 +48,10 @@ case class Fly4sConfig(
   baselineOnMigrate: Boolean       = defaultBaselineOnMigrate,
   outOfOrder: Boolean              = defaultOutOfOrder,
   skipDefaultCallbacks: Boolean    = defaultSkipDefaultCallbacks,
-  skipDefaultResolvers: Boolean    = defaultSkipDefaultResolvers
+  skipDefaultResolvers: Boolean    = defaultSkipDefaultResolvers,
+  // --- mima after 0.1.0 ---
+  loggers: List[LoggerType]             = defaultLoggers,
+  baseJavaConfig: Option[Configuration] = None
 ) extends Fly4sConfigContract
 object Fly4sConfig extends Fly4sConfigBuilder:
 
@@ -66,6 +70,9 @@ object Fly4sConfig extends Fly4sConfigBuilder:
 
     def withLockRetryCount(lockRetryCount: Int): Fly4sConfig =
       i.copy(lockRetryCount = lockRetryCount)
+
+    def withLoggers(loggers: List[LoggerType]): Fly4sConfig =
+      i.copy(loggers = loggers)
 
     def withInstalledBy(installedBy: Option[String]): Fly4sConfig =
       i.copy(installedBy = installedBy)
@@ -91,7 +98,9 @@ object Fly4sConfig extends Fly4sConfigBuilder:
     def withBaselineDescription(baselineDescription: String): Fly4sConfig =
       i.copy(baselineDescription = baselineDescription)
 
-    def withIgnoreMigrationPatterns(ignoreMigrationPatterns: List[ValidatePattern]): Fly4sConfig =
+    def withIgnoreMigrationPatterns(
+      ignoreMigrationPatterns: List[ValidatePattern]
+    ): Fly4sConfig =
       i.copy(ignoreMigrationPatterns = ignoreMigrationPatterns)
 
     def withPlaceholders(placeholders: Map[String, String]): Fly4sConfig =

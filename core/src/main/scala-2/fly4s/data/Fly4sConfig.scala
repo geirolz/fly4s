@@ -1,8 +1,9 @@
-package fly4s.core.data
+package fly4s.data
 
 import cats.data.NonEmptyList
 import com.geirolz.macros.fluent.copy.FluentCopy
-import fly4s.core.data.Fly4sConfigDefaults.*
+import fly4s.data.Fly4sConfigDefaults.*
+import org.flywaydb.core.api.configuration.Configuration
 
 import java.nio.charset.Charset
 
@@ -49,6 +50,9 @@ case class Fly4sConfig(
   baselineOnMigrate: Boolean       = defaultBaselineOnMigrate,
   outOfOrder: Boolean              = defaultOutOfOrder,
   skipDefaultCallbacks: Boolean    = defaultSkipDefaultCallbacks,
-  skipDefaultResolvers: Boolean    = defaultSkipDefaultResolvers
+  skipDefaultResolvers: Boolean    = defaultSkipDefaultResolvers,
+  // --- mima after 0.1.0 ---
+  loggers: List[LoggerType]             = defaultLoggers,
+  baseJavaConfig: Option[Configuration] = None
 ) extends Fly4sConfigContract
 object Fly4sConfig extends Fly4sConfigBuilder
