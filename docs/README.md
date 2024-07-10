@@ -1,11 +1,11 @@
 # Fly4s
-[![Build Status](https://github.com/geirolz/@PRJ_NAME@/actions/workflows/cicd.yml/badge.svg)](https://github.com/geirolz/@PRJ_NAME@/actions)
-[![codecov](https://img.shields.io/codecov/c/github/geirolz/@PRJ_NAME@)](https://codecov.io/gh/geirolz/@PRJ_NAME@)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/db3274b55e0c4031803afb45f58d4413)](https://www.codacy.com/manual/david.geirola/@PRJ_NAME@?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=geirolz/@PRJ_NAME@&amp;utm_campaign=Badge_Grade)
-[![Sonatype Nexus (Releases)](https://img.shields.io/nexus/r/com.github.geirolz/@MODULE_NAME@_2.13?server=https%3A%2F%2Foss.sonatype.org)](https://mvnrepository.com/artifact/com.github.geirolz/@MODULE_NAME@)
+[![Build Status](https://github.com/geirolz/fly4s/actions/workflows/cicd.yml/badge.svg?query=branch%3A0.x-9.x)](https://github.com/geirolz/fly4s/actions?query=branch%3A0.x-9.x)
+[![Codacy Badge](https://app.codacy.com/project/badge/Coverage/32b85d22894d479491bed9bbf64a2651)](https://app.codacy.com/gh/geirolz/fly4s/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_coverage)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/32b85d22894d479491bed9bbf64a2651)](https://app.codacy.com/gh/geirolz/fly4s/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
+[![Sonatype Nexus (Releases)](https://img.shields.io/nexus/r/com.github.geirolz/fly4s_2.13?server=https%3A%2F%2Foss.sonatype.org)](https://mvnrepository.com/artifact/com.github.geirolz/fly4s)
 [![Scala Steward badge](https://img.shields.io/badge/Scala_Steward-helping-blue.svg?style=flat&logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAQCAMAAAARSr4IAAAAVFBMVEUAAACHjojlOy5NWlrKzcYRKjGFjIbp293YycuLa3pYY2LSqql4f3pCUFTgSjNodYRmcXUsPD/NTTbjRS+2jomhgnzNc223cGvZS0HaSD0XLjbaSjElhIr+AAAAAXRSTlMAQObYZgAAAHlJREFUCNdNyosOwyAIhWHAQS1Vt7a77/3fcxxdmv0xwmckutAR1nkm4ggbyEcg/wWmlGLDAA3oL50xi6fk5ffZ3E2E3QfZDCcCN2YtbEWZt+Drc6u6rlqv7Uk0LdKqqr5rk2UCRXOk0vmQKGfc94nOJyQjouF9H/wCc9gECEYfONoAAAAASUVORK5CYII=)](https://scala-steward.org)
-[![Mergify Status](https://img.shields.io/endpoint.svg?url=https://api.mergify.com/v1/badges/geirolz/@PRJ_NAME@&style=flat)](https://mergify.io)
-[![GitHub license](https://img.shields.io/github/license/geirolz/@PRJ_NAME@)](https://github.com/geirolz/@PRJ_NAME@/blob/main/LICENSE)
+[![Mergify Status](https://img.shields.io/endpoint.svg?url=https://api.mergify.com/v1/badges/geirolz/fly4s&style=flat)](https://mergify.io)
+[![GitHub license](https://img.shields.io/github/license/geirolz/fly4s)](https://github.com/geirolz/fly4s/blob/0.x-9.x/LICENSE)
 
 <div align="center">
  <img src="images/logo.png" alt="logo" width="50%"/>
@@ -15,9 +15,10 @@ A lightweight, simple and functional wrapper for Flyway using cats-effect.
 
 ### Compatibility matrix
 
-| **Fly4s**                                                            | **Flyway** |
-|----------------------------------------------------------------------|------------|
-| [0.x](https://github.com/geirolz/fly4s/releases?q=0.&expanded=false) | 9.x        |
+|                               **Fly4s**                               | **Flyway** |                        **Branch**                        |
+|:---------------------------------------------------------------------:|:----------:|:--------------------------------------------------------:|
+| [0.x](https://github.com/geirolz/fly4s/releases?q=v0.&expanded=false) |    9.x     | [0.x-9.x](https://github.com/geirolz/fly4s/tree/0.x-9.x) |
+| [1.x](https://github.com/geirolz/fly4s/releases?q=v1.&expanded=false) |    10.x    |    [main](https://github.com/geirolz/fly4s/tree/main)    |
 
 
 The most famous library to handle database migrations in Java is for sure Flyway.
@@ -41,6 +42,14 @@ To achieve this goal, `Fly4s` use the typelevel libraries `cats` and `cats-effec
 ### Adopters
 If you are using Fly4s in your company, please let me know and I'll add it to the list! It means a lot to me.
 
+<a href="https://www.codacy.com/">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://www.codacy.com/hubfs/Codacy_2023/Images/logo_codacy_white.svg">
+   <source media="(prefers-color-scheme: light)" srcset="https://www.codacy.com/hubfs/Codacy_2023/Images/logo_codacy.svg">
+   <img alt="Codacy Logo" height=55 >
+ </picture>
+</a>
+
 ### Getting started
 Fly4s supports Scala 2.13 and 3.
 The first step, import the `Fly4s` library in our SBT project.
@@ -50,6 +59,10 @@ Fly4s depends on Flyway, so we'll have access to Flyway as well
 ```sbt
 libraryDependencies += "@ORG@" %% "@MODULE_NAME@" % "@VERSION@"
 ```
+
+Remember to also import the specific database module from Flyway
+
+https://documentation.red-gate.com/flyway/flyway-cli-and-api/supported-databases
 
 ### Migrations files
 As the plain Flyway, we have to create a folder that will contain our migrations scripts, often in `resources/db`.
