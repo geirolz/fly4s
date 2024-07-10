@@ -6,7 +6,7 @@ pull_request_rules:
       - check-success=codecov/project
       - check-success=build (Scala2_13)
       - check-success=build (Scala3_3)
-      - base=main
+      - base=0.x-9.x
       - label!=work-in-progress
     actions:
       merge:
@@ -16,7 +16,7 @@ pull_request_rules:
       - author=scala-steward-geirolz[bot]
       - check-success=build (Scala2_13)
       - check-success=build (Scala3_3)
-      - base=main
+      - base=0.x-9.x
     actions:
       merge:
         method: rebase
@@ -25,7 +25,7 @@ pull_request_rules:
       - author=dependabot[bot]
       - check-success=build (Scala2_13)
       - check-success=build (Scala3_3)
-      - base=main
+      - base=0.x-9.x
     actions:
       merge:
         method: rebase
