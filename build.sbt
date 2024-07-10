@@ -40,7 +40,7 @@ lazy val core: Project =
   module("core")(
     folder             = "./core",
     publishAs          = Some(prjName),
-    mimaCompatibleWith = Set("0.1.0")
+    mimaCompatibleWith = Set.empty
   ).settings(
     mimaBinaryIssueFilters ++= Seq(
       ProblemFilters.exclude[DirectMissingMethodProblem]("fly4s.data.Fly4sConfig.apply"),
