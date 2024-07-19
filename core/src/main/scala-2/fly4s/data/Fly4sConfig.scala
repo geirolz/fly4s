@@ -53,6 +53,7 @@ case class Fly4sConfig(
   skipDefaultResolvers: Boolean    = defaultSkipDefaultResolvers,
   // --- mima after 0.1.0 ---
   loggers: List[LoggerType]             = defaultLoggers,
-  baseJavaConfig: Option[Configuration] = None
+  baseJavaConfig: Option[Configuration] = None,
+  driver: Option[String]                = defaultDriver
 ) extends Fly4sConfigContract
 object Fly4sConfig extends Fly4sConfigBuilder

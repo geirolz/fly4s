@@ -51,11 +51,16 @@ case class Fly4sConfig(
   skipDefaultResolvers: Boolean    = defaultSkipDefaultResolvers,
   // --- mima after 0.1.0 ---
   loggers: List[LoggerType]             = defaultLoggers,
-  baseJavaConfig: Option[Configuration] = None
+  baseJavaConfig: Option[Configuration] = None,
+  driver: Option[String]                = defaultDriver
 ) extends Fly4sConfigContract
 object Fly4sConfig extends Fly4sConfigBuilder:
 
   extension (i: Fly4sConfig)
+
+    def withDriver(driver: Option[String]): Fly4sConfig =
+      i.copy(driver = driver)
+
     def withConnectRetries(connectRetries: Int): Fly4sConfig =
       i.copy(connectRetries = connectRetries)
 

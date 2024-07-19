@@ -61,6 +61,7 @@ private[fly4s] trait Fly4sConfigContract {
 }
 
 private[fly4s] object Fly4sConfigDefaults {
+  val defaultDriver: Option[String]                    = None
   val defaultConnectRetries: Int                       = 0
   val defaultInitSql: Option[String]                   = None
   val defaultDefaultSchemaName: Option[String]         = None
@@ -119,6 +120,7 @@ private[fly4s] trait Fly4sConfigBuilder {
     new Fly4sConfig(
       baseJavaConfig = Some(c),
       // ---------- connection ----------
+      driver            = Option(c.getDriver),
       connectRetries    = c.getConnectRetries,
       initSql           = Option(c.getInitSql),
       defaultSchemaName = Option(c.getDefaultSchema),
@@ -183,6 +185,7 @@ private[fly4s] trait Fly4sConfigBuilder {
 
     // ---------- connection ----------
     fluentConfiguration
+      .driver(c.driver.orNull)
       .connectRetries(c.connectRetries)
       .initSql(c.initSql.orNull)
       .defaultSchema(c.defaultSchemaName.orNull)
