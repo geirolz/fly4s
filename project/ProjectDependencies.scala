@@ -9,7 +9,7 @@ object ProjectDependencies {
     // test
     "org.scalameta" %% "munit"             % "1.0.0"   % Test,
     "org.typelevel" %% "munit-cats-effect" % "2.0.0"   % Test,
-    "com.h2database" % "h2"                % "2.2.224" % Test
+    "com.h2database" % "h2"                % "2.3.230" % Test
   )
 
   lazy val for2_13_Only: Seq[ModuleID] = Seq(
