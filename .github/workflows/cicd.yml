@@ -19,7 +19,7 @@ jobs:
       matrix:
         # supported scala versions
         include:
-          - scala: 2.13.14
+          - scala: 2.13.15
             name: Scala2_13
             test-tasks: coverage test coverageReport gen-doc
           - scala: 3.3.3
