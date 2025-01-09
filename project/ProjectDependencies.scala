@@ -7,7 +7,7 @@ object ProjectDependencies {
     "org.typelevel" %% "cats-effect" % "3.5.7",
     "org.flywaydb"   % "flyway-core" % "11.1.0",
     // test
-    "org.scalameta" %% "munit"             % "1.0.3"   % Test,
+    "org.scalameta" %% "munit"             % "1.0.4"   % Test,
     "org.typelevel" %% "munit-cats-effect" % "2.0.0"   % Test,
     "com.h2database" % "h2"                % "2.3.232" % Test
   )
