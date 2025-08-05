@@ -36,16 +36,20 @@ jobs:
           distribution: "liberica"
           java-version: 17
 
+      #----------- Install SBT -----------
+      - name: Setup SBT
+        uses: sbt/setup-sbt@v1
+
       #----------- CACHE -----------
       - name: Cache SBT
-        uses: actions/cache@v4.1.0
+        uses: actions/cache@v4.2.3
         with:
           # A list of files, directories, and wildcard patterns to cache and restore
           path: |
             ~/.ivy2/cache
             ~/.sbt
           # An explicit key for restoring and saving the cache
-          key: ${{ runner.os }}-sbt-${{ matrix.scala }}-${{ hashFiles('**/build.sb') }}
+          key: ${{ runner.os }}-sbt-${{ matrix.scala }}-${{ hashFiles('**/build.sbt') }}
 
       #----------- COMPILE -----------
       - name: Compile, Format, Test and Coverage for ${{ matrix.scala }}
@@ -77,7 +81,7 @@ jobs:
 
       #----------- CACHE -----------
       - name: Cache SBT
-        uses: actions/cache@v4.1.0
+        uses: actions/cache@v4.2.3
         with:
           # A list of files, directories, and wildcard patterns to cache and restore
           path: |
