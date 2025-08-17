@@ -34,3 +34,30 @@ modules/generic/targetk
 
 #changelog
 changelog.md
+
+### Metals (Scala Language Server)
+.metals/
+.metals.sbt
+.bloop/
+.bsp/
+metals.sbt
+
+### Cursor IDE
+.cursor/
+.cursorrules
+.cursorignore
+
+### VS Code
+.vscode/
+*.code-workspace
+
+### Bloop (Build Server Protocol)
+.bloop/
+.bsp/
+bloop.settings.json
+bloop.settings.json.bak
+
+### Additional Scala/Build tool files
+*.metals/
+*.bloop/
+*.bsp/
