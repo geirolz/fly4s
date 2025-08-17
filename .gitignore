@@ -1,6 +1,8 @@
 # Created by .ignore support plugin (hsz.mobi)
 ### Scala template
 *.log
+.metals/
+.metals.sbt
 
 ### SBT template
 # Simple Build Tool
