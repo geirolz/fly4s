@@ -27,22 +27,22 @@ jobs:
             test-tasks: coverage test coverageReport
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       #----------- JDK -----------
       - name: Setup JDK
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v4.7.1
         with:
           distribution: "liberica"
           java-version: 17
 
       #----------- Install SBT -----------
       - name: Setup SBT
-        uses: sbt/setup-sbt@v1
+        uses: sbt/setup-sbt@v1.1.12
 
       #----------- CACHE -----------
       - name: Cache SBT
-        uses: actions/cache@v4.2.3
+        uses: actions/cache@v4.2.4
         with:
           # A list of files, directories, and wildcard patterns to cache and restore
           path: |
@@ -70,22 +70,22 @@ jobs:
     needs: [build]
     if: github.event_name != 'pull_request'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       #----------- JDK -----------
       - name: Setup JDK
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v4.7.1
         with:
           distribution: "liberica"
           java-version: 17
 
       #----------- Install SBT -----------
       - name: Setup SBT
-        uses: sbt/setup-sbt@v1
+        uses: sbt/setup-sbt@v1.1.12
           
       #----------- CACHE -----------
       - name: Cache SBT
-        uses: actions/cache@v4.2.3
+        uses: actions/cache@v4.2.4
         with:
           # A list of files, directories, and wildcard patterns to cache and restore
           path: |
