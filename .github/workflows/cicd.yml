@@ -38,7 +38,7 @@ jobs:
 
       #----------- Install SBT -----------
       - name: Setup SBT
-        uses: sbt/setup-sbt@v1.1.12
+        uses: sbt/setup-sbt@v1.1.14
 
       #----------- CACHE -----------
       - name: Cache SBT
@@ -81,7 +81,7 @@ jobs:
 
       #----------- Install SBT -----------
       - name: Setup SBT
-        uses: sbt/setup-sbt@v1.1.12
+        uses: sbt/setup-sbt@v1.1.14
           
       #----------- CACHE -----------
       - name: Cache SBT
