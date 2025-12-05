@@ -59,11 +59,11 @@ jobs:
       - name: MiMa Report
         run: sbt ++${{ matrix.scala }} mimaReportBinaryIssues
 
-      #----------- COVERAGE -----------
-      - name: Upload Coverage to Codacy
-        run: bash <(curl -Ls https://coverage.codacy.com/get.sh)
-        env:
-          CODACY_PROJECT_TOKEN: ${{ secrets.CODACY_PROJECT_TOKEN }}
+      # #----------- COVERAGE -----------
+      # - name: Upload Coverage to Codacy
+      #   run: bash <(curl -Ls https://coverage.codacy.com/get.sh)
+      #   env:
+      #     CODACY_PROJECT_TOKEN: ${{ secrets.CODACY_PROJECT_TOKEN }}
 
   deploy:
     runs-on: ubuntu-latest
