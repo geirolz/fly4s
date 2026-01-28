@@ -10,7 +10,7 @@ object ProjectDependencies {
   private val h2Version               = "2.4.240"
   private val fluentCopyVersion       = "0.0.2"
   private val kindProjectorVersion    = "0.13.4"
-  private val betterMonadicForVersion = "0.13.4"
+  private val betterMonadicForVersion = "0.3.1"
 
   lazy val common: Seq[ModuleID] = Seq(
     "org.typelevel" %% "cats-core"   % catsVersion,
