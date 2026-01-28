@@ -6,7 +6,7 @@ lazy val prjName                = "fly4s"
 lazy val prjPackageName         = prjName.replaceAll("[^\\p{Alpha}\\d]+", ".")
 lazy val prjDescription         = "A functional wrapper for Flywayy"
 lazy val prjOrg                 = "com.github.geirolz"
-lazy val scala213               = "2.13.16"
+lazy val scala213               = "2.13.18"
 lazy val scala33                = "3.3.5"
 lazy val supportedScalaVersions = List(scala213, scala33)
 
@@ -146,20 +146,21 @@ def scalacSettings(scalaVersion: String): Seq[String] =
     "-language:experimental.macros", // Allow macro definition (besides implementation and application)
     "-language:higherKinds", // Allow higher-kinded types
     "-language:implicitConversions" // Allow definition of implicit functions called views
+  ) ++ Seq(
+    "-Wconf:any:error", // anything not covered by below rules is an error
+    "-Wconf:cat=deprecation:warning" // deprecations are warings
   ) ++ {
     CrossVersion.partialVersion(scalaVersion) match {
       case Some((3, _)) =>
         Seq(
           "-Ykind-projector",
-          "-explain-types", // Explain type errors in more detail.
-          "-Xfatal-warnings" // Fail the compilation if there are any warnings.
+          "-explain-types" // Explain type errors in more detail.
         )
       case Some((2, 13)) =>
         Seq(
           "-explaintypes", // Explain type errors in more detail.
           "-unchecked", // Enable additional warnings where generated code depends on assumptions.
           "-Xcheckinit", // Wrap field accessors to throw an exception on uninitialized access.
-          "-Xfatal-warnings", // Fail the compilation if there are any warnings.
           "-Xlint:adapted-args", // Warn if an argument list is modified to match the receiver.
           "-Xlint:constant", // Evaluation of a constant arithmetic expression results in an error.
           "-Xlint:delayedinit-select", // Selecting member of DelayedInit.
