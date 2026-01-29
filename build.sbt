@@ -4,7 +4,7 @@ import com.typesafe.tools.mima.core.{DirectMissingMethodProblem, ProblemFilters}
 
 lazy val prjName                = "fly4s"
 lazy val prjPackageName         = prjName.replaceAll("[^\\p{Alpha}\\d]+", ".")
-lazy val prjDescription         = "A functional wrapper for Flywayy"
+lazy val prjDescription         = "A functional wrapper for Flyway"
 lazy val prjOrg                 = "com.github.geirolz"
 lazy val scala213               = "2.13.18"
 lazy val scala33                = "3.3.5"
@@ -22,7 +22,8 @@ inThisBuild(
         "david.geirola@gmail.com",
         url("https://github.com/geirolz")
       )
-    )
+    ),
+    sonatypeCredentialHost := "s01.oss.sonatype.org"
   )
 )
 
