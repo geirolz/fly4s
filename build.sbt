@@ -1,7 +1,6 @@
 import sbt.project
 import ModuleMdocPlugin.autoImport.mdocScalacOptions
 import com.typesafe.tools.mima.core.{DirectMissingMethodProblem, ProblemFilters}
-import xerial.sbt.Sonatype.sonatypeCentralHost
 
 lazy val prjName                = "fly4s"
 lazy val prjPackageName         = prjName.replaceAll("[^\\p{Alpha}\\d]+", ".")
@@ -23,8 +22,7 @@ inThisBuild(
         "david.geirola@gmail.com",
         url("https://github.com/geirolz")
       )
-    ),
-    sonatypeCredentialHost := sonatypeCentralHost
+    )
   )
 )
 
