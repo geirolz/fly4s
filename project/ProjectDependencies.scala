@@ -4,7 +4,7 @@ object ProjectDependencies {
 
   private val catsVersion             = "2.13.0"
   private val catsEffectVersion       = "3.6.3"
-  private val flywayVersion           = "11.18.0"
+  private val flywayVersion           = "12.0.0"
   private val munitVersion            = "1.2.2"
   private val munitCatsEffectVersion  = "2.1.0"
   private val h2Version               = "2.4.240"
