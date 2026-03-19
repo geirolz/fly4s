@@ -46,8 +46,26 @@ lazy val core: Project =
       ProblemFilters.exclude[DirectMissingMethodProblem]("fly4s.data.Fly4sConfig.apply"),
       ProblemFilters.exclude[DirectMissingMethodProblem]("fly4s.data.Fly4sConfig.copy"),
       ProblemFilters.exclude[DirectMissingMethodProblem]("fly4s.data.Fly4sConfig.this"),
+
+      // 2.0.0
       ProblemFilters.exclude[DirectMissingMethodProblem](
         "fly4s.data.Fly4sConfig.cleanOnValidationError"
+      ),
+      ProblemFilters.exclude[DirectMissingMethodProblem](
+        "fly4s.data.Fly4sConfig.withCleanOnValidationError"
+      ),
+      ProblemFilters.exclude[IncompatibleResultTypeProblem](
+        "fly4s.data.Fly4sConfig.<init>$default$37"
+      ),
+      ProblemFilters.exclude[IncompatibleResultTypeProblem](
+        "fly4s.data.Fly4sConfig.copy$default$37"
+      ),
+      ProblemFilters.exclude[IncompatibleResultTypeProblem]("fly4s.data.Fly4sConfig._37"),
+      ProblemFilters.exclude[IncompatibleResultTypeProblem](
+        "fly4s.data.Fly4sConfig.<init>$default$37"
+      ),
+      ProblemFilters.exclude[DirectMissingMethodProblem](
+        "fly4s.data.Fly4sConfig.withCleanOnValidationError"
       )
     ),
     libraryDependencies ++= {
