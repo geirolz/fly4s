@@ -50,7 +50,6 @@ private[fly4s] trait Fly4sConfigContract {
   val failOnMissingLocations: Boolean
   val validateMigrationNaming: Boolean
   val validateOnMigrate: Boolean
-  val cleanOnValidationError: Boolean
   val cleanDisabled: Boolean
   val createSchemas: Boolean
   val placeholderReplacement: Boolean
@@ -102,7 +101,6 @@ private[fly4s] object Fly4sConfigDefaults {
   val defaultFailOnMissingLocations: Boolean  = false
   val defaultValidateMigrationNaming: Boolean = false
   val defaultValidateOnMigrate: Boolean       = true
-  val defaultCleanOnValidationError: Boolean  = false
   val defaultCleanDisabled: Boolean           = true
   val defaultCreateSchemas: Boolean           = true
   val defaultPlaceholderReplacement: Boolean  = true
@@ -156,7 +154,6 @@ private[fly4s] trait Fly4sConfigBuilder {
       failOnMissingLocations  = c.isFailOnMissingLocations,
       validateMigrationNaming = c.isValidateMigrationNaming,
       validateOnMigrate       = c.isValidateOnMigrate,
-      cleanOnValidationError  = c.isCleanOnValidationError,
       cleanDisabled           = c.isCleanDisabled,
       createSchemas           = c.isCreateSchemas,
       placeholderReplacement  = c.isPlaceholderReplacement,
@@ -221,7 +218,6 @@ private[fly4s] trait Fly4sConfigBuilder {
       .failOnMissingLocations(c.failOnMissingLocations)
       .validateMigrationNaming(c.validateMigrationNaming)
       .validateOnMigrate(c.validateOnMigrate)
-      .cleanOnValidationError(c.cleanOnValidationError)
       .cleanDisabled(c.cleanDisabled)
       .createSchemas(c.createSchemas)
       .placeholderReplacement(c.placeholderReplacement)

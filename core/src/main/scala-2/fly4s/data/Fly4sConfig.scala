@@ -43,7 +43,6 @@ case class Fly4sConfig(
   failOnMissingLocations: Boolean  = defaultFailOnMissingLocations,
   validateMigrationNaming: Boolean = defaultValidateMigrationNaming,
   validateOnMigrate: Boolean       = defaultValidateOnMigrate,
-  cleanOnValidationError: Boolean  = defaultCleanOnValidationError,
   cleanDisabled: Boolean           = defaultCleanDisabled,
   createSchemas: Boolean           = defaultCreateSchemas,
   placeholderReplacement: Boolean  = defaultPlaceholderReplacement,

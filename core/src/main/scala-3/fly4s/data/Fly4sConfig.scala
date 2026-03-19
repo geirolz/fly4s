@@ -41,7 +41,6 @@ case class Fly4sConfig(
   failOnMissingLocations: Boolean  = defaultFailOnMissingLocations,
   validateMigrationNaming: Boolean = defaultValidateMigrationNaming,
   validateOnMigrate: Boolean       = defaultValidateOnMigrate,
-  cleanOnValidationError: Boolean  = defaultCleanOnValidationError,
   cleanDisabled: Boolean           = defaultCleanDisabled,
   createSchemas: Boolean           = defaultCreateSchemas,
   placeholderReplacement: Boolean  = defaultPlaceholderReplacement,
@@ -152,9 +151,6 @@ object Fly4sConfig extends Fly4sConfigBuilder:
 
     def withValidateOnMigrate(validateOnMigrate: Boolean): Fly4sConfig =
       i.copy(validateOnMigrate = validateOnMigrate)
-
-    def withCleanOnValidationError(cleanOnValidationError: Boolean): Fly4sConfig =
-      i.copy(cleanOnValidationError = cleanOnValidationError)
 
     def withCleanDisabled(cleanDisabled: Boolean): Fly4sConfig =
       i.copy(cleanDisabled = cleanDisabled)
