@@ -1,6 +1,10 @@
 import sbt.project
 import ModuleMdocPlugin.autoImport.mdocScalacOptions
-import com.typesafe.tools.mima.core.{DirectMissingMethodProblem, ProblemFilters}
+import com.typesafe.tools.mima.core.{
+  DirectMissingMethodProblem,
+  IncompatibleResultTypeProblem,
+  ProblemFilters
+}
 
 lazy val prjName                = "fly4s"
 lazy val prjPackageName         = prjName.replaceAll("[^\\p{Alpha}\\d]+", ".")
