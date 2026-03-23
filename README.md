@@ -58,7 +58,7 @@ So, add the dependency in your `build.sbt` file.
 Fly4s depends on Flyway, so we'll have access to Flyway as well
 
 ```sbt
-libraryDependencies += "com.github.geirolz" %% "fly4s" % "1.0.8"
+libraryDependencies += "com.github.geirolz" %% "fly4s" % "2.0.0"
 ```
 
 Remember to also import the specific database module from Flyway
