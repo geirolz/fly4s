@@ -27,7 +27,7 @@ jobs:
             test-tasks: coverage test coverageReport
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       #----------- JDK -----------
       - name: Setup JDK
@@ -71,7 +71,7 @@ jobs:
     needs: [ build ]
     if: github.event_name != 'pull_request'
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
