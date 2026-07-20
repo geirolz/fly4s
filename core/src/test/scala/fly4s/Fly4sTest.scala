@@ -204,4 +204,19 @@ class Fly4sTest extends munit.CatsEffectSuite {
       )
     } yield ()
   }
+
+  test("close should not fail when the DB is not available (bug replication)") {
+    val deadUrl = "jdbc:h2:tcp://localhost:1/closedb"
+
+    Fly4s
+      .make[IO](deadUrl)
+      .use(_.migrate.attempt)
+      .attempt
+      .map { result =>
+        assert(
+          result.isRight,
+          s"program should succeed because `use` handled the migration error, but it failed: $result"
+        )
+      }
+  }
 }
