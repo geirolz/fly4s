@@ -296,7 +296,11 @@ object Fly4s extends AllInstances {
         F.blocking { flyway.repair() }
 
       override private[fly4s] def close: F[Unit] =
-        F.delay { flyway.getConfiguration.getDataSource.getConnection.close() }
+        flyway.getConfiguration.getDataSource match {
+          case ac: AutoCloseable => F.blocking(ac.close())
+          case _                 => F.unit
+        }
+
     }
 
   }
