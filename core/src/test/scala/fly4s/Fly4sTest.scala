@@ -204,4 +204,26 @@ class Fly4sTest extends munit.CatsEffectSuite {
       )
     } yield ()
   }
+
+  test("Resource release should not add a suppressed error") {
+    val deadUrl = "jdbc:h2:tcp://localhost:1/closedb"
+
+    Fly4s
+      .make[IO](deadUrl)
+      .use(_.migrate)
+      .attempt
+      .map { result =>
+        assert(result.isLeft, s"migrate should fail with the database down: $result")
+
+        val err = result.left.get
+        val closeSuppressed =
+          err.getSuppressed.exists(_.getStackTrace.exists(_.getClassName.startsWith("fly4s.Fly4s")))
+
+        assert(
+          !closeSuppressed,
+          s"release must not add a suppressed error originating from fly4s.Fly4s: ${err.getSuppressed.mkString(", ")}"
+        )
+      }
+  }
 }
+
